@@ -12,4 +12,4 @@ Ce projet a été effectué dans le cadre d'un cours sur l'interface Homme-Machi
 à [l'Université de Technologie de Troyes (UTT)](https://www.utt.fr).
 
 Vous pouvez trouver le sujet sur ce
-dépôt [ici](https://github.com/koeltv/BattleOfPrograms_Game/blob/master/projet_eg23_p22.pdf).
+dépôt [ici](https://github.com/koeltv/BattleOfPrograms/blob/master/projet_eg23_p22.pdf).

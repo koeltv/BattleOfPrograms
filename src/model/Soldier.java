@@ -4,15 +4,19 @@ public class Soldier {
 	private boolean isReservist = false;
 	
 	protected int lifePoints = 30;
-	protected int strength = 0;
-	protected int dexterity = 0;
-	protected int resistance = 0;
-	protected int constitution = 0;
-	protected int initiative = 0;
+	protected int strength;
+	protected int dexterity;
+	protected int resistance;
+	protected int constitution;
+	protected int initiative;
+
+	/**
+	 * Defensive, offensive, random
+	 */
 	protected final AI ai;
 	
-	public Soldier(int strenght, int dexterity, int resistance, int constitution, int initiative, AI ai) {
-		this.strength = strenght;
+	public Soldier(int strength, int dexterity, int resistance, int constitution, int initiative, AI ai) {
+		this.strength = strength;
 		this.dexterity = dexterity;
 		this.resistance = resistance;
 		
@@ -20,10 +24,7 @@ public class Soldier {
 		this.lifePoints += constitution;
 		
 		this.initiative = initiative;
-		
-		/**
-		 * Defensive, offensive, random
-		 */
+
 		this.ai = ai;
 	}
 	
@@ -48,8 +49,10 @@ public class Soldier {
 		hitChance -= (dexterity * ((double) 3/100)) * hitChance;
 		
 		if(Math.random() <= hitChance) { //In that case he take the hit
-			hitChance -= (resistance * ((double) 5/100)) * hitChance;
+			damageValue -= (resistance * ((double) 5/100)) * damageValue;
 		}
+
+		lifePoints -= damageValue;
 	}
 	
 	public void rest() {
