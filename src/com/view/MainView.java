@@ -36,6 +36,7 @@ public class MainView {
 		initialize();
 		mainPanel.add(new StartingPanel(), PanelIdentifier.STARTING_PANEL.toString());
 		mainPanel.add(new PlayerInfoPanel(), PanelIdentifier.PLAYER_INFO_PANEL.toString());
+		mainPanel.add(new AttributePanel(), PanelIdentifier.ATTRIBUTE_PANEL.toString());
 	}
 
 	public static void switchToPanel(PanelIdentifier identifier) {
@@ -68,14 +69,16 @@ public class MainView {
 			
 		});
 		GridBagConstraints gbc_btnMenu = new GridBagConstraints();
-		gbc_btnMenu.anchor = GridBagConstraints.NORTHWEST;
+		gbc_btnMenu.anchor = GridBagConstraints.WEST;
 		gbc_btnMenu.gridx = 0;
 		gbc_btnMenu.gridy = 0;
 		menuBar.add(btnMenu, gbc_btnMenu);
 		
 		JLabel lblNewLabel = new JLabel("F.R.I.C.D");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setForeground(new Color(253, 253 ,253));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel.gridx = 1;
 		gbc_lblNewLabel.gridy = 0;
 		menuBar.add(lblNewLabel, gbc_lblNewLabel);
