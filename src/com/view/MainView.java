@@ -14,6 +14,12 @@ public class MainView {
 
 	private static JPanel mainPanel;
 
+	public static JLabel pointLabel;
+
+	public static JButton confirmButton;
+
+	public static JLabel playerLabel;
+
 	/**
 	 * Launch the application.
 	 */
@@ -59,7 +65,7 @@ public class MainView {
 		GridBagLayout gbl_menuBar = new GridBagLayout();
 		gbl_menuBar.columnWidths = new int[]{426, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_menuBar.rowHeights = new int[]{21, 0};
-		gbl_menuBar.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_menuBar.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_menuBar.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		menuBar.setLayout(gbl_menuBar);
 		
@@ -69,15 +75,18 @@ public class MainView {
 			
 		});
 		GridBagConstraints gbc_btnMenu = new GridBagConstraints();
+		gbc_btnMenu.fill = GridBagConstraints.VERTICAL;
 		gbc_btnMenu.insets = new Insets(0, 0, 0, 5);
 		gbc_btnMenu.anchor = GridBagConstraints.WEST;
 		gbc_btnMenu.gridx = 0;
 		gbc_btnMenu.gridy = 0;
 		menuBar.add(btnMenu, gbc_btnMenu);
 		
-		JLabel pointLabel = new JLabel("Points \u00E0 assigner : 400 pts");
+		pointLabel = new JLabel("Points \u00E0 assigner : 400 pts");
 		pointLabel.setForeground(Color.WHITE);
 		GridBagConstraints gbc_pointLabel = new GridBagConstraints();
+		gbc_pointLabel.fill = GridBagConstraints.VERTICAL;
+		gbc_pointLabel.anchor = GridBagConstraints.WEST;
 		gbc_pointLabel.insets = new Insets(0, 0, 0, 5);
 		gbc_pointLabel.gridx = 1;
 		gbc_pointLabel.gridy = 0;
@@ -88,23 +97,29 @@ public class MainView {
 		statsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		statsLabel.setForeground(ColorPalette.WHITE.color);
 		GridBagConstraints gbc_statsLabel = new GridBagConstraints();
+		gbc_statsLabel.anchor = GridBagConstraints.EAST;
+		gbc_statsLabel.fill = GridBagConstraints.VERTICAL;
 		gbc_statsLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_statsLabel.fill = GridBagConstraints.HORIZONTAL;
 		gbc_statsLabel.gridx = 2;
 		gbc_statsLabel.gridy = 0;
 		menuBar.add(statsLabel, gbc_statsLabel);
 		
-		JButton confirmButton = new JButton("Valider");
+		confirmButton = new JButton("Valider");
 		GridBagConstraints gbc_confirmButton = new GridBagConstraints();
+		gbc_confirmButton.fill = GridBagConstraints.VERTICAL;
+		gbc_confirmButton.anchor = GridBagConstraints.EAST;
 		gbc_confirmButton.insets = new Insets(0, 0, 0, 5);
-		gbc_confirmButton.gridx = 28;
+		gbc_confirmButton.gridx = 3;
 		gbc_confirmButton.gridy = 0;
 		menuBar.add(confirmButton, gbc_confirmButton);
 		confirmButton.setVisible(false);
 		
-		JLabel playerLabel = new JLabel("       J1");
+		playerLabel = new JLabel("       J1");
 		GridBagConstraints gbc_playerLabel = new GridBagConstraints();
-		gbc_playerLabel.gridx = 29;
+		gbc_playerLabel.fill = GridBagConstraints.VERTICAL;
+		gbc_playerLabel.anchor = GridBagConstraints.EAST;
+		gbc_playerLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_playerLabel.gridx = 4;
 		gbc_playerLabel.gridy = 0;
 		menuBar.add(playerLabel, gbc_playerLabel);
 		playerLabel.setVisible(false);

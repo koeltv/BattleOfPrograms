@@ -80,6 +80,7 @@ public class PlayerInfoPanel extends BasePanel {
 		gbc_programLabel.gridx = 1;
 		gbc_programLabel.gridy = 3;
 		panel_1.add(programLabel, gbc_programLabel);
+		//noinspection rawtypes,unchecked
 		programList = new JList(programs);
 		programList.addListSelectionListener(e -> checkInformations());
 		programList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

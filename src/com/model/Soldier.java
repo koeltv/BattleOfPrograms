@@ -1,8 +1,8 @@
 package com.model;
 
 public class Soldier {
-	private boolean isReservist = false;
-	
+	protected boolean reservist = false;
+
 	protected int lifePoints = 30;
 	protected int strength;
 	protected int dexterity;
@@ -13,23 +13,71 @@ public class Soldier {
 	/**
 	 * Defensive, offensive, random
 	 */
-	protected final AI ai;
-	
-	public Soldier(int strength, int dexterity, int resistance, int constitution, int initiative, AI ai) {
-		this.strength = strength;
-		this.dexterity = dexterity;
-		this.resistance = resistance;
-		
-		this.constitution = constitution;
-		this.lifePoints += constitution;
-		
-		this.initiative = initiative;
+	public AI ai;
 
-		this.ai = ai;
+	public Soldier () {
+
 	}
-	
+
+	public boolean isReservist() {
+		return reservist;
+	}
+
+	public void setReservist(boolean reservist) {
+		this.reservist = reservist;
+	}
+
+	public int getStrength() {
+		return strength;
+	}
+
+	public boolean setStrength(int strength) {
+		this.strength = strength;
+		return true;
+	}
+
+	public int getDexterity() {
+		return dexterity;
+	}
+
+	public boolean setDexterity(int dexterity) {
+		this.dexterity = dexterity;
+		return true;
+	}
+
+	public int getResistance() {
+		return resistance;
+	}
+
+	public boolean setResistance(int resistance) {
+		this.resistance = resistance;
+		return true;
+	}
+
+	public int getConstitution() {
+		return constitution;
+	}
+
+	public boolean setConstitution(int constitution) {
+		this.constitution = constitution;
+		return true;
+	}
+
 	public int getInitiative() {
 		return initiative;
+	}
+
+	public boolean setInitiative(int initiative) {
+		this.initiative = initiative;
+		return true;
+	}
+
+	public AI getAi() {
+		return ai;
+	}
+
+	public void setAi(AI ai) {
+		this.ai = ai;
 	}
 	
 	public void heal() {
@@ -48,12 +96,14 @@ public class Soldier {
 		double hitChance = 1;
 		hitChance -= (dexterity * ((double) 3/100)) * hitChance;
 		
-		if(Math.random() <= hitChance) { //In that case he take the hit
+		if(Math.random() <= hitChance) { //In that case he takes the hit
 			damageValue -= (resistance * ((double) 5/100)) * damageValue;
 		}
 
 		lifePoints -= damageValue;
 	}
+
+
 	
 	public void rest() {
 		

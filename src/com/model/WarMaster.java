@@ -2,8 +2,8 @@ package com.model;
 
 public class WarMaster extends Soldier {
 	
-	public WarMaster(int strength, int dexterity, int resistance, int constitution, int initiative, AI ai) {
-		super(strength, dexterity, resistance, constitution, initiative, ai);
+	public WarMaster() {
+		super();
 		super.strength += 2;
 		super.dexterity += 2;
 		super.resistance += 2;
@@ -12,6 +12,36 @@ public class WarMaster extends Soldier {
 		super.lifePoints += 10;
 
 		super.initiative += 2;
+	}
+
+	@Override
+	public boolean setStrength(int strength) {
+		if (strength > 1) return super.setStrength(strength);
+		else return false;
+	}
+
+	@Override
+	public boolean setDexterity(int dexterity) {
+		if (dexterity > 1) return super.setDexterity(dexterity);
+		else return false;
+	}
+
+	@Override
+	public boolean setResistance(int resistance) {
+		if (resistance > 1) return super.setResistance(resistance);
+		else return false;
+	}
+
+	@Override
+	public boolean setConstitution(int constitution) {
+		if (constitution > 9) return super.setConstitution(constitution);
+		else return false;
+	}
+
+	@Override
+	public boolean setInitiative(int initiative) {
+		if (initiative > 1) return super.setInitiative(initiative);
+		else return false;
 	}
 
 }

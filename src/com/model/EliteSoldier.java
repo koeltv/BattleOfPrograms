@@ -2,8 +2,8 @@ package com.model;
 
 public class EliteSoldier extends Soldier {
 	
-	public EliteSoldier(int strength, int dexterity, int resistance, int constitution, int initiative, AI ai) {
-		super(strength, dexterity, resistance, constitution, initiative, ai);
+	public EliteSoldier() {
+		super();
 		super.strength += 1;
 		super.dexterity += 1;
 		super.resistance += 1;
@@ -12,5 +12,35 @@ public class EliteSoldier extends Soldier {
 		super.lifePoints += 5;
 
 		super.initiative += 1;
+	}
+
+	@Override
+	public boolean setStrength(int strength) {
+		if (strength > 0) return super.setStrength(strength);
+		else return false;
+	}
+
+	@Override
+	public boolean setDexterity(int dexterity) {
+		if (dexterity > 0) return super.setDexterity(dexterity);
+		else return false;
+	}
+
+	@Override
+	public boolean setResistance(int resistance) {
+		if (resistance > 0) return super.setResistance(resistance);
+		else return false;
+	}
+
+	@Override
+	public boolean setConstitution(int constitution) {
+		if (constitution > 0) return super.setConstitution(constitution);
+		else return false;
+	}
+
+	@Override
+	public boolean setInitiative(int initiative) {
+		if (initiative > 0) return super.setInitiative(initiative);
+		else return false;
 	}
 }
