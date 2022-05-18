@@ -22,16 +22,28 @@ public class BasePanel extends JPanel {
 	 */
 	@Serial
 	private static final long serialVersionUID = -5114453698893412532L;
-	private final Image background;
+	private Image background;
 
 	/**
 	 * Create the panel.
 	 */
 	public BasePanel() {
-		URL backgroundUrl = StartingPanel.class.getResource("/images/background_map.jpeg");
+		URL backgroundUrl = BasePanel.class.getResource("/images/background_map.jpeg");
 		if (backgroundUrl != null) {
 			try {
 				background = ImageIO.read(backgroundUrl);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		} else {
+			background = null;
+		}
+	}
+
+	public void changeBackground(URL url) {
+		if (url != null) {
+			try {
+				background = ImageIO.read(url);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
