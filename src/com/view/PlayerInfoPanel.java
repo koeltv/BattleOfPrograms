@@ -96,7 +96,7 @@ public class PlayerInfoPanel extends BasePanel {
 		panel_1.setOpaque(false);
 
 		btnConfirm.addActionListener(e -> {
-			GameController.players[playerId] = new Player(nameField.getText(), programList.getSelectedValue());
+			GameController.players[playerId] = new Player(nameField.getText().equals("") ? "J" + (playerId + 1) : nameField.getText(), programList.getSelectedValue());
 			if(++playerId == 1) {
 				nameField.setText(null);
 				btnConfirm.setEnabled(false);
@@ -110,9 +110,7 @@ public class PlayerInfoPanel extends BasePanel {
 	}
 
 	public void checkInformations() {
-		btnConfirm.setEnabled(nameField.getText() != null && !nameField.getText().equals("") &&
-				(playerId < 1 || !programList.getSelectedValue().equals(GameController.players[0].program))
-		);
+		btnConfirm.setEnabled(playerId < 1 || !programList.getSelectedValue().equals(GameController.players[0].program));
 	}
 
 }

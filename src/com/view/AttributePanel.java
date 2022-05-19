@@ -5,12 +5,8 @@ import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.Serial;
-import java.net.URL;
 import java.util.Arrays;
 
 public class AttributePanel extends JPanel {
@@ -26,6 +22,8 @@ public class AttributePanel extends JPanel {
 	private int assignablePoints = 400;
 
 	private GraphicSoldier currentGraphicSoldier;
+
+	private int currentPlayerIndex = 0;
 
 
 	private final JCheckBox reservistCheckBox;
@@ -76,7 +74,7 @@ public class AttributePanel extends JPanel {
 		statPanel.add(reservistCheckBox, gbc_reservistCheckBox);
 		reservistCheckBox.addActionListener(e -> {
 			currentGraphicSoldier.soldier.setReservist(reservistCheckBox.isSelected());
-			long numberOfReservist = Arrays.stream(GameController.players[0].soldiers).filter(Soldier::isReservist).count();
+			long numberOfReservist = Arrays.stream(GameController.players[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
 			reservistCheckBox.setEnabled(numberOfReservist < 5  || reservistCheckBox.isSelected());
 			reservistCheckBox.setText(numberOfReservist + "/5");
 		});
@@ -310,7 +308,7 @@ public class AttributePanel extends JPanel {
 				System.out.println("Now showing !");
 				setupSoldiers();
 				MainView.pointLabel.setVisible(true);
-				MainView.playerIndicator.setPlayer(GameController.players[0]);
+				MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
 				MainView.playerIndicator.setVisible(true);
 				MainView.confirmButton.setVisible(true);
 			}
@@ -323,65 +321,72 @@ public class AttributePanel extends JPanel {
 	}
 
 	public void setupSoldiers() {
-		URL soldierUrl = AttributePanel.class.getResource("/images/soldier.png");
-		URL eliteSoldierUrl = AttributePanel.class.getResource("/images/elite_soldier.png");
-		URL warMasterUrl = AttributePanel.class.getResource("/images/commander.png");
+		assignablePoints = 400;
 
-		if (soldierUrl != null && eliteSoldierUrl != null && warMasterUrl != null) {
-			for (int i = 0; i < 20; i++) {
-				GraphicSoldier graphicSoldier;
-				if (i < 15) {
-					graphicSoldier = new GraphicSoldier(new Soldier());
-				} else if (i < 19) {
-					graphicSoldier = new GraphicSoldier(new EliteSoldier());
-				} else {
-					graphicSoldier = new GraphicSoldier(new WarMaster());
-				}
-
-				GameController.players[0].soldiers[i] = graphicSoldier.soldier;
-				soldierPanel.add(graphicSoldier);
-
-				if (i == 0) {
-					currentGraphicSoldier = graphicSoldier;
-					currentGraphicSoldier.soldier = graphicSoldier.soldier;
-					currentGraphicSoldier.setSelected(true);
-				}
-
-				graphicSoldier.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseClicked(MouseEvent e) {
-						currentGraphicSoldier.setSelected(false);
-						currentGraphicSoldier = (GraphicSoldier) e.getComponent();
-						currentGraphicSoldier.setSelected(true);
-
-						reservistCheckBox.setSelected(currentGraphicSoldier.soldier.isReservist());
-						long numberOfReservist = Arrays.stream(GameController.players[0].soldiers).filter(Soldier::isReservist).count();
-						reservistCheckBox.setEnabled(numberOfReservist < 5 || reservistCheckBox.isSelected());
-
-						strengthSlider.setValue(currentGraphicSoldier.soldier.getStrength());
-						resistanceSlider.setValue(currentGraphicSoldier.soldier.getResistance());
-						initiativeSlider.setValue(currentGraphicSoldier.soldier.getInitiative());
-						constitutionSlider.setValue(currentGraphicSoldier.soldier.getConstitution());
-						dexteritySlider.setValue(currentGraphicSoldier.soldier.getDexterity());
-
-						if (currentGraphicSoldier.soldier.ai instanceof DefensiveAI) {
-							defensiveRadioButton.doClick();
-						} else if (currentGraphicSoldier.soldier.ai instanceof OffensiveAI) {
-							offensiveRadioButton.doClick();
-						} else {
-							randomRadioButton.doClick();
-						}
-					}
-				});
+		for (int i = 0; i < 20; i++) {
+			GraphicSoldier graphicSoldier;
+			if (i < 15) {
+				graphicSoldier = new GraphicSoldier(new Soldier());
+			} else if (i < 19) {
+				graphicSoldier = new GraphicSoldier(new EliteSoldier());
+			} else {
+				graphicSoldier = new GraphicSoldier(new WarMaster());
 			}
+
+			GameController.players[currentPlayerIndex].soldiers[i] = graphicSoldier.soldier;
+			soldierPanel.add(graphicSoldier);
+
+			if (i == 0) {
+				currentGraphicSoldier = graphicSoldier;
+				currentGraphicSoldier.soldier = graphicSoldier.soldier;
+				currentGraphicSoldier.setSelected(true);
+			}
+
+			graphicSoldier.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					currentGraphicSoldier.setSelected(false);
+					currentGraphicSoldier = (GraphicSoldier) e.getComponent();
+					currentGraphicSoldier.setSelected(true);
+
+					reservistCheckBox.setSelected(currentGraphicSoldier.soldier.isReservist());
+					long numberOfReservist = Arrays.stream(GameController.players[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
+					reservistCheckBox.setEnabled(numberOfReservist < 5 || reservistCheckBox.isSelected());
+
+					strengthSlider.setValue(currentGraphicSoldier.soldier.getStrength());
+					resistanceSlider.setValue(currentGraphicSoldier.soldier.getResistance());
+					initiativeSlider.setValue(currentGraphicSoldier.soldier.getInitiative());
+					constitutionSlider.setValue(currentGraphicSoldier.soldier.getConstitution());
+					dexteritySlider.setValue(currentGraphicSoldier.soldier.getDexterity());
+
+					if (currentGraphicSoldier.soldier.ai instanceof DefensiveAI) {
+						defensiveRadioButton.doClick();
+					} else if (currentGraphicSoldier.soldier.ai instanceof OffensiveAI) {
+						offensiveRadioButton.doClick();
+					} else {
+						randomRadioButton.doClick();
+					}
+				}
+			});
 		}
 
-		MainView.confirmButton.addActionListener(e -> {
-			for (Soldier soldier : GameController.players[0].soldiers) {
-				if (soldier.getAi() == null) soldier.setAi(Math.random() > 0.5 ? new OffensiveAI() : new DefensiveAI());
-			}
+		MainView.confirmButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for (Soldier soldier : GameController.players[currentPlayerIndex].soldiers) {
+					if (soldier.getAi() == null) soldier.setAi(Math.random() > 0.5 ? new OffensiveAI() : new DefensiveAI());
+				}
 
-			//TODO Pass to next player, then next panel
+				if (currentPlayerIndex < 1) {
+					currentPlayerIndex++;
+					soldierPanel.removeAll();
+					setupSoldiers();
+					MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
+				} else {
+					MainView.confirmButton.removeActionListener(this);
+					MainView.switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
+				}
+			}
 		});
 	}
 

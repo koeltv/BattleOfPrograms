@@ -42,6 +42,7 @@ public class MainView {
 		mainPanel.add(new StartingPanel(), PanelIdentifier.STARTING_PANEL.toString());
 		mainPanel.add(new PlayerInfoPanel(), PanelIdentifier.PLAYER_INFO_PANEL.toString());
 		mainPanel.add(new AttributePanel(), PanelIdentifier.ATTRIBUTE_PANEL.toString());
+		mainPanel.add(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL.toString());
 	}
 
 	public static void switchToPanel(PanelIdentifier identifier) {
