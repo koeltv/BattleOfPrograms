@@ -310,6 +310,8 @@ public class AttributePanel extends JPanel {
 				System.out.println("Now showing !");
 				setupSoldiers();
 				MainView.pointLabel.setVisible(true);
+				MainView.playerIndicator.setPlayer(GameController.players[0]);
+				MainView.playerIndicator.setVisible(true);
 				MainView.confirmButton.setVisible(true);
 			}
 		});

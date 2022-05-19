@@ -17,8 +17,7 @@ public class MainView {
 	public static JLabel pointLabel;
 
 	public static JButton confirmButton;
-
-	public static JLabel playerLabel;
+	public static PlayerIndicator playerIndicator;
 
 	/**
 	 * Launch the application.
@@ -65,8 +64,8 @@ public class MainView {
 		GridBagLayout gbl_menuBar = new GridBagLayout();
 		gbl_menuBar.columnWidths = new int[]{426, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_menuBar.rowHeights = new int[]{21, 0};
-		gbl_menuBar.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_menuBar.rowWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_menuBar.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_menuBar.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		menuBar.setLayout(gbl_menuBar);
 		
 		JButton btnMenu = new JButton("Menu");
@@ -112,17 +111,18 @@ public class MainView {
 		gbc_confirmButton.gridx = 3;
 		gbc_confirmButton.gridy = 0;
 		menuBar.add(confirmButton, gbc_confirmButton);
+
+		playerIndicator = new PlayerIndicator();
+		GridBagConstraints gbc_playerIndicator = new GridBagConstraints();
+		gbc_playerIndicator.anchor = GridBagConstraints.EAST;
+		gbc_playerIndicator.insets = new Insets(0, 0, 0, 5);
+		gbc_playerIndicator.fill = GridBagConstraints.VERTICAL;
+		gbc_playerIndicator.gridx = 4;
+		gbc_playerIndicator.gridy = 0;
+		menuBar.add(playerIndicator, gbc_playerIndicator);
+
+		playerIndicator.setVisible(false);
 		confirmButton.setVisible(false);
-		
-		playerLabel = new JLabel("       J1");
-		GridBagConstraints gbc_playerLabel = new GridBagConstraints();
-		gbc_playerLabel.fill = GridBagConstraints.VERTICAL;
-		gbc_playerLabel.anchor = GridBagConstraints.EAST;
-		gbc_playerLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_playerLabel.gridx = 4;
-		gbc_playerLabel.gridy = 0;
-		menuBar.add(playerLabel, gbc_playerLabel);
-		playerLabel.setVisible(false);
 		
 		mainPanel = new JPanel();
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
