@@ -11,8 +11,15 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Serial;
 
 public class FieldAttributionPanel extends JPanel {
+
+	/**
+	 * 
+	 */
+	@Serial
+	private static final long serialVersionUID = -2108193670223851849L;
 
 	private final BasePanel soldierPanel;
 

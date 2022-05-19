@@ -5,11 +5,18 @@ import com.model.Soldier;
 import com.model.WarMaster;
 
 import javax.swing.*;
+import java.io.Serial;
 import java.net.URL;
 import java.util.Objects;
 
 public class GraphicSoldier extends JLabel {
 
+	/**
+	 * 
+	 */
+	@Serial
+	private static final long serialVersionUID = -5370972161337730381L;
+	
 	private static final URL soldierUrl = AttributePanel.class.getResource("/images/soldier.png");
 	private static final URL transparentSoldierUrl = AttributePanel.class.getResource("/images/soldier-t.png");
 	private static final URL eliteSoldierUrl = AttributePanel.class.getResource("/images/elite_soldier.png");

@@ -18,6 +18,7 @@ public class PlayerInfoPanel extends BasePanel {
 	 */
 	@Serial
 	private static final long serialVersionUID = 6378665743080841415L;
+	
 	private final JTextField nameField;
 
 	private final JButton btnConfirm;

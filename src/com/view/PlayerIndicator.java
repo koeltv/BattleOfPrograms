@@ -4,9 +4,16 @@ import com.model.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serial;
 
 public class PlayerIndicator extends JPanel {
 
+	/**
+	 * 
+	 */
+	@Serial
+	private static final long serialVersionUID = 5731537562132378545L;
+	
 	private Color color;
 	private final JPanel playerCircle;
 
