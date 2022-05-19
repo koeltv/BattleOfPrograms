@@ -276,6 +276,34 @@ public class AttributePanel extends JPanel {
 		buttonGroup.add(randomRadioButton);
 		aiSelectionPanel.add(randomRadioButton);
 
+		reservistLabel.setForeground(ColorPalette.WHITE.color);
+		strengthLabel.setForeground(ColorPalette.WHITE.color);
+		resistanceLabel.setForeground(ColorPalette.WHITE.color);
+		initiativeLabel.setForeground(ColorPalette.WHITE.color);
+		constitutionLabel.setForeground(ColorPalette.WHITE.color);
+		dexterityLabel.setForeground(ColorPalette.WHITE.color);
+		aiLabel.setForeground(ColorPalette.WHITE.color);
+
+		reservistCheckBox.setForeground(ColorPalette.WHITE.color);
+		strengthSlider.setForeground(ColorPalette.WHITE.color);
+		resistanceSlider.setForeground(ColorPalette.WHITE.color);
+		initiativeSlider.setForeground(ColorPalette.WHITE.color);
+		constitutionSlider.setForeground(ColorPalette.WHITE.color);
+		dexteritySlider.setForeground(ColorPalette.WHITE.color);
+		defensiveRadioButton.setForeground(ColorPalette.WHITE.color);
+		offensiveRadioButton.setForeground(ColorPalette.WHITE.color);
+		randomRadioButton.setForeground(ColorPalette.WHITE.color);
+
+		reservistCheckBox.setBackground(null);
+		strengthSlider.setBackground(null);
+		resistanceSlider.setBackground(null);
+		initiativeSlider.setBackground(null);
+		constitutionSlider.setBackground(null);
+		dexteritySlider.setBackground(null);
+		defensiveRadioButton.setBackground(null);
+		offensiveRadioButton.setBackground(null);
+		randomRadioButton.setBackground(null);
+
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -314,14 +342,15 @@ public class AttributePanel extends JPanel {
 				if (i == 0) {
 					currentGraphicSoldier = graphicSoldier;
 					currentGraphicSoldier.soldier = graphicSoldier.soldier;
+					currentGraphicSoldier.setSelected(true);
 				}
 
 				graphicSoldier.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						if (currentGraphicSoldier.soldier != null) currentGraphicSoldier.setBackground(null);
+						currentGraphicSoldier.setSelected(false);
 						currentGraphicSoldier = (GraphicSoldier) e.getComponent();
-						graphicSoldier.setBackground(Color.RED);
+						currentGraphicSoldier.setSelected(true);
 
 						reservistCheckBox.setSelected(currentGraphicSoldier.soldier.isReservist());
 						long numberOfReservist = Arrays.stream(GameController.players[0].soldiers).filter(Soldier::isReservist).count();
