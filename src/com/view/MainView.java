@@ -8,7 +8,7 @@ import java.awt.*;
  * The panels are added to the card layout and can be changed that way.
  * The menu bar always stay at the top.
  */
-public class MainView {
+public class MainView { //TODO Global BattleField, individual battles, popups, (player transition)
 
 	private JFrame frame;
 
@@ -60,67 +60,50 @@ public class MainView {
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel menuBar = new JPanel();
+		menuBar.setPreferredSize(new Dimension(10, 23));
 		menuBar.setBackground(ColorPalette.BLACK.color);
 		frame.getContentPane().add(menuBar, BorderLayout.NORTH);
-		GridBagLayout gbl_menuBar = new GridBagLayout();
-		gbl_menuBar.columnWidths = new int[]{426, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_menuBar.rowHeights = new int[]{21, 0};
-		gbl_menuBar.columnWeights = new double[]{0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_menuBar.rowWeights = new double[]{1.0, Double.MIN_VALUE};
-		menuBar.setLayout(gbl_menuBar);
 		
 		JButton btnMenu = new JButton("Menu");
 		btnMenu.setForeground(ColorPalette.MENU_BLUE.color);
 		btnMenu.addActionListener(e -> {
 			
 		});
-		GridBagConstraints gbc_btnMenu = new GridBagConstraints();
-		gbc_btnMenu.fill = GridBagConstraints.VERTICAL;
-		gbc_btnMenu.insets = new Insets(0, 0, 0, 5);
-		gbc_btnMenu.anchor = GridBagConstraints.WEST;
-		gbc_btnMenu.gridx = 0;
-		gbc_btnMenu.gridy = 0;
-		menuBar.add(btnMenu, gbc_btnMenu);
+		SpringLayout sl_menuBar = new SpringLayout();
+		sl_menuBar.putConstraint(SpringLayout.NORTH, btnMenu, 1, SpringLayout.NORTH, menuBar);
+		sl_menuBar.putConstraint(SpringLayout.WEST, btnMenu, 1, SpringLayout.WEST, menuBar);
+		menuBar.setLayout(sl_menuBar);
+		menuBar.add(btnMenu);
 		
 		pointLabel = new JLabel("Points \u00E0 assigner : 400 pts");
+		sl_menuBar.putConstraint(SpringLayout.NORTH, pointLabel, 1, SpringLayout.NORTH, menuBar);
+		sl_menuBar.putConstraint(SpringLayout.WEST, pointLabel, 50, SpringLayout.EAST, btnMenu);
+		sl_menuBar.putConstraint(SpringLayout.SOUTH, pointLabel, 22, SpringLayout.NORTH, menuBar);
+		pointLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		pointLabel.setForeground(Color.WHITE);
-		GridBagConstraints gbc_pointLabel = new GridBagConstraints();
-		gbc_pointLabel.fill = GridBagConstraints.VERTICAL;
-		gbc_pointLabel.anchor = GridBagConstraints.WEST;
-		gbc_pointLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_pointLabel.gridx = 1;
-		gbc_pointLabel.gridy = 0;
-		menuBar.add(pointLabel, gbc_pointLabel);
+		menuBar.add(pointLabel);
 		pointLabel.setVisible(false);
 		
 		JLabel statsLabel = new JLabel("F.R.I.C.D");
+		sl_menuBar.putConstraint(SpringLayout.NORTH, statsLabel, 1, SpringLayout.NORTH, menuBar);
+		sl_menuBar.putConstraint(SpringLayout.WEST, statsLabel, 51, SpringLayout.WEST, menuBar);
+		sl_menuBar.putConstraint(SpringLayout.SOUTH, statsLabel, 22, SpringLayout.NORTH, menuBar);
+		statsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		statsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		statsLabel.setForeground(ColorPalette.WHITE.color);
-		GridBagConstraints gbc_statsLabel = new GridBagConstraints();
-		gbc_statsLabel.anchor = GridBagConstraints.EAST;
-		gbc_statsLabel.fill = GridBagConstraints.VERTICAL;
-		gbc_statsLabel.insets = new Insets(0, 0, 0, 5);
-		gbc_statsLabel.gridx = 2;
-		gbc_statsLabel.gridy = 0;
-		menuBar.add(statsLabel, gbc_statsLabel);
+		menuBar.add(statsLabel);
 		
 		confirmButton = new JButton("Valider");
-		GridBagConstraints gbc_confirmButton = new GridBagConstraints();
-		gbc_confirmButton.fill = GridBagConstraints.VERTICAL;
-		gbc_confirmButton.anchor = GridBagConstraints.EAST;
-		gbc_confirmButton.insets = new Insets(0, 0, 0, 5);
-		gbc_confirmButton.gridx = 3;
-		gbc_confirmButton.gridy = 0;
-		menuBar.add(confirmButton, gbc_confirmButton);
+		sl_menuBar.putConstraint(SpringLayout.NORTH, confirmButton, 1, SpringLayout.NORTH, menuBar);
+		menuBar.add(confirmButton);
 
 		playerIndicator = new PlayerIndicator();
-		GridBagConstraints gbc_playerIndicator = new GridBagConstraints();
-		gbc_playerIndicator.anchor = GridBagConstraints.EAST;
-		gbc_playerIndicator.insets = new Insets(0, 0, 0, 5);
-		gbc_playerIndicator.fill = GridBagConstraints.VERTICAL;
-		gbc_playerIndicator.gridx = 4;
-		gbc_playerIndicator.gridy = 0;
-		menuBar.add(playerIndicator, gbc_playerIndicator);
+		sl_menuBar.putConstraint(SpringLayout.EAST, statsLabel, -20, SpringLayout.WEST, playerIndicator);
+		sl_menuBar.putConstraint(SpringLayout.EAST, confirmButton, -25, SpringLayout.WEST, playerIndicator);
+		sl_menuBar.putConstraint(SpringLayout.NORTH, playerIndicator, 1, SpringLayout.NORTH, menuBar);
+		sl_menuBar.putConstraint(SpringLayout.SOUTH, playerIndicator, 22, SpringLayout.NORTH, menuBar);
+		sl_menuBar.putConstraint(SpringLayout.EAST, playerIndicator, -10, SpringLayout.EAST, menuBar);
+		menuBar.add(playerIndicator);
 
 		playerIndicator.setVisible(false);
 		confirmButton.setVisible(false);

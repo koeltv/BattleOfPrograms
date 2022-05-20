@@ -46,6 +46,7 @@ public class PlayerIndicator extends JPanel {
 			if (color == ColorPalette.RED.color) color = ColorPalette.MENU_BLUE.color;
 			else color = ColorPalette.RED.color;
 			playerLabel.setForeground(color);
+			repaint();
 		}
 	}
 
