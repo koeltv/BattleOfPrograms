@@ -308,7 +308,6 @@ public class AttributePanel extends JPanel {
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				System.out.println("Now showing !");
 				setupSoldiers();
 				MainView.pointLabel.setVisible(true);
 				MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);

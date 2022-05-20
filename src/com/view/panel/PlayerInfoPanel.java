@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.io.Serial;
 
 /**
- * Panel used to get players information.
+ * Panel used to get players' information.
  */
 public class PlayerInfoPanel extends BasePanel {
 	/**

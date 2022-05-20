@@ -5,6 +5,8 @@ import com.model.Soldier;
 import com.model.WarMaster;
 import com.view.ColorPalette;
 import com.view.MainView;
+import com.view.component.FieldProperties;
+import com.view.component.GraphicField;
 import com.view.component.GraphicSoldier;
 import controller.GameController;
 
@@ -48,27 +50,35 @@ public class FieldAttributionPanel extends JPanel {
 		JPanel field1 = new JPanel();
 		fields[0] = field1;
 		statPanel.add(field1);
+		field1.add(new GraphicField(FieldProperties.LIBRARY));
 
 		JPanel field2 = new JPanel();
 		fields[1] = field2;
 		statPanel.add(field2);
+		field2.add(new GraphicField(FieldProperties.BDE));
 
 		JPanel field3 = new JPanel();
 		fields[2] = field3;
 		statPanel.add(field3);
+		field3.add(new GraphicField(FieldProperties.ADMINISTRATIVE_QUARTER));
 
 		JPanel field4 = new JPanel();
 		fields[3] = field4;
 		statPanel.add(field4);
+		field4.add(new GraphicField(FieldProperties.INDUSTRIAL_HALLS));
 
 		JPanel field5 = new JPanel();
 		fields[4] = field5;
 		statPanel.add(field5);
+		field5.add(new GraphicField(FieldProperties.SPORTS_HALL));
+
+		for (JPanel field : fields) {
+			field.setOpaque(false);
+		}
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				System.out.println("Now showing !");
 				setupSoldiers();
 				MainView.playerIndicator.setPlayer(GameController.players[0]);
 			}
@@ -87,6 +97,7 @@ public class FieldAttributionPanel extends JPanel {
 					graphicSoldier = new GraphicSoldier(new Soldier());
 				}
 
+				graphicSoldier.setSelected(true);
 				soldierPanel.add(graphicSoldier);
 
 				graphicSoldier.addMouseMotionListener(new MouseAdapter() {
