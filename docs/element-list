@@ -1,2 +1,5 @@
 com.model
 com.view
+com.view.component
+com.view.panel
+controller

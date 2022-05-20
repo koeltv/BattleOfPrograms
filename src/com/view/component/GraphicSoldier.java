@@ -1,8 +1,9 @@
-package com.view;
+package com.view.component;
 
 import com.model.EliteSoldier;
 import com.model.Soldier;
 import com.model.WarMaster;
+import com.view.panel.AttributePanel;
 
 import javax.swing.*;
 import java.io.Serial;

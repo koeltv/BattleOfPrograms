@@ -1,4 +1,6 @@
-package com.view;
+package com.view.panel;
+
+import com.view.MainView;
 
 import javax.swing.*;
 import java.awt.*;

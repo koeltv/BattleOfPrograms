@@ -1,5 +1,8 @@
 package com.view;
 
+import com.view.component.PlayerIndicator;
+import com.view.panel.*;
+
 import javax.swing.*;
 import java.awt.*;
 

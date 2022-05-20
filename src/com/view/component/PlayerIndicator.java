@@ -1,6 +1,7 @@
-package com.view;
+package com.view.component;
 
 import com.model.Player;
+import com.view.ColorPalette;
 
 import javax.swing.*;
 import java.awt.*;

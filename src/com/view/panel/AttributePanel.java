@@ -1,6 +1,9 @@
-package com.view;
+package com.view.panel;
 
 import com.model.*;
+import com.view.ColorPalette;
+import com.view.MainView;
+import com.view.component.GraphicSoldier;
 import controller.GameController;
 
 import javax.swing.*;

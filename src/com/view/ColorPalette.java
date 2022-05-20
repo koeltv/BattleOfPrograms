@@ -15,7 +15,7 @@ public enum ColorPalette {
 	TEXT_BLUE (new Color(14, 99, 161)),
 	LIFEBAR_GREY (new Color(196, 196, 196));
 
-	final Color color;
+	public final Color color;
 
 	ColorPalette (Color color) {
 		this.color = color;

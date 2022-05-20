@@ -1,6 +1,7 @@
-package com.view;
+package com.view.panel;
 
 import com.model.Player;
+import com.view.MainView;
 import controller.GameController;
 
 import javax.swing.*;

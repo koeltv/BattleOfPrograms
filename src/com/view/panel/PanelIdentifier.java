@@ -1,4 +1,4 @@
-package com.view;
+package com.view.panel;
 
 public enum PanelIdentifier {
 	STARTING_PANEL,
