@@ -5,8 +5,8 @@ import com.model.Soldier;
 import com.model.WarMaster;
 import com.view.ColorPalette;
 import com.view.MainView;
+import com.view.component.FieldColumn;
 import com.view.component.FieldProperties;
-import com.view.component.GraphicField;
 import com.view.component.GraphicSoldier;
 import controller.GameController;
 
@@ -28,7 +28,7 @@ public class FieldAttributionPanel extends JPanel {
 
 	private final BasePanel soldierPanel;
 
-	private final JPanel[] fields = new JPanel[5];
+	private final FieldColumn[] fields = new FieldColumn[5];
 
 	/**
 	 * Create the panel.
@@ -47,34 +47,25 @@ public class FieldAttributionPanel extends JPanel {
 		statPanel.setBackground(ColorPalette.BLUE_BACKGROUND.color);
 		add(statPanel);
 
-		JPanel field1 = new JPanel();
-		fields[0] = field1;
-		statPanel.add(field1);
-		field1.add(new GraphicField(FieldProperties.LIBRARY));
+		FieldColumn fieldColumn1 = new FieldColumn(new JPanel(), FieldProperties.LIBRARY);
+		statPanel.add(fieldColumn1);
+		fields[0] = fieldColumn1;
 
-		JPanel field2 = new JPanel();
-		fields[1] = field2;
-		statPanel.add(field2);
-		field2.add(new GraphicField(FieldProperties.BDE));
+		FieldColumn fieldColumn2 = new FieldColumn(new JPanel(), FieldProperties.BDE);
+		statPanel.add(fieldColumn2);
+		fields[1] = fieldColumn2;
 
-		JPanel field3 = new JPanel();
-		fields[2] = field3;
-		statPanel.add(field3);
-		field3.add(new GraphicField(FieldProperties.ADMINISTRATIVE_QUARTER));
+		FieldColumn fieldColumn3 = new FieldColumn(new JPanel(), FieldProperties.ADMINISTRATIVE_QUARTER);
+		statPanel.add(fieldColumn3);
+		fields[2] = fieldColumn3;
 
-		JPanel field4 = new JPanel();
-		fields[3] = field4;
-		statPanel.add(field4);
-		field4.add(new GraphicField(FieldProperties.INDUSTRIAL_HALLS));
+		FieldColumn fieldColumn4 = new FieldColumn(new JPanel(), FieldProperties.INDUSTRIAL_HALLS);
+		statPanel.add(fieldColumn4);
+		fields[3] = fieldColumn4;
 
-		JPanel field5 = new JPanel();
-		fields[4] = field5;
-		statPanel.add(field5);
-		field5.add(new GraphicField(FieldProperties.SPORTS_HALL));
-
-		for (JPanel field : fields) {
-			field.setOpaque(false);
-		}
+		FieldColumn fieldColumn5 = new FieldColumn(new JPanel(), FieldProperties.SPORTS_HALL);
+		statPanel.add(fieldColumn5);
+		fields[4] = fieldColumn5;
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -114,23 +105,25 @@ public class FieldAttributionPanel extends JPanel {
 					@Override
 					public void mouseReleased(MouseEvent e) {
 						Rectangle soldierAbsoluteBounds = SwingUtilities.convertRectangle(graphicSoldier.getParent(), graphicSoldier.getBounds(), SwingUtilities.getRoot(graphicSoldier));
+						boolean intersectionFound = false;
 
-						for (JPanel field : fields) {
+						for (JComponent field : fields) {
 							Rectangle fieldBounds = SwingUtilities.convertRectangle(field.getParent(), field.getBounds(), SwingUtilities.getRoot(field));
 
 							if (intersects(soldierAbsoluteBounds, fieldBounds)) {
+								intersectionFound = true;
 								graphicSoldier.getParent().remove(graphicSoldier);
 								field.add(graphicSoldier);
-								field.repaint();
-								field.revalidate();
-								return;
+								break;
 							}
 						}
 
-						graphicSoldier.getParent().remove(graphicSoldier);
-						soldierPanel.add(graphicSoldier);
-						soldierPanel.repaint();
-						soldierPanel.revalidate();
+						if (!intersectionFound) {
+							graphicSoldier.getParent().remove(graphicSoldier);
+							soldierPanel.add(graphicSoldier);
+						}
+						repaint();
+						revalidate();
 					}
 				});
 			}

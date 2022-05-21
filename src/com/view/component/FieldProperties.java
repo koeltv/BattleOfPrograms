@@ -3,7 +3,7 @@ package com.view.component;
 import java.net.URL;
 
 public enum FieldProperties {
-	LIBRARY ("Bibliothèque", FieldProperties.class.getResource("/images/library.png")),
+	LIBRARY ("Biblioth\u00E8que", FieldProperties.class.getResource("/images/library.png")),
 	BDE ("BDE", FieldProperties.class.getResource("/images/bde.png")),
 	ADMINISTRATIVE_QUARTER ("Quartier administratif", FieldProperties.class.getResource("/images/administrative_quarter.png")),
 	INDUSTRIAL_HALLS ("Halles industrielles", FieldProperties.class.getResource("/images/industrial_halls.png")),
