@@ -46,6 +46,8 @@ public class MainView { //TODO Global BattleField, individual battles, popups, (
 		mainPanel.add(new PlayerInfoPanel(), PanelIdentifier.PLAYER_INFO_PANEL.toString());
 		mainPanel.add(new AttributePanel(), PanelIdentifier.ATTRIBUTE_PANEL.toString());
 		mainPanel.add(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL.toString());
+		mainPanel.add(new GlobalFieldPanel(), PanelIdentifier.GLOBAL_FIELD_PANEL.toString());
+		mainPanel.add(new FieldPanel(), PanelIdentifier.FIELD_PANEL.toString());
 	}
 
 	public static void switchToPanel(PanelIdentifier identifier) {

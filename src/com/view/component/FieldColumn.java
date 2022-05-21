@@ -32,4 +32,14 @@ public class FieldColumn extends JScrollPane {
 		((JComponent) comp).setAlignmentX(Component.CENTER_ALIGNMENT);
 		return panel.add(comp);
 	}
+
+	@Override
+	public void remove(Component comp) {
+		panel.remove(comp);
+	}
+
+	@Override
+	public Component[] getComponents() {
+		return panel.getComponents();
+	}
 }

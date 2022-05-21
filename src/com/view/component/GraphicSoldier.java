@@ -39,6 +39,9 @@ public class GraphicSoldier extends JLabel {
 		this.soldier = soldier;
 	}
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public GraphicSoldier(Soldier soldier) {
 		super(new ImageIcon(Objects.requireNonNull(transparentSoldierUrl)));
 		this.soldier = soldier;

@@ -1,5 +1,7 @@
 package com.model;
 
+import com.view.component.FieldProperties;
+
 public class Soldier {
 	protected boolean reservist = false;
 
@@ -9,6 +11,8 @@ public class Soldier {
 	protected int resistance;
 	protected int constitution;
 	protected int initiative;
+
+	public FieldProperties assignedField;
 
 	/**
 	 * Defensive, offensive, random
@@ -111,5 +115,9 @@ public class Soldier {
 	
 	public boolean isDead() {
 		return lifePoints <= 0;
+	}
+
+	public void sendToField(FieldProperties field) {
+		assignedField = field;
 	}
 }

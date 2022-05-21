@@ -42,7 +42,7 @@ public class PlayerIndicator extends JPanel {
 	public void setPlayer(Player player) {
 		if (this.player != player) {
 			this.player = player;
-			playerLabel.setText("  " + player.name);
+			playerLabel.setText("  " + player.name + " (" + player.program + ")");
 
 			if (color == ColorPalette.RED.color) color = ColorPalette.MENU_BLUE.color;
 			else color = ColorPalette.RED.color;

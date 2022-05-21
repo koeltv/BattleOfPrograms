@@ -12,11 +12,9 @@ import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.Serial;
+import java.util.HashMap;
 
 public class FieldAttributionPanel extends JPanel {
 
@@ -28,7 +26,9 @@ public class FieldAttributionPanel extends JPanel {
 
 	private final BasePanel soldierPanel;
 
-	private final FieldColumn[] fields = new FieldColumn[5];
+	private final HashMap<FieldProperties, FieldColumn> fields = new HashMap<>(5);
+
+	private int currentPlayerIndex = 0;
 
 	/**
 	 * Create the panel.
@@ -49,23 +49,23 @@ public class FieldAttributionPanel extends JPanel {
 
 		FieldColumn fieldColumn1 = new FieldColumn(new JPanel(), FieldProperties.LIBRARY);
 		statPanel.add(fieldColumn1);
-		fields[0] = fieldColumn1;
+		fields.put(FieldProperties.LIBRARY, fieldColumn1);
 
 		FieldColumn fieldColumn2 = new FieldColumn(new JPanel(), FieldProperties.BDE);
 		statPanel.add(fieldColumn2);
-		fields[1] = fieldColumn2;
+		fields.put(FieldProperties.BDE, fieldColumn2);
 
 		FieldColumn fieldColumn3 = new FieldColumn(new JPanel(), FieldProperties.ADMINISTRATIVE_QUARTER);
 		statPanel.add(fieldColumn3);
-		fields[2] = fieldColumn3;
+		fields.put(FieldProperties.ADMINISTRATIVE_QUARTER, fieldColumn3);
 
 		FieldColumn fieldColumn4 = new FieldColumn(new JPanel(), FieldProperties.INDUSTRIAL_HALLS);
 		statPanel.add(fieldColumn4);
-		fields[3] = fieldColumn4;
+		fields.put(FieldProperties.INDUSTRIAL_HALLS, fieldColumn4);
 
 		FieldColumn fieldColumn5 = new FieldColumn(new JPanel(), FieldProperties.SPORTS_HALL);
 		statPanel.add(fieldColumn5);
-		fields[4] = fieldColumn5;
+		fields.put(FieldProperties.SPORTS_HALL, fieldColumn5);
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -107,7 +107,7 @@ public class FieldAttributionPanel extends JPanel {
 						Rectangle soldierAbsoluteBounds = SwingUtilities.convertRectangle(graphicSoldier.getParent(), graphicSoldier.getBounds(), SwingUtilities.getRoot(graphicSoldier));
 						boolean intersectionFound = false;
 
-						for (JComponent field : fields) {
+						for (FieldColumn field : fields.values()) {
 							Rectangle fieldBounds = SwingUtilities.convertRectangle(field.getParent(), field.getBounds(), SwingUtilities.getRoot(field));
 
 							if (intersects(soldierAbsoluteBounds, fieldBounds)) {
@@ -128,6 +128,36 @@ public class FieldAttributionPanel extends JPanel {
 				});
 			}
 		}
+
+		MainView.confirmButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				fields.forEach((fieldName, column) -> {
+					for (Component component : column.getComponents()) {
+						if (component instanceof GraphicSoldier graphicSoldier) {
+							graphicSoldier.soldier.sendToField(fieldName);
+						}
+					}
+				});
+
+				if (currentPlayerIndex < 1) {
+					currentPlayerIndex++;
+					soldierPanel.removeAll();
+					fields.values().forEach(field -> {
+						for (Component component : field.getComponents()) {
+							if (component instanceof GraphicSoldier) field.remove(component);
+						}
+						field.repaint();
+						field.revalidate();
+					});
+					setupSoldiers();
+					MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
+				} else {
+					MainView.confirmButton.removeActionListener(this);
+					MainView.switchToPanel(PanelIdentifier.GLOBAL_FIELD_PANEL);
+				}
+			}
+		});
 	}
 
 	/**
