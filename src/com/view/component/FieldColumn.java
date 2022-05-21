@@ -2,6 +2,7 @@ package com.view.component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serial;
 
 /**
  * Represent a column to assign soldiers to a field.
@@ -9,6 +10,12 @@ import java.awt.*;
  */
 public class FieldColumn extends JScrollPane {
 
+	/**
+	 * 
+	 */
+	@Serial
+	private static final long serialVersionUID = 1762692385236278793L;
+	
 	private final JPanel panel;
 
 	public FieldColumn(JPanel panel, FieldProperties fieldProperties) {

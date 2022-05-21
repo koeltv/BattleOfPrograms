@@ -2,9 +2,16 @@ package com.view.component;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serial;
 import java.util.Objects;
 
 public class GraphicField extends JPanel {
+
+	/**
+	 * 
+	 */
+	@Serial
+	private static final long serialVersionUID = 368210040522610077L;
 
 	/**
 	 * Create the panel.
