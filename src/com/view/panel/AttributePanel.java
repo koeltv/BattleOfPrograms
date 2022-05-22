@@ -328,11 +328,11 @@ public class AttributePanel extends JPanel {
 		for (int i = 0; i < 20; i++) {
 			GraphicSoldier graphicSoldier;
 			if (i < 15) {
-				graphicSoldier = new GraphicSoldier(new Soldier());
+				graphicSoldier = GraphicSoldier.createGraphics(new Soldier());
 			} else if (i < 19) {
-				graphicSoldier = new GraphicSoldier(new EliteSoldier());
+				graphicSoldier = GraphicSoldier.createGraphics(new EliteSoldier());
 			} else {
-				graphicSoldier = new GraphicSoldier(new WarMaster());
+				graphicSoldier = GraphicSoldier.createGraphics(new WarMaster());
 			}
 
 			GameController.players[currentPlayerIndex].soldiers[i] = graphicSoldier.soldier;
@@ -340,7 +340,6 @@ public class AttributePanel extends JPanel {
 
 			if (i == 0) {
 				currentGraphicSoldier = graphicSoldier;
-				currentGraphicSoldier.soldier = graphicSoldier.soldier;
 				currentGraphicSoldier.setSelected(true);
 			}
 

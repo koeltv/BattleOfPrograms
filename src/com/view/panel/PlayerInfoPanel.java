@@ -111,6 +111,10 @@ public class PlayerInfoPanel extends BasePanel {
 
 	}
 
+	/**
+	 * Check player information.
+	 * Players should each select a different program.
+	 */
 	public void checkInformations() {
 		btnConfirm.setEnabled(playerId < 1 || !programList.getSelectedValue().equals(GameController.players[0].program));
 	}

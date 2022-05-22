@@ -27,14 +27,14 @@ public class GraphicSoldier extends JLabel {
 
 	public boolean selected;
 
-	public Soldier soldier;
+	public final Soldier soldier;
 
-	public GraphicSoldier(WarMaster soldier) {
+	GraphicSoldier(WarMaster soldier) {
 		super(new ImageIcon(Objects.requireNonNull(transparentWarMasterUrl)));
 		this.soldier = soldier;
 	}
 
-	public GraphicSoldier(EliteSoldier soldier) {
+	GraphicSoldier(EliteSoldier soldier) {
 		super(new ImageIcon(Objects.requireNonNull(transparentEliteSoldierUrl)));
 		this.soldier = soldier;
 	}
@@ -42,9 +42,19 @@ public class GraphicSoldier extends JLabel {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public GraphicSoldier(Soldier soldier) {
+	GraphicSoldier(Soldier soldier) {
 		super(new ImageIcon(Objects.requireNonNull(transparentSoldierUrl)));
 		this.soldier = soldier;
+	}
+
+	public static GraphicSoldier createGraphics(Soldier soldier) {
+		if (soldier instanceof WarMaster warMaster) {
+			return new GraphicSoldier(warMaster);
+		} else if (soldier instanceof EliteSoldier eliteSoldier) {
+			return new GraphicSoldier(eliteSoldier);
+		} else {
+			return new GraphicSoldier(soldier);
+		}
 	}
 
 	public void setSelected(boolean selected) {

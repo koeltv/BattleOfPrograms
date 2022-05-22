@@ -1,8 +1,6 @@
 package com.view.panel;
 
-import com.model.EliteSoldier;
 import com.model.Soldier;
-import com.model.WarMaster;
 import com.view.ColorPalette;
 import com.view.MainView;
 import com.view.component.FieldColumn;
@@ -72,22 +70,44 @@ public class FieldAttributionPanel extends JPanel {
 			public void componentShown(ComponentEvent e) {
 				setupSoldiers();
 				MainView.playerIndicator.setPlayer(GameController.players[0]);
+
+				MainView.confirmButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						fields.forEach((fieldName, column) -> {
+							for (Component component : column.getComponents()) {
+								if (component instanceof GraphicSoldier graphicSoldier) {
+									graphicSoldier.soldier.sendToField(fieldName);
+								}
+							}
+						});
+
+						if (currentPlayerIndex < 1) {
+							currentPlayerIndex++;
+							soldierPanel.removeAll();
+							fields.values().forEach(field -> {
+								for (Component component : field.getComponents()) {
+									if (component instanceof GraphicSoldier) field.remove(component);
+								}
+								field.repaint();
+								field.revalidate();
+							});
+							MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
+							setupSoldiers();
+						} else {
+							MainView.confirmButton.removeActionListener(this);
+							MainView.switchToPanel(PanelIdentifier.GLOBAL_FIELD_PANEL);
+						}
+					}
+				});
 			}
 		});
 	}
 
-	public void setupSoldiers() {
-		for (Soldier soldier : GameController.players[0].soldiers) {
+	private void setupSoldiers() {
+		for (Soldier soldier : GameController.players[currentPlayerIndex].soldiers) {
 			if (!soldier.isReservist()) {
-				GraphicSoldier graphicSoldier;
-				if (soldier instanceof WarMaster) {
-					graphicSoldier = new GraphicSoldier(new WarMaster());
-				} else if (soldier instanceof EliteSoldier) {
-					graphicSoldier = new GraphicSoldier(new EliteSoldier());
-				} else {
-					graphicSoldier = new GraphicSoldier(new Soldier());
-				}
-
+				GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
 				graphicSoldier.setSelected(true);
 				soldierPanel.add(graphicSoldier);
 
@@ -128,36 +148,6 @@ public class FieldAttributionPanel extends JPanel {
 				});
 			}
 		}
-
-		MainView.confirmButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fields.forEach((fieldName, column) -> {
-					for (Component component : column.getComponents()) {
-						if (component instanceof GraphicSoldier graphicSoldier) {
-							graphicSoldier.soldier.sendToField(fieldName);
-						}
-					}
-				});
-
-				if (currentPlayerIndex < 1) {
-					currentPlayerIndex++;
-					soldierPanel.removeAll();
-					fields.values().forEach(field -> {
-						for (Component component : field.getComponents()) {
-							if (component instanceof GraphicSoldier) field.remove(component);
-						}
-						field.repaint();
-						field.revalidate();
-					});
-					setupSoldiers();
-					MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
-				} else {
-					MainView.confirmButton.removeActionListener(this);
-					MainView.switchToPanel(PanelIdentifier.GLOBAL_FIELD_PANEL);
-				}
-			}
-		});
 	}
 
 	/**
@@ -167,7 +157,7 @@ public class FieldAttributionPanel extends JPanel {
 	 * @param r2 - second rectangle
 	 * @return true if the intersection exist, false otherwise
 	 */
-	public boolean intersects(Rectangle r1, Rectangle r2) {
+	private boolean intersects(Rectangle r1, Rectangle r2) {
 		int leftX = Math.max(r1.x, r2.x);
 		int rightX = (int) Math.min(r1.getMaxX(), r2.getMaxX());
 		int topY = Math.max(r1.y,r2.y);
