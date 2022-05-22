@@ -31,7 +31,7 @@ public class GlobalFieldPanel extends BasePanel {
 
 		GraphicField sportField = new GraphicField(FieldProperties.SPORTS_HALL);
 		springLayout.putConstraint(SpringLayout.NORTH, sportField, 58, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, sportField, 46, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.WEST, sportField, 150, SpringLayout.WEST, this);
 		add(sportField);
 		sportField.addMouseListener(new MouseAdapter() {
 			@Override
@@ -41,8 +41,8 @@ public class GlobalFieldPanel extends BasePanel {
 		});
 
 		GraphicField bdeField = new GraphicField(FieldProperties.BDE);
-		springLayout.putConstraint(SpringLayout.NORTH, bdeField, 118, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, bdeField, 93, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, bdeField, 250, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, bdeField, 450, SpringLayout.WEST, this);
 		add(bdeField);
 		bdeField.addMouseListener(new MouseAdapter() {
 			@Override
@@ -52,8 +52,8 @@ public class GlobalFieldPanel extends BasePanel {
 		});
 
 		GraphicField libraryField = new GraphicField(FieldProperties.LIBRARY);
-		springLayout.putConstraint(SpringLayout.WEST, libraryField, 165, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, libraryField, -135, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.WEST, libraryField, 600, SpringLayout.WEST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, libraryField, -300, SpringLayout.SOUTH, this);
 		add(libraryField);
 		libraryField.addMouseListener(new MouseAdapter() {
 			@Override
@@ -63,8 +63,8 @@ public class GlobalFieldPanel extends BasePanel {
 		});
 
 		GraphicField administrativeField = new GraphicField(FieldProperties.ADMINISTRATIVE_QUARTER);
-		springLayout.putConstraint(SpringLayout.NORTH, administrativeField, 132, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, administrativeField, -92, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.NORTH, administrativeField, 200, SpringLayout.NORTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, administrativeField, -300, SpringLayout.EAST, this);
 		add(administrativeField);
 		administrativeField.addMouseListener(new MouseAdapter() {
 			@Override
@@ -74,8 +74,8 @@ public class GlobalFieldPanel extends BasePanel {
 		});
 
 		GraphicField industrialField = new GraphicField(FieldProperties.INDUSTRIAL_HALLS);
-		springLayout.putConstraint(SpringLayout.SOUTH, industrialField, -61, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, industrialField, -68, SpringLayout.EAST, this);
+		springLayout.putConstraint(SpringLayout.SOUTH, industrialField, -150, SpringLayout.SOUTH, this);
+		springLayout.putConstraint(SpringLayout.EAST, industrialField, -200, SpringLayout.EAST, this);
 		add(industrialField);
 		industrialField.addMouseListener(new MouseAdapter() {
 			@Override
