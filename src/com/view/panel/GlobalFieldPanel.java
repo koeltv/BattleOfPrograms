@@ -5,14 +5,19 @@ import com.view.component.FieldProperties;
 import com.view.component.GraphicField;
 
 import javax.swing.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.Serial;
 
+/**
+ * Panel used to display the overhaul battlefield.
+ */
 public class GlobalFieldPanel extends BasePanel {
 
 	/**
-	 * 
+	 *
 	 */
 	@Serial
 	private static final long serialVersionUID = -2611728061732290991L;
@@ -23,7 +28,7 @@ public class GlobalFieldPanel extends BasePanel {
 	public GlobalFieldPanel() { //TODO Positioning is temporary, it needs to be redone
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
-		
+
 		GraphicField sportField = new GraphicField(FieldProperties.SPORTS_HALL);
 		springLayout.putConstraint(SpringLayout.NORTH, sportField, 58, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, sportField, 46, SpringLayout.WEST, this);
@@ -34,7 +39,7 @@ public class GlobalFieldPanel extends BasePanel {
 				MainView.switchToPanel(FieldProperties.SPORTS_HALL);
 			}
 		});
-		
+
 		GraphicField bdeField = new GraphicField(FieldProperties.BDE);
 		springLayout.putConstraint(SpringLayout.NORTH, bdeField, 118, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, bdeField, 93, SpringLayout.WEST, this);
@@ -45,7 +50,7 @@ public class GlobalFieldPanel extends BasePanel {
 				MainView.switchToPanel(FieldProperties.BDE);
 			}
 		});
-		
+
 		GraphicField libraryField = new GraphicField(FieldProperties.LIBRARY);
 		springLayout.putConstraint(SpringLayout.WEST, libraryField, 165, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, libraryField, -135, SpringLayout.SOUTH, this);
@@ -85,6 +90,14 @@ public class GlobalFieldPanel extends BasePanel {
 		MainView.addPanel(new FieldPanel(FieldProperties.LIBRARY), FieldProperties.LIBRARY);
 		MainView.addPanel(new FieldPanel(FieldProperties.ADMINISTRATIVE_QUARTER), FieldProperties.ADMINISTRATIVE_QUARTER);
 		MainView.addPanel(new FieldPanel(FieldProperties.INDUSTRIAL_HALLS), FieldProperties.INDUSTRIAL_HALLS);
+
+
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				MainView.confirmButton.setText("Passer");
+			}
+		});
 	}
 
 }

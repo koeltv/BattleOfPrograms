@@ -12,6 +12,9 @@ import java.awt.event.*;
 import java.io.Serial;
 import java.util.Arrays;
 
+/**
+ * Panel used to attribute stats to each soldier.
+ */
 public class AttributePanel extends JPanel {
 
 	/**
@@ -105,11 +108,13 @@ public class AttributePanel extends JPanel {
 		gbc_strengthSlider.gridy = 1;
 		statPanel.add(strengthSlider, gbc_strengthSlider);
 		strengthSlider.addChangeListener(e -> {
-			int difference = strengthSlider.getValue() - currentGraphicSoldier.soldier.getStrength();
-			if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setStrength(currentGraphicSoldier.soldier.getStrength() + difference)) {
-				updatePoints(difference);
-			} else {
-				strengthSlider.setValue(currentGraphicSoldier.soldier.getStrength());
+			if (currentGraphicSoldier != null) {
+				int difference = strengthSlider.getValue() - currentGraphicSoldier.soldier.getStrength();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setStrength(currentGraphicSoldier.soldier.getStrength() + difference)) {
+					updatePoints(difference);
+				} else {
+					strengthSlider.setValue(currentGraphicSoldier.soldier.getStrength());
+				}
 			}
 		});
 
@@ -136,11 +141,13 @@ public class AttributePanel extends JPanel {
 		gbc_resistanceSlider.gridy = 2;
 		statPanel.add(resistanceSlider, gbc_resistanceSlider);
 		resistanceSlider.addChangeListener(e -> {
-			int difference = resistanceSlider.getValue() - currentGraphicSoldier.soldier.getResistance();
-			if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setResistance(currentGraphicSoldier.soldier.getResistance() + difference)) {
-				updatePoints(difference);
-			} else {
-				resistanceSlider.setValue(currentGraphicSoldier.soldier.getResistance());
+			if (currentGraphicSoldier != null) {
+				int difference = resistanceSlider.getValue() - currentGraphicSoldier.soldier.getResistance();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setResistance(currentGraphicSoldier.soldier.getResistance() + difference)) {
+					updatePoints(difference);
+				} else {
+					resistanceSlider.setValue(currentGraphicSoldier.soldier.getResistance());
+				}
 			}
 		});
 
@@ -167,11 +174,13 @@ public class AttributePanel extends JPanel {
 		gbc_initiativeSlider.gridy = 3;
 		statPanel.add(initiativeSlider, gbc_initiativeSlider);
 		initiativeSlider.addChangeListener(e -> {
-			int difference = initiativeSlider.getValue() - currentGraphicSoldier.soldier.getInitiative();
-			if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setInitiative(currentGraphicSoldier.soldier.getInitiative() + difference)) {
-				updatePoints(difference);
-			} else {
-				initiativeSlider.setValue(currentGraphicSoldier.soldier.getInitiative());
+			if (currentGraphicSoldier != null) {
+				int difference = initiativeSlider.getValue() - currentGraphicSoldier.soldier.getInitiative();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setInitiative(currentGraphicSoldier.soldier.getInitiative() + difference)) {
+					updatePoints(difference);
+				} else {
+					initiativeSlider.setValue(currentGraphicSoldier.soldier.getInitiative());
+				}
 			}
 		});
 
@@ -200,11 +209,13 @@ public class AttributePanel extends JPanel {
 		gbc_constitutionSlider.gridy = 4;
 		statPanel.add(constitutionSlider, gbc_constitutionSlider);
 		constitutionSlider.addChangeListener(e -> {
-			int difference = constitutionSlider.getValue() - currentGraphicSoldier.soldier.getConstitution();
-			if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setConstitution(currentGraphicSoldier.soldier.getConstitution() + difference)) {
-				updatePoints(difference);
-			} else {
-				constitutionSlider.setValue(currentGraphicSoldier.soldier.getConstitution());
+			if (currentGraphicSoldier != null) {
+				int difference = constitutionSlider.getValue() - currentGraphicSoldier.soldier.getConstitution();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setConstitution(currentGraphicSoldier.soldier.getConstitution() + difference)) {
+					updatePoints(difference);
+				} else {
+					constitutionSlider.setValue(currentGraphicSoldier.soldier.getConstitution());
+				}
 			}
 		});
 
@@ -231,11 +242,13 @@ public class AttributePanel extends JPanel {
 		gbc_dexteritySlider.gridy = 5;
 		statPanel.add(dexteritySlider, gbc_dexteritySlider);
 		dexteritySlider.addChangeListener(e -> {
-			int difference = dexteritySlider.getValue() - currentGraphicSoldier.soldier.getDexterity();
-			if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setDexterity(currentGraphicSoldier.soldier.getDexterity() + difference)) {
-				updatePoints(difference);
-			} else {
-				dexteritySlider.setValue(currentGraphicSoldier.soldier.getDexterity());
+			if (currentGraphicSoldier != null) {
+				int difference = dexteritySlider.getValue() - currentGraphicSoldier.soldier.getDexterity();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setDexterity(currentGraphicSoldier.soldier.getDexterity() + difference)) {
+					updatePoints(difference);
+				} else {
+					dexteritySlider.setValue(currentGraphicSoldier.soldier.getDexterity());
+				}
 			}
 		});
 
@@ -313,6 +326,37 @@ public class AttributePanel extends JPanel {
 				MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
 				MainView.playerIndicator.setVisible(true);
 				MainView.confirmButton.setVisible(true);
+
+				MainView.confirmButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						for (Soldier soldier : GameController.players[currentPlayerIndex].soldiers) {
+							if (soldier.getAi() == null) soldier.setAi(Math.random() > 0.5 ? new OffensiveAI() : new DefensiveAI());
+						}
+
+						if (currentPlayerIndex < 1) {
+							currentPlayerIndex++;
+							soldierPanel.removeAll();
+
+							resetPoints();
+							currentGraphicSoldier = null;
+							reservistCheckBox.setSelected(false);
+							strengthSlider.setValue(0);
+							resistanceSlider.setValue(0);
+							initiativeSlider.setValue(0);
+							constitutionSlider.setValue(0);
+							dexteritySlider.setValue(0);
+							randomRadioButton.doClick();
+
+							setupSoldiers();
+							MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
+						} else {
+							MainView.pointLabel.setVisible(false);
+							MainView.confirmButton.removeActionListener(this);
+							MainView.switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
+						}
+					}
+				});
 			}
 		});
 	}
@@ -322,6 +366,14 @@ public class AttributePanel extends JPanel {
 		MainView.pointLabel.setText("Points \u00E0 assigner : " + assignablePoints + " pts");
 	}
 
+	private void resetPoints() {
+		assignablePoints = 400;
+		MainView.pointLabel.setText("Points \u00E0 assigner : " + assignablePoints + " pts");
+	}
+
+	/**
+	 * Set up the soldiers on the left side.
+	 */
 	public void setupSoldiers() {
 		assignablePoints = 400;
 
@@ -370,25 +422,5 @@ public class AttributePanel extends JPanel {
 				}
 			});
 		}
-
-		MainView.confirmButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (Soldier soldier : GameController.players[currentPlayerIndex].soldiers) {
-					if (soldier.getAi() == null) soldier.setAi(Math.random() > 0.5 ? new OffensiveAI() : new DefensiveAI());
-				}
-
-				if (currentPlayerIndex < 1) {
-					currentPlayerIndex++;
-					soldierPanel.removeAll();
-					setupSoldiers();
-					MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
-				} else {
-					MainView.confirmButton.removeActionListener(this);
-					MainView.switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
-				}
-			}
-		});
 	}
-
 }

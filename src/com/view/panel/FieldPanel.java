@@ -12,6 +12,9 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.Serial;
 
+/**
+ * Panel used to display one specific battlefield.
+ */
 public class FieldPanel extends BasePanel {
 
 	/**
@@ -25,6 +28,8 @@ public class FieldPanel extends BasePanel {
 
 	/**
 	 * Create the panel.
+	 *
+	 * @param fieldProperties the field properties
 	 */
 	public FieldPanel(FieldProperties fieldProperties) {
 		this.fieldProperties = fieldProperties;
@@ -87,6 +92,9 @@ public class FieldPanel extends BasePanel {
 		});
 	}
 
+	/**
+	 * Set up the soldiers on both sides.
+	 */
 	private void setupSoldiers() {
 		Player[] players = GameController.players;
 		for (int i = 0; i < players.length; i++) {

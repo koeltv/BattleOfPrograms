@@ -35,6 +35,11 @@ public class BasePanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Change background image.
+	 *
+	 * @param url the url of the image
+	 */
 	public void changeBackground(URL url) {
 		if (url != null) {
 			try {

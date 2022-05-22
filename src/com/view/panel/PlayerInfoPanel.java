@@ -112,7 +112,7 @@ public class PlayerInfoPanel extends BasePanel {
 	}
 
 	/**
-	 * Check player information.
+	 * Check player information to enable or not the confirm button.
 	 * Players should each select a different program.
 	 */
 	public void checkInformations() {

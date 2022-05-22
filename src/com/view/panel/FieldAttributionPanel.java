@@ -14,6 +14,9 @@ import java.awt.event.*;
 import java.io.Serial;
 import java.util.HashMap;
 
+/**
+ * Panel used to attribute the soldiers to a field.
+ */
 public class FieldAttributionPanel extends JPanel {
 
 	/**
@@ -104,6 +107,10 @@ public class FieldAttributionPanel extends JPanel {
 		});
 	}
 
+	/**
+	 * Add all the soldiers that needs to be attributed to the left side.
+	 * If a soldier is a reservist he won't be displayed on the first round.
+	 */
 	private void setupSoldiers() {
 		for (Soldier soldier : GameController.players[currentPlayerIndex].soldiers) {
 			if (!soldier.isReservist()) {
