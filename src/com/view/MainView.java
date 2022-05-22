@@ -6,6 +6,8 @@ import com.view.panel.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Main View containing all panels.
@@ -98,19 +100,41 @@ public class MainView { //TODO Global BattleField, individual battles, popups, (
 		
 		JLabel statsLabel = new JLabel("F.R.I.C.D");
 		sl_menuBar.putConstraint(SpringLayout.NORTH, statsLabel, 1, SpringLayout.NORTH, menuBar);
-		sl_menuBar.putConstraint(SpringLayout.WEST, statsLabel, 51, SpringLayout.WEST, menuBar);
+		sl_menuBar.putConstraint(SpringLayout.WEST, statsLabel, 200, SpringLayout.WEST, menuBar);
 		sl_menuBar.putConstraint(SpringLayout.SOUTH, statsLabel, 22, SpringLayout.NORTH, menuBar);
+		sl_menuBar.putConstraint(SpringLayout.EAST, statsLabel, -200, SpringLayout.EAST, menuBar);
 		statsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		statsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		statsLabel.setForeground(ColorPalette.WHITE.color);
 		menuBar.add(statsLabel);
+		statsLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Dialog dialog = new Dialog(new Point(frame.getLocationOnScreen().x + frame.getWidth()/2, frame.getLocationOnScreen().y + frame.getHeight()/2),
+						"""
+								En-dessous de chaque combattant, vous pourrez voir 5 chiffres, ceux-ci correspondent aux statistiques F.R.I.C.D. :
+        
+								Force : Les points affectés ici augmentent les dégâts du combattant de 10% par point affecté. Par ex, si un combattant à 2 points, il frappera avec 20% de force en plus. Il fera 20% de dégâts en plus.
+								        
+								Résistance : Les points affectés ici diminuent les dégâts reçus par le combattant de 5% par point affecté. Par ex, si un combattant à 2 points, il « absorbera » 10% des dégâts qu’il reçoit.
+								        
+								Initiative : Lors d’un affrontement, c’est celui qui a la plus forte initiative qui porte le premier coup, puis c’est le combattant qui a la seconde meilleure initiative etc...
+								        
+								Constitution : Elle permet d’augmenter la constitution du combattant en lui donnant des points de vie supplémentaires. Par ex, 10 points de constitution feront augmenter les points de vie initiaux à 40 (au lieu de 30).
+								        
+								Dextérité : Les points affecté ici augmentent les chances de « toucher » son ennemi lors d’une attaque, ou d’esquiver lorsqu’on est attaqué. 1 point correspond à 3% de chance supplémentaire d’atteindre sa cible ou d’esquiver une attaque.
+								"""
+				);
+				dialog.disableButtons();
+				dialog.setVisible(true);
+			}
+		});
 		
 		confirmButton = new JButton("Valider");
 		sl_menuBar.putConstraint(SpringLayout.NORTH, confirmButton, 1, SpringLayout.NORTH, menuBar);
 		menuBar.add(confirmButton);
 
 		playerIndicator = new PlayerIndicator();
-		sl_menuBar.putConstraint(SpringLayout.EAST, statsLabel, -20, SpringLayout.WEST, playerIndicator);
 		sl_menuBar.putConstraint(SpringLayout.EAST, confirmButton, -25, SpringLayout.WEST, playerIndicator);
 		sl_menuBar.putConstraint(SpringLayout.NORTH, playerIndicator, 1, SpringLayout.NORTH, menuBar);
 		sl_menuBar.putConstraint(SpringLayout.SOUTH, playerIndicator, 22, SpringLayout.NORTH, menuBar);
