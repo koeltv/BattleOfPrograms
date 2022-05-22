@@ -10,7 +10,7 @@ import java.io.Serial;
 import java.net.URL;
 import java.util.Objects;
 
-public class GraphicSoldier extends JLabel {
+public class GraphicSoldier extends JLabel { //TODO Implement life-bar and stats
 
 	/**
 	 * 

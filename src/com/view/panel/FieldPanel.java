@@ -15,7 +15,7 @@ import java.io.Serial;
 /**
  * Panel used to display one specific battlefield.
  */
-public class FieldPanel extends BasePanel {
+public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 
 	/**
 	 * 

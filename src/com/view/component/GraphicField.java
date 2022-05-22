@@ -5,7 +5,7 @@ import java.awt.*;
 import java.io.Serial;
 import java.util.Objects;
 
-public class GraphicField extends JPanel {
+public class GraphicField extends JPanel { //TODO Implement battle state, number of soldiers
 
 	/**
 	 * 

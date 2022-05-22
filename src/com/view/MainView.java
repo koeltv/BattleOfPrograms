@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
  * The panels are added to the card layout and can be changed that way.
  * The menu bar always stay at the top.
  */
-public class MainView { //TODO Global BattleField, individual battles, popups, (player transition)
+public class MainView { //TODO Player transition
 
 	private JFrame frame;
 
