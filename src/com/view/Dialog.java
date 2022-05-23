@@ -5,12 +5,19 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Serial;
 
 /**
  * Used to display information to the players while interrupting the game.
  */
 public class Dialog extends JDialog {
 
+	/**
+	 * 
+	 */
+	@Serial
+	private static final long serialVersionUID = -5301893305124026332L;
+	
 	private final JPanel buttonPane;
 	private final JTextPane textPane;
 
