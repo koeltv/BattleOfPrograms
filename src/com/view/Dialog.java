@@ -38,6 +38,11 @@ public class Dialog extends JDialog {
 		contentPanel.setLayout(sl_contentPanel);
 
 		textPane = new JTextPane();
+
+		//fontSize = (1 / textLength^0.25) * 90, used to scale text to fill dialog
+		float fontSize = (float) ((float) 1 / Math.pow(text.length(), 0.25) * 90);
+		textPane.setFont(textPane.getFont().deriveFont(fontSize));
+
 		sl_contentPanel.putConstraint(SpringLayout.NORTH, textPane, 5, SpringLayout.NORTH, contentPanel);
 		sl_contentPanel.putConstraint(SpringLayout.WEST, textPane, 5, SpringLayout.WEST, contentPanel);
 		sl_contentPanel.putConstraint(SpringLayout.SOUTH, textPane, -5, SpringLayout.SOUTH, contentPanel);
@@ -48,6 +53,7 @@ public class Dialog extends JDialog {
 		textPane.setForeground(ColorPalette.WHITE.color);
 		textPane.setOpaque(false);
 		contentPanel.add(textPane);
+
 		{
 			buttonPane = new JPanel();
 			buttonPane.setOpaque(false);
