@@ -80,7 +80,7 @@ public class FieldAttributionPanel extends JPanel {
 						fields.forEach((fieldName, column) -> {
 							for (Component component : column.getComponents()) {
 								if (component instanceof GraphicSoldier graphicSoldier) {
-									graphicSoldier.soldier.sendToField(fieldName);
+									graphicSoldier.sendToField(fieldName);
 								}
 							}
 						});
@@ -116,6 +116,7 @@ public class FieldAttributionPanel extends JPanel {
 			if (!soldier.isReservist()) {
 				GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
 				graphicSoldier.setSelected(true);
+				graphicSoldier.enableInfos();
 				soldierPanel.add(graphicSoldier);
 
 				graphicSoldier.addMouseMotionListener(new MouseAdapter() {

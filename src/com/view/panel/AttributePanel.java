@@ -79,7 +79,7 @@ public class AttributePanel extends JPanel {
 		gbc_reservistCheckBox.gridy = 0;
 		statPanel.add(reservistCheckBox, gbc_reservistCheckBox);
 		reservistCheckBox.addActionListener(e -> {
-			currentGraphicSoldier.soldier.setReservist(reservistCheckBox.isSelected());
+			currentGraphicSoldier.setReservist(reservistCheckBox.isSelected());
 			long numberOfReservist = Arrays.stream(GameController.players[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
 			reservistCheckBox.setEnabled(numberOfReservist < 5  || reservistCheckBox.isSelected());
 			reservistCheckBox.setText(numberOfReservist + "/5");
@@ -109,11 +109,11 @@ public class AttributePanel extends JPanel {
 		statPanel.add(strengthSlider, gbc_strengthSlider);
 		strengthSlider.addChangeListener(e -> {
 			if (currentGraphicSoldier != null) {
-				int difference = strengthSlider.getValue() - currentGraphicSoldier.soldier.getStrength();
-				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setStrength(currentGraphicSoldier.soldier.getStrength() + difference)) {
+				int difference = strengthSlider.getValue() - currentGraphicSoldier.getStrength();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.setStrength(currentGraphicSoldier.getStrength() + difference)) {
 					updatePoints(difference);
 				} else {
-					strengthSlider.setValue(currentGraphicSoldier.soldier.getStrength());
+					strengthSlider.setValue(currentGraphicSoldier.getStrength());
 				}
 			}
 		});
@@ -142,11 +142,11 @@ public class AttributePanel extends JPanel {
 		statPanel.add(resistanceSlider, gbc_resistanceSlider);
 		resistanceSlider.addChangeListener(e -> {
 			if (currentGraphicSoldier != null) {
-				int difference = resistanceSlider.getValue() - currentGraphicSoldier.soldier.getResistance();
-				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setResistance(currentGraphicSoldier.soldier.getResistance() + difference)) {
+				int difference = resistanceSlider.getValue() - currentGraphicSoldier.getResistance();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.setResistance(currentGraphicSoldier.getResistance() + difference)) {
 					updatePoints(difference);
 				} else {
-					resistanceSlider.setValue(currentGraphicSoldier.soldier.getResistance());
+					resistanceSlider.setValue(currentGraphicSoldier.getResistance());
 				}
 			}
 		});
@@ -175,11 +175,11 @@ public class AttributePanel extends JPanel {
 		statPanel.add(initiativeSlider, gbc_initiativeSlider);
 		initiativeSlider.addChangeListener(e -> {
 			if (currentGraphicSoldier != null) {
-				int difference = initiativeSlider.getValue() - currentGraphicSoldier.soldier.getInitiative();
-				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setInitiative(currentGraphicSoldier.soldier.getInitiative() + difference)) {
+				int difference = initiativeSlider.getValue() - currentGraphicSoldier.getInitiative();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.setInitiative(currentGraphicSoldier.getInitiative() + difference)) {
 					updatePoints(difference);
 				} else {
-					initiativeSlider.setValue(currentGraphicSoldier.soldier.getInitiative());
+					initiativeSlider.setValue(currentGraphicSoldier.getInitiative());
 				}
 			}
 		});
@@ -210,11 +210,11 @@ public class AttributePanel extends JPanel {
 		statPanel.add(constitutionSlider, gbc_constitutionSlider);
 		constitutionSlider.addChangeListener(e -> {
 			if (currentGraphicSoldier != null) {
-				int difference = constitutionSlider.getValue() - currentGraphicSoldier.soldier.getConstitution();
-				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setConstitution(currentGraphicSoldier.soldier.getConstitution() + difference)) {
+				int difference = constitutionSlider.getValue() - currentGraphicSoldier.getConstitution();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.setConstitution(currentGraphicSoldier.getConstitution() + difference)) {
 					updatePoints(difference);
 				} else {
-					constitutionSlider.setValue(currentGraphicSoldier.soldier.getConstitution());
+					constitutionSlider.setValue(currentGraphicSoldier.getConstitution());
 				}
 			}
 		});
@@ -243,11 +243,11 @@ public class AttributePanel extends JPanel {
 		statPanel.add(dexteritySlider, gbc_dexteritySlider);
 		dexteritySlider.addChangeListener(e -> {
 			if (currentGraphicSoldier != null) {
-				int difference = dexteritySlider.getValue() - currentGraphicSoldier.soldier.getDexterity();
-				if (assignablePoints - difference >= 0 && currentGraphicSoldier.soldier.setDexterity(currentGraphicSoldier.soldier.getDexterity() + difference)) {
+				int difference = dexteritySlider.getValue() - currentGraphicSoldier.getDexterity();
+				if (assignablePoints - difference >= 0 && currentGraphicSoldier.setDexterity(currentGraphicSoldier.getDexterity() + difference)) {
 					updatePoints(difference);
 				} else {
-					dexteritySlider.setValue(currentGraphicSoldier.soldier.getDexterity());
+					dexteritySlider.setValue(currentGraphicSoldier.getDexterity());
 				}
 			}
 		});
@@ -275,14 +275,14 @@ public class AttributePanel extends JPanel {
 		buttonGroup.add(defensiveRadioButton);
 		aiSelectionPanel.add(defensiveRadioButton);
 		defensiveRadioButton.addActionListener(l -> {
-			if (defensiveRadioButton.isSelected()) currentGraphicSoldier.soldier.setAi(new DefensiveAI());
+			if (defensiveRadioButton.isSelected()) currentGraphicSoldier.setAi(new DefensiveAI());
 		});
 
 		offensiveRadioButton = new JRadioButton("Offensif");
 		buttonGroup.add(offensiveRadioButton);
 		aiSelectionPanel.add(offensiveRadioButton);
 		offensiveRadioButton.addActionListener(l -> {
-			if (offensiveRadioButton.isSelected()) currentGraphicSoldier.soldier.setAi(new OffensiveAI());
+			if (offensiveRadioButton.isSelected()) currentGraphicSoldier.setAi(new OffensiveAI());
 		});
 
 		randomRadioButton = new JRadioButton("Al\u00E9atoire");
@@ -378,16 +378,13 @@ public class AttributePanel extends JPanel {
 		assignablePoints = 400;
 
 		for (int i = 0; i < 20; i++) {
-			GraphicSoldier graphicSoldier;
-			if (i < 15) {
-				graphicSoldier = GraphicSoldier.createGraphics(new Soldier());
-			} else if (i < 19) {
-				graphicSoldier = GraphicSoldier.createGraphics(new EliteSoldier());
-			} else {
-				graphicSoldier = GraphicSoldier.createGraphics(new WarMaster());
-			}
+			Soldier soldier;
+			if (i < 15) soldier = new Soldier();
+			else if (i < 19) soldier = new EliteSoldier();
+			else soldier = new WarMaster();
 
-			GameController.players[currentPlayerIndex].soldiers[i] = graphicSoldier.soldier;
+			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
+			GameController.players[currentPlayerIndex].soldiers[i] = soldier;
 			soldierPanel.add(graphicSoldier);
 
 			if (i == 0) {
@@ -402,19 +399,19 @@ public class AttributePanel extends JPanel {
 					currentGraphicSoldier = (GraphicSoldier) e.getComponent();
 					currentGraphicSoldier.setSelected(true);
 
-					reservistCheckBox.setSelected(currentGraphicSoldier.soldier.isReservist());
+					reservistCheckBox.setSelected(currentGraphicSoldier.isReservist());
 					long numberOfReservist = Arrays.stream(GameController.players[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
 					reservistCheckBox.setEnabled(numberOfReservist < 5 || reservistCheckBox.isSelected());
 
-					strengthSlider.setValue(currentGraphicSoldier.soldier.getStrength());
-					resistanceSlider.setValue(currentGraphicSoldier.soldier.getResistance());
-					initiativeSlider.setValue(currentGraphicSoldier.soldier.getInitiative());
-					constitutionSlider.setValue(currentGraphicSoldier.soldier.getConstitution());
-					dexteritySlider.setValue(currentGraphicSoldier.soldier.getDexterity());
+					strengthSlider.setValue(currentGraphicSoldier.getStrength());
+					resistanceSlider.setValue(currentGraphicSoldier.getResistance());
+					initiativeSlider.setValue(currentGraphicSoldier.getInitiative());
+					constitutionSlider.setValue(currentGraphicSoldier.getConstitution());
+					dexteritySlider.setValue(currentGraphicSoldier.getDexterity());
 
-					if (currentGraphicSoldier.soldier.ai instanceof DefensiveAI) {
+					if (currentGraphicSoldier.getAi() instanceof DefensiveAI) {
 						defensiveRadioButton.doClick();
-					} else if (currentGraphicSoldier.soldier.ai instanceof OffensiveAI) {
+					} else if (currentGraphicSoldier.getAi() instanceof OffensiveAI) {
 						offensiveRadioButton.doClick();
 					} else {
 						randomRadioButton.doClick();

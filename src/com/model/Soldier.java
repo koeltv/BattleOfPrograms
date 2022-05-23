@@ -5,7 +5,8 @@ import com.view.component.FieldProperties;
 public class Soldier {
 	protected boolean reservist = false;
 
-	protected int lifePoints = 30;
+	protected final int maxLifePoints = 30;
+	protected int lifePoints = maxLifePoints;
 	protected int strength;
 	protected int dexterity;
 	protected int resistance;
@@ -17,7 +18,7 @@ public class Soldier {
 	/**
 	 * Defensive, offensive, random
 	 */
-	public AI ai;
+	private AI ai;
 
 	public Soldier () {
 
@@ -82,6 +83,14 @@ public class Soldier {
 
 	public void setAi(AI ai) {
 		this.ai = ai;
+	}
+
+	public int getMaxLifePoints() {
+		return maxLifePoints;
+	}
+
+	public int getLifePoints() {
+		return lifePoints;
 	}
 	
 	public void heal() {

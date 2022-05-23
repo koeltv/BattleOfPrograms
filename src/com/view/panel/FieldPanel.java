@@ -102,6 +102,7 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 				if (soldier.assignedField == fieldProperties) {
 					GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
 					graphicSoldier.setSelected(true);
+					graphicSoldier.enableInfos();
 					(i < 1 ? firstPlayerPanel : secondPlayerPanel).add(graphicSoldier);
 				}
 			}
