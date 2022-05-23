@@ -1,9 +1,6 @@
 package com.view.component;
 
-import com.model.AI;
-import com.model.EliteSoldier;
-import com.model.Soldier;
-import com.model.WarMaster;
+import com.model.*;
 import com.view.ColorPalette;
 import com.view.panel.AttributePanel;
 
@@ -11,9 +8,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.Serial;
 import java.net.URL;
+import java.util.List;
 import java.util.Objects;
 
-public class GraphicSoldier extends JPanel {
+public class GraphicSoldier extends JPanel implements Fighter {
 
 	/**
 	 * 
@@ -219,11 +217,36 @@ public class GraphicSoldier extends JPanel {
 		soldier.setAi(ai);
 	}
 
+	@Override
+	public void heal() {
+
+	}
+
 	public void sendToField(FieldProperties field) {
 		soldier.sendToField(field);
 	}
 
 	public boolean isDead() {
 		return soldier.isDead();
+	}
+
+	@Override
+	public void attack(List<Fighter> fighters) {
+		soldier.attack(fighters);
+	}
+
+	@Override
+	public boolean takeHit(Hit hit) {
+		if (soldier.takeHit(hit)) {
+			lifeBar.setValue(soldier.getLifePoints());
+			repaint();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void rest() {
+
 	}
 }

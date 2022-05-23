@@ -44,7 +44,7 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 
 	public void setUpperLabelText(String text) {
 		upperLabel.setText(text);
-		upperLabel.setEnabled(true);
+		upperLabel.setVisible(true);
 	}
 
 	public void setBottomLabelText(String text) {
@@ -57,13 +57,13 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 			case "battleState" -> {
 				if (evt.getNewValue() instanceof Boolean isBattleHappening) {
 					if (isBattleHappening) setBottomLabelText("Bataille en cours...");
-					else bottomLabel.setEnabled(false);
+					else bottomLabel.setVisible(false);
 				}
 			}
 			case "soldierState" -> {
 				if (evt.getNewValue() instanceof GraphicSoldier[] soldiers) {
 					long soldiersLeft = Arrays.stream(soldiers).filter(GraphicSoldier::isDead).count();
-					if (soldiers.length == soldiersLeft) upperLabel.setEnabled(false);
+					if (soldiers.length == soldiersLeft) upperLabel.setVisible(false);
 					else setUpperLabelText(soldiersLeft + "/" + soldiers.length + " soldats survivants");
 				}
 			}

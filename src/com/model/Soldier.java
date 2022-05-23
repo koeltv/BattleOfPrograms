@@ -2,7 +2,9 @@ package com.model;
 
 import com.view.component.FieldProperties;
 
-public class Soldier {
+import java.util.List;
+
+public class Soldier implements Fighter {
 	protected boolean reservist = false;
 
 	protected final int maxLifePoints = 30;
@@ -93,33 +95,41 @@ public class Soldier {
 		return lifePoints;
 	}
 	
-	public void heal() {
-		
-	}
-	
-	public void attack() {
-		double attackValue = 1;
+	public void attack(List<Fighter> fighters) {
+		float attackValue = 1;
 		attackValue += attackValue * ((double) strength / 10);
 		
-		double hitChance = 1;
+		float hitChance = 1;
 		hitChance += (dexterity * ((double) 3/100)) * hitChance;
-	}
-	
-	public void takeHit(double damageValue) {
-		double hitChance = 1;
-		hitChance -= (dexterity * ((double) 3/100)) * hitChance;
-		
-		if(Math.random() <= hitChance) { //In that case he takes the hit
-			damageValue -= (resistance * ((double) 5/100)) * damageValue;
-		}
 
-		lifePoints -= damageValue;
+		ai.selectTarget(fighters).takeHit(new Hit(attackValue, hitChance));
+	}
+
+	@Override
+	public boolean takeHit(Hit hit) {
+		float hitChance = hit.hitChance();
+		hitChance -= (dexterity * ((double) 3/100)) * hitChance;
+
+		float damageValue = hit.attackValue();
+		double random = Math.random();
+		System.out.println(random + " <= " + hitChance + " ?");
+		if(random <= hitChance) { //In that case he takes the hit
+			System.err.println("I took a hit ! " + this);
+			damageValue -= (resistance * ((double) 5/100)) * damageValue;
+			lifePoints -= damageValue;
+			return true;
+		}
+		return false;
 	}
 
 
 	
 	public void rest() {
 		
+	}
+
+	public void heal() {
+
 	}
 	
 	public boolean isDead() {

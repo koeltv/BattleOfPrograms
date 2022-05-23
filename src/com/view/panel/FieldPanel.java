@@ -1,5 +1,6 @@
 package com.view.panel;
 
+import com.model.Fighter;
 import com.model.Player;
 import com.model.Soldier;
 import com.view.MainView;
@@ -16,11 +17,15 @@ import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Panel used to display one specific battlefield.
  */
-public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
+public class FieldPanel extends BasePanel { //TODO Animations ? + Separate Model
 
 	/**
 	 *
@@ -32,6 +37,11 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 	private final JPanel secondPlayerPanel;
 
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+
+	private List<Fighter> leftSide = new ArrayList<>();
+	private List<Fighter> rightSide = new ArrayList<>();
+
+	private List<Fighter> attackOrder = new ArrayList<>();
 
 	/**
 	 * Create the panel.
@@ -91,10 +101,10 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 		rightPanel.add(secondPlayerPanel, gbc_panel_2);
 		secondPlayerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
+		setupSoldiers();
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
-				setupSoldiers();
 				MainView.confirmButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -102,10 +112,31 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 						MainView.switchToPanel(PanelIdentifier.GLOBAL_FIELD_PANEL);
 					}
 				});
+
+				battle();
 			}
 		});
+	}
 
-//		changeSupport.firePropertyChange("type", "oldValue", "newValue");
+	public void battle() {
+		attackOrder = attackOrder.stream().filter(fighter -> !fighter.isDead()).collect(Collectors.toList());
+		leftSide = leftSide.stream().filter(fighter -> !fighter.isDead()).collect(Collectors.toList());
+		rightSide = rightSide.stream().filter(fighter -> !fighter.isDead()).collect(Collectors.toList());
+
+		if (leftSide.size() < 1 || rightSide.size() < 1) {
+			GameController.battleContinues = false;
+			changeSupport.firePropertyChange("battleState", true, false);
+		} else {
+			Fighter fighter = attackOrder.get(0);
+			if (leftSide.contains(fighter)) {
+				fighter.attack(rightSide);
+			} else {
+				fighter.attack(leftSide);
+			}
+			attackOrder.remove(fighter);
+			attackOrder.add(fighter);
+		}
+			//		changeSupport.firePropertyChange("soldierState", "oldValue", "newValue"); TODO Trigger update when a soldier dies
 	}
 
 	/**
@@ -119,12 +150,22 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 					GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
 					graphicSoldier.setSelected(true);
 					graphicSoldier.enableInfos();
-					(i < 1 ? firstPlayerPanel : secondPlayerPanel).add(graphicSoldier);
+					if (i < 1) {
+						firstPlayerPanel.add(graphicSoldier);
+						leftSide.add(graphicSoldier);
+					} else {
+						secondPlayerPanel.add(graphicSoldier);
+						rightSide.add(graphicSoldier);
+					}
 				}
 			}
 		}
 		repaint();
 		revalidate();
+
+		attackOrder.addAll(leftSide.stream().toList());
+		attackOrder.addAll(rightSide.stream().toList());
+		attackOrder = attackOrder.stream().sorted(Comparator.comparingInt(Fighter::getInitiative)).collect(Collectors.toList());
 	}
 
 	public void addObserver(PropertyChangeListener propertyChangeListener) {
