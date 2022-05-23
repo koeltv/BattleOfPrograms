@@ -37,8 +37,12 @@ public class GlobalFieldPanel extends BasePanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				MainView.switchToPanel(FieldProperties.SPORTS_HALL);
+				sportField.removeMouseListener(this);
 			}
 		});
+		FieldPanel sportPanel = new FieldPanel(FieldProperties.SPORTS_HALL);
+		sportPanel.addObserver(sportField);
+		MainView.addPanel(sportPanel, FieldProperties.SPORTS_HALL);
 
 		GraphicField bdeField = new GraphicField(FieldProperties.BDE);
 		springLayout.putConstraint(SpringLayout.NORTH, bdeField, 250, SpringLayout.NORTH, this);
@@ -48,8 +52,12 @@ public class GlobalFieldPanel extends BasePanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				MainView.switchToPanel(FieldProperties.BDE);
+				bdeField.removeMouseListener(this);
 			}
 		});
+		FieldPanel bdePanel = new FieldPanel(FieldProperties.BDE);
+		bdePanel.addObserver(sportField);
+		MainView.addPanel(bdePanel, FieldProperties.SPORTS_HALL);
 
 		GraphicField libraryField = new GraphicField(FieldProperties.LIBRARY);
 		springLayout.putConstraint(SpringLayout.WEST, libraryField, 600, SpringLayout.WEST, this);
@@ -59,8 +67,12 @@ public class GlobalFieldPanel extends BasePanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				MainView.switchToPanel(FieldProperties.LIBRARY);
+				libraryField.removeMouseListener(this);
 			}
 		});
+		FieldPanel libraryPanel = new FieldPanel(FieldProperties.LIBRARY);
+		libraryPanel.addObserver(sportField);
+		MainView.addPanel(libraryPanel, FieldProperties.LIBRARY);
 
 		GraphicField administrativeField = new GraphicField(FieldProperties.ADMINISTRATIVE_QUARTER);
 		springLayout.putConstraint(SpringLayout.NORTH, administrativeField, 200, SpringLayout.NORTH, this);
@@ -70,8 +82,12 @@ public class GlobalFieldPanel extends BasePanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				MainView.switchToPanel(FieldProperties.ADMINISTRATIVE_QUARTER);
+				administrativeField.removeMouseListener(this);
 			}
 		});
+		FieldPanel administrativePanel = new FieldPanel(FieldProperties.ADMINISTRATIVE_QUARTER);
+		administrativePanel.addObserver(sportField);
+		MainView.addPanel(administrativePanel, FieldProperties.ADMINISTRATIVE_QUARTER);
 
 		GraphicField industrialField = new GraphicField(FieldProperties.INDUSTRIAL_HALLS);
 		springLayout.putConstraint(SpringLayout.SOUTH, industrialField, -150, SpringLayout.SOUTH, this);
@@ -81,16 +97,14 @@ public class GlobalFieldPanel extends BasePanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				MainView.switchToPanel(FieldProperties.INDUSTRIAL_HALLS);
+				industrialField.removeMouseListener(this);
 			}
 		});
+		FieldPanel industrialPanel = new FieldPanel(FieldProperties.INDUSTRIAL_HALLS);
+		industrialPanel.addObserver(sportField);
+		MainView.addPanel(industrialPanel, FieldProperties.INDUSTRIAL_HALLS);
 
 		changeBackground(FieldPanel.class.getResource("/images/interactive_map.PNG"));
-		MainView.addPanel(new FieldPanel(FieldProperties.SPORTS_HALL), FieldProperties.SPORTS_HALL);
-		MainView.addPanel(new FieldPanel(FieldProperties.BDE), FieldProperties.BDE);
-		MainView.addPanel(new FieldPanel(FieldProperties.LIBRARY), FieldProperties.LIBRARY);
-		MainView.addPanel(new FieldPanel(FieldProperties.ADMINISTRATIVE_QUARTER), FieldProperties.ADMINISTRATIVE_QUARTER);
-		MainView.addPanel(new FieldPanel(FieldProperties.INDUSTRIAL_HALLS), FieldProperties.INDUSTRIAL_HALLS);
-
 
 		addComponentListener(new ComponentAdapter() {
 			@Override

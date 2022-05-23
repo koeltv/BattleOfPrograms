@@ -222,4 +222,8 @@ public class GraphicSoldier extends JPanel {
 	public void sendToField(FieldProperties field) {
 		soldier.sendToField(field);
 	}
+
+	public boolean isDead() {
+		return soldier.isDead();
+	}
 }

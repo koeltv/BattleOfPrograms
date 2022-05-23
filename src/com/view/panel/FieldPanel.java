@@ -2,14 +2,19 @@ package com.view.panel;
 
 import com.model.Player;
 import com.model.Soldier;
+import com.view.MainView;
 import com.view.component.FieldProperties;
 import com.view.component.GraphicSoldier;
 import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serial;
 
 /**
@@ -18,13 +23,15 @@ import java.io.Serial;
 public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 
 	/**
-	 * 
+	 *
 	 */
 	@Serial
 	private static final long serialVersionUID = -6721489079020570444L;
 	private final FieldProperties fieldProperties;
 	private final JPanel firstPlayerPanel;
 	private final JPanel secondPlayerPanel;
+
+	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
 	/**
 	 * Create the panel.
@@ -35,11 +42,11 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 		this.fieldProperties = fieldProperties;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setOpaque(false);
-		
+
 		JLabel fieldNameLabel = new JLabel("Champ de bataille : " + fieldProperties.name);
 		fieldNameLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		add(fieldNameLabel);
-		
+
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
 		add(panel);
@@ -55,7 +62,7 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 		gbl_firstPlayerPanel.columnWeights = new double[]{};
 		gbl_firstPlayerPanel.rowWeights = new double[]{};
 		leftPanel.setLayout(gbl_firstPlayerPanel);
-		
+
 		firstPlayerPanel = new JPanel();
 		firstPlayerPanel.setOpaque(false);
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
@@ -74,7 +81,7 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 		gbl_secondPlayerPanel.columnWeights = new double[]{};
 		gbl_secondPlayerPanel.rowWeights = new double[]{};
 		rightPanel.setLayout(gbl_secondPlayerPanel);
-		
+
 		secondPlayerPanel = new JPanel();
 		secondPlayerPanel.setOpaque(false);
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
@@ -88,8 +95,17 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 			@Override
 			public void componentShown(ComponentEvent e) {
 				setupSoldiers();
+				MainView.confirmButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						MainView.confirmButton.removeActionListener(this);
+						MainView.switchToPanel(PanelIdentifier.GLOBAL_FIELD_PANEL);
+					}
+				});
 			}
 		});
+
+//		changeSupport.firePropertyChange("type", "oldValue", "newValue");
 	}
 
 	/**
@@ -109,5 +125,9 @@ public class FieldPanel extends BasePanel { //TODO Battle (with animation ?)
 		}
 		repaint();
 		revalidate();
+	}
+
+	public void addObserver(PropertyChangeListener propertyChangeListener) {
+		this.changeSupport.addPropertyChangeListener(propertyChangeListener);
 	}
 }
