@@ -13,7 +13,7 @@ import java.io.Serial;
 import java.net.URL;
 import java.util.Objects;
 
-public class GraphicSoldier extends JPanel { //TODO Implement life-bar and stats
+public class GraphicSoldier extends JPanel {
 
 	/**
 	 * 
