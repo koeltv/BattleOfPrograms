@@ -1,8 +1,8 @@
 package com.view;
 
-import com.view.component.FieldProperties;
 import com.view.component.PlayerIndicator;
-import com.view.panel.*;
+import com.view.panel.PanelIdentifier;
+import com.view.panel.StartingPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,21 +46,13 @@ public class MainView { //TODO Player transition
 	public MainView() {
 		initialize();
 		mainPanel.add(new StartingPanel(), PanelIdentifier.STARTING_PANEL.toString());
-		mainPanel.add(new PlayerInfoPanel(), PanelIdentifier.PLAYER_INFO_PANEL.toString());
-		mainPanel.add(new AttributePanel(), PanelIdentifier.ATTRIBUTE_PANEL.toString());
-		mainPanel.add(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL.toString());
-		mainPanel.add(new GlobalFieldPanel(), PanelIdentifier.GLOBAL_FIELD_PANEL.toString());
 	}
 
-	public static void addPanel(JPanel panel, FieldProperties fieldProperties) {
-		mainPanel.add(panel, fieldProperties.toString());
+	public static <T extends Enum<T>> void addPanel(JPanel panel, T identifier) {
+		mainPanel.add(panel, identifier.toString());
 	}
 
-	public static void switchToPanel(PanelIdentifier identifier) {
-		((CardLayout) mainPanel.getLayout()).show(mainPanel, identifier.toString());
-	}
-
-	public static void switchToPanel(FieldProperties identifier) {
+	public static <T extends Enum<T>> void switchToPanel(T identifier) {
 		((CardLayout) mainPanel.getLayout()).show(mainPanel, identifier.toString());
 	}
 
@@ -80,9 +72,7 @@ public class MainView { //TODO Player transition
 		
 		JButton btnMenu = new JButton("Menu");
 		btnMenu.setForeground(ColorPalette.MENU_BLUE.color);
-		btnMenu.addActionListener(e -> {
-			
-		});
+		btnMenu.addActionListener(e -> MainView.switchToPanel(PanelIdentifier.STARTING_PANEL));
 		SpringLayout sl_menuBar = new SpringLayout();
 		sl_menuBar.putConstraint(SpringLayout.NORTH, btnMenu, 1, SpringLayout.NORTH, menuBar);
 		sl_menuBar.putConstraint(SpringLayout.WEST, btnMenu, 1, SpringLayout.WEST, menuBar);

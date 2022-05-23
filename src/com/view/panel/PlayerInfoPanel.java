@@ -105,10 +105,10 @@ public class PlayerInfoPanel extends BasePanel {
 				programList.setSelectedIndex(0);
 				nameLabel.setText("Entrer le nom du joueur " + (playerId + 1));
 			} else if (playerId > 1) {
+				MainView.addPanel(new AttributePanel(), PanelIdentifier.ATTRIBUTE_PANEL);
 				MainView.switchToPanel(PanelIdentifier.ATTRIBUTE_PANEL);
 			}
 		});
-
 	}
 
 	/**

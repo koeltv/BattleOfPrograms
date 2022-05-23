@@ -34,7 +34,10 @@ public class StartingPanel extends BasePanel {
 		
 		JButton btnNewGame = new JButton("Nouveau Jeu");
 		buttonPanel.add(btnNewGame);
-		btnNewGame.addActionListener(e -> MainView.switchToPanel(PanelIdentifier.PLAYER_INFO_PANEL));
+		btnNewGame.addActionListener(e -> {
+			MainView.addPanel(new PlayerInfoPanel(), PanelIdentifier.PLAYER_INFO_PANEL);
+			MainView.switchToPanel(PanelIdentifier.PLAYER_INFO_PANEL);
+		});
 		
 		JButton btnCredits = new JButton("Cr\u00E9dits");
 		buttonPanel.add(btnCredits);

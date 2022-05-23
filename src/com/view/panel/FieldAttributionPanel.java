@@ -99,6 +99,7 @@ public class FieldAttributionPanel extends JPanel {
 							setupSoldiers();
 						} else {
 							MainView.confirmButton.removeActionListener(this);
+							MainView.addPanel(new GlobalFieldPanel(), PanelIdentifier.GLOBAL_FIELD_PANEL);
 							MainView.switchToPanel(PanelIdentifier.GLOBAL_FIELD_PANEL);
 						}
 					}

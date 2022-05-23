@@ -353,6 +353,7 @@ public class AttributePanel extends JPanel {
 						} else {
 							MainView.pointLabel.setVisible(false);
 							MainView.confirmButton.removeActionListener(this);
+							MainView.addPanel(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
 							MainView.switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
 						}
 					}
