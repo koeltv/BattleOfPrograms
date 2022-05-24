@@ -72,7 +72,6 @@ public class MainView { //TODO Player transition
 		
 		JButton btnMenu = new JButton("Menu");
 		btnMenu.setForeground(ColorPalette.MENU_BLUE.color);
-		btnMenu.addActionListener(e -> MainView.switchToPanel(PanelIdentifier.STARTING_PANEL));
 		SpringLayout sl_menuBar = new SpringLayout();
 		sl_menuBar.putConstraint(SpringLayout.NORTH, btnMenu, 1, SpringLayout.NORTH, menuBar);
 		sl_menuBar.putConstraint(SpringLayout.WEST, btnMenu, 1, SpringLayout.WEST, menuBar);
@@ -137,6 +136,14 @@ public class MainView { //TODO Player transition
 		mainPanel = new JPanel();
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		mainPanel.setLayout(new CardLayout(0, 0));
-	}
 
+		btnMenu.addActionListener(e -> {
+			mainPanel.removeAll();
+			pointLabel.setVisible(false);
+			playerIndicator.setVisible(false);
+			confirmButton.setVisible(false);
+			MainView.addPanel(new StartingPanel(), PanelIdentifier.STARTING_PANEL);
+			MainView.switchToPanel(PanelIdentifier.STARTING_PANEL);
+		});
+	}
 }

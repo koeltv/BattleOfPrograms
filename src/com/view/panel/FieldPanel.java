@@ -40,6 +40,7 @@ public class FieldPanel extends BasePanel { //TODO Animations ?
 		setOpaque(false);
 
 		JLabel fieldNameLabel = new JLabel("Champ de bataille : " + field.fieldProperties.name);
+		fieldNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		fieldNameLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		add(fieldNameLabel);
 
@@ -49,42 +50,14 @@ public class FieldPanel extends BasePanel { //TODO Animations ?
 		GridLayout gridLayout = new GridLayout(1, 2);
 		panel.setLayout(gridLayout);
 
-		JPanel leftPanel = new JPanel();
-		leftPanel.setOpaque(false);
-		panel.add(leftPanel);
-		GridBagLayout gbl_firstPlayerPanel = new GridBagLayout();
-		gbl_firstPlayerPanel.columnWidths = new int[]{0, 0};
-		gbl_firstPlayerPanel.rowHeights = new int[]{0, 0};
-		gbl_firstPlayerPanel.columnWeights = new double[]{};
-		gbl_firstPlayerPanel.rowWeights = new double[]{};
-		leftPanel.setLayout(gbl_firstPlayerPanel);
-
 		firstPlayerPanel = new JPanel();
 		firstPlayerPanel.setOpaque(false);
-		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-		gbc_panel_1.fill = GridBagConstraints.BOTH;
-		gbc_panel_1.gridx = 0;
-		gbc_panel_1.gridy = 0;
-		leftPanel.add(firstPlayerPanel, gbc_panel_1);
+		panel.add(firstPlayerPanel);
 		firstPlayerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-		JPanel rightPanel = new JPanel();
-		rightPanel.setOpaque(false);
-		panel.add(rightPanel);
-		GridBagLayout gbl_secondPlayerPanel = new GridBagLayout();
-		gbl_secondPlayerPanel.columnWidths = new int[]{0, 0};
-		gbl_secondPlayerPanel.rowHeights = new int[]{0, 0};
-		gbl_secondPlayerPanel.columnWeights = new double[]{};
-		gbl_secondPlayerPanel.rowWeights = new double[]{};
-		rightPanel.setLayout(gbl_secondPlayerPanel);
 
 		secondPlayerPanel = new JPanel();
 		secondPlayerPanel.setOpaque(false);
-		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.fill = GridBagConstraints.BOTH;
-		gbc_panel_2.gridx = 0;
-		gbc_panel_2.gridy = 0;
-		rightPanel.add(secondPlayerPanel, gbc_panel_2);
+		panel.add(secondPlayerPanel);
 		secondPlayerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		setupSoldiers();
