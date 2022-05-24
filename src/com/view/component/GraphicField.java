@@ -1,11 +1,12 @@
 package com.view.component;
 
+import com.view.ColorPalette;
+
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serial;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class GraphicField extends JPanel implements PropertyChangeListener {
@@ -16,12 +17,15 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	@Serial
 	private static final long serialVersionUID = 368210040522610077L;
 
+	private final FieldProperties fieldProperties;
+
 	private final JLabel upperLabel, bottomLabel;
 
 	/**
 	 * Create the panel.
 	 */
 	public GraphicField(FieldProperties fieldProperties) {
+		this.fieldProperties = fieldProperties;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setOpaque(false);
 
@@ -44,11 +48,13 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 
 	public void setUpperLabelText(String text) {
 		upperLabel.setText(text);
+		upperLabel.setForeground(ColorPalette.ORANGE.color);
 		upperLabel.setVisible(true);
 	}
 
 	public void setBottomLabelText(String text) {
 		bottomLabel.setText(text);
+		bottomLabel.setForeground(ColorPalette.TEXT_BLUE.color);
 	}
 
 	@Override
@@ -60,13 +66,14 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 					else bottomLabel.setVisible(false);
 				}
 			}
-			case "soldierState" -> {
-				if (evt.getNewValue() instanceof GraphicSoldier[] soldiers) {
-					long soldiersLeft = Arrays.stream(soldiers).filter(GraphicSoldier::isDead).count();
-					if (soldiers.length == soldiersLeft) upperLabel.setVisible(false);
-					else setUpperLabelText(soldiersLeft + "/" + soldiers.length + " soldats survivants");
-				}
-			}
+			case "soldierAmount" -> setUpperLabelText(evt.getNewValue() + "/" + evt.getOldValue() + " soldats survivants");
+			case "initialSoldierAmount" -> setUpperLabelText(evt.getNewValue() + "/" + evt.getNewValue() + " soldats survivants");
 		}
+		repaint();
+		revalidate();
+	}
+
+	public FieldProperties getFieldProperties() {
+		return fieldProperties;
 	}
 }

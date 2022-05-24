@@ -1,12 +1,10 @@
 package com.view.panel;
 
+import com.model.Field;
 import com.model.Fighter;
-import com.model.Player;
 import com.model.Soldier;
 import com.view.MainView;
-import com.view.component.FieldProperties;
 import com.view.component.GraphicSoldier;
-import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,46 +12,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.Serial;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Panel used to display one specific battlefield.
  */
-public class FieldPanel extends BasePanel { //TODO Animations ? + Separate Model
+public class FieldPanel extends BasePanel { //TODO Animations ?
 
 	/**
 	 *
 	 */
 	@Serial
 	private static final long serialVersionUID = -6721489079020570444L;
-	private final FieldProperties fieldProperties;
 	private final JPanel firstPlayerPanel;
 	private final JPanel secondPlayerPanel;
 
-	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-
-	private List<Fighter> leftSide = new ArrayList<>();
-	private List<Fighter> rightSide = new ArrayList<>();
-
-	private List<Fighter> attackOrder = new ArrayList<>();
+	private final Field field;
 
 	/**
 	 * Create the panel.
 	 *
-	 * @param fieldProperties the field properties
+	 * @param field the field
 	 */
-	public FieldPanel(FieldProperties fieldProperties) {
-		this.fieldProperties = fieldProperties;
+	public FieldPanel(Field field) {
+		this.field = field;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setOpaque(false);
 
-		JLabel fieldNameLabel = new JLabel("Champ de bataille : " + fieldProperties.name);
+		JLabel fieldNameLabel = new JLabel("Champ de bataille : " + field.fieldProperties.name);
 		fieldNameLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		add(fieldNameLabel);
 
@@ -112,63 +98,35 @@ public class FieldPanel extends BasePanel { //TODO Animations ? + Separate Model
 						MainView.switchToPanel(PanelIdentifier.GLOBAL_FIELD_PANEL);
 					}
 				});
-
-				battle();
 			}
 		});
-	}
-
-	public void battle() {
-		attackOrder = attackOrder.stream().filter(fighter -> !fighter.isDead()).collect(Collectors.toList());
-		leftSide = leftSide.stream().filter(fighter -> !fighter.isDead()).collect(Collectors.toList());
-		rightSide = rightSide.stream().filter(fighter -> !fighter.isDead()).collect(Collectors.toList());
-
-		if (leftSide.size() < 1 || rightSide.size() < 1) {
-			GameController.battleContinues = false;
-			changeSupport.firePropertyChange("battleState", true, false);
-		} else {
-			Fighter fighter = attackOrder.get(0);
-			if (leftSide.contains(fighter)) {
-				fighter.attack(rightSide);
-			} else {
-				fighter.attack(leftSide);
-			}
-			attackOrder.remove(fighter);
-			attackOrder.add(fighter);
-		}
-			//		changeSupport.firePropertyChange("soldierState", "oldValue", "newValue"); TODO Trigger update when a soldier dies
 	}
 
 	/**
 	 * Set up the soldiers on both sides.
 	 */
 	private void setupSoldiers() {
-		Player[] players = GameController.players;
-		for (int i = 0; i < players.length; i++) {
-			for (Soldier soldier : players[i].soldiers) {
-				if (soldier.assignedField == fieldProperties) {
-					GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
-					graphicSoldier.setSelected(true);
-					graphicSoldier.enableInfos();
-					if (i < 1) {
-						firstPlayerPanel.add(graphicSoldier);
-						leftSide.add(graphicSoldier);
-					} else {
-						secondPlayerPanel.add(graphicSoldier);
-						rightSide.add(graphicSoldier);
-					}
-				}
-			}
+		field.assignSoldiers();
+
+		for (Fighter fighter : field.leftSide) {
+			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics((Soldier) fighter);
+			graphicSoldier.setSelected(true);
+			graphicSoldier.enableInfos();
+			firstPlayerPanel.add(graphicSoldier);
+		}
+		for (Fighter fighter : field.rightSide) {
+			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics((Soldier) fighter);
+			graphicSoldier.setSelected(true);
+			graphicSoldier.enableInfos();
+			secondPlayerPanel.add(graphicSoldier);
 		}
 		repaint();
 		revalidate();
 
-		attackOrder.addAll(leftSide.stream().toList());
-		attackOrder.addAll(rightSide.stream().toList());
-		attackOrder = attackOrder.stream().sorted(Comparator.comparingInt(Fighter::getInitiative)).collect(Collectors.toList());
+		field.setAttackOrder();
 	}
 
-	public void addObserver(PropertyChangeListener propertyChangeListener) {
-		this.changeSupport.addPropertyChangeListener(propertyChangeListener);
+	public String getName() {
+		return field.fieldProperties.toString();
 	}
 }

@@ -41,7 +41,7 @@ public interface Fighter {
 
 	void rest();
 
-	boolean isDead();
+	boolean isAlive();
 
 	void sendToField(FieldProperties field);
 }

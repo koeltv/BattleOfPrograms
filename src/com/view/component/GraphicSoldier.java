@@ -6,12 +6,14 @@ import com.view.panel.AttributePanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serial;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
-public class GraphicSoldier extends JPanel implements Fighter {
+public class GraphicSoldier extends JPanel implements Fighter, PropertyChangeListener {
 
 	/**
 	 * 
@@ -26,8 +28,6 @@ public class GraphicSoldier extends JPanel implements Fighter {
 	private static final URL warMasterUrl = AttributePanel.class.getResource("/images/commander.png");
 	private static final URL transparentWarMasterUrl = AttributePanel.class.getResource("/images/commander-t.png");
 
-	public boolean selected;
-
 	private final Soldier soldier;
 
 	private final JLabel soldierDisplay;
@@ -36,76 +36,62 @@ public class GraphicSoldier extends JPanel implements Fighter {
 
 	private final JLabel statsLabel = new JLabel();
 
-	GraphicSoldier(WarMaster soldier) {
+	private GraphicSoldier(WarMaster soldier) {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setOpaque(false);
 		this.soldier = soldier;
 
-		lifeBar.setVisible(false);
 		add(lifeBar);
-
 		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentWarMasterUrl)));
-		soldierDisplay.setHorizontalAlignment(SwingConstants.CENTER);
-		soldierDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(soldierDisplay);
-
-		statsLabel.setVisible(false);
 		add(statsLabel);
 	}
 
-	GraphicSoldier(EliteSoldier soldier) {
+	private GraphicSoldier(EliteSoldier soldier) {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setOpaque(false);
 		this.soldier = soldier;
 
-		lifeBar.setVisible(false);
 		add(lifeBar);
-
 		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentEliteSoldierUrl)));
-		soldierDisplay.setHorizontalAlignment(SwingConstants.CENTER);
-		soldierDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(soldierDisplay);
-
-		statsLabel.setVisible(false);
 		add(statsLabel);
 	}
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	GraphicSoldier(Soldier soldier) {
+	private GraphicSoldier(Soldier soldier) {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setOpaque(false);
 		this.soldier = soldier;
 
-		lifeBar.setVisible(false);
 		add(lifeBar);
-
 		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentSoldierUrl)));
-		soldierDisplay.setHorizontalAlignment(SwingConstants.CENTER);
-		soldierDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(soldierDisplay);
-
-		statsLabel.setVisible(false);
 		add(statsLabel);
 	}
 
 	public static GraphicSoldier createGraphics(Soldier soldier) {
+		GraphicSoldier graphicSoldier;
 		if (soldier instanceof WarMaster warMaster) {
-			return new GraphicSoldier(warMaster);
+			graphicSoldier = new GraphicSoldier(warMaster);
 		} else if (soldier instanceof EliteSoldier eliteSoldier) {
-			return new GraphicSoldier(eliteSoldier);
+			graphicSoldier = new GraphicSoldier(eliteSoldier);
 		} else {
-			return new GraphicSoldier(soldier);
+			graphicSoldier = new GraphicSoldier(soldier);
 		}
+
+		soldier.addObserver(graphicSoldier);
+		graphicSoldier.setOpaque(false);
+		graphicSoldier.soldierDisplay.setHorizontalAlignment(SwingConstants.CENTER);
+		graphicSoldier.soldierDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
+		graphicSoldier.lifeBar.setVisible(false);
+		graphicSoldier.statsLabel.setVisible(false);
+		return graphicSoldier;
 	}
 
 	public void setSelected(boolean selected) {
-		this.selected = selected;
-
 		URL url;
 		if (soldier instanceof WarMaster) url = selected ? warMasterUrl : transparentWarMasterUrl;
 		else if (soldier instanceof EliteSoldier) url = selected ? eliteSoldierUrl : transparentEliteSoldierUrl;
@@ -121,8 +107,8 @@ public class GraphicSoldier extends JPanel implements Fighter {
 
 	public void enableInfos() {
 		lifeBar.setForeground(ColorPalette.RED.color);
-		lifeBar.setMaximum(soldier.getMaxLifePoints());
-		lifeBar.setValue(soldier.getLifePoints());
+		lifeBar.setMaximum(soldier.getMaxLifePoints() * 100);
+		lifeBar.setValue((int) (soldier.getLifePoints() * 100));
 		lifeBar.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lifeBar.setVisible(true);
 
@@ -226,8 +212,8 @@ public class GraphicSoldier extends JPanel implements Fighter {
 		soldier.sendToField(field);
 	}
 
-	public boolean isDead() {
-		return soldier.isDead();
+	public boolean isAlive() {
+		return soldier.isAlive();
 	}
 
 	@Override
@@ -237,16 +223,19 @@ public class GraphicSoldier extends JPanel implements Fighter {
 
 	@Override
 	public boolean takeHit(Hit hit) {
-		if (soldier.takeHit(hit)) {
-			lifeBar.setValue(soldier.getLifePoints());
-			repaint();
-			return true;
-		}
-		return false;
+		return soldier.takeHit(hit);
 	}
 
 	@Override
 	public void rest() {
 
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals("damage") || evt.getPropertyName().equals("dead")) {
+			lifeBar.setValue((int) ((Float) evt.getNewValue() * 100));
+			repaint();
+		}
 	}
 }

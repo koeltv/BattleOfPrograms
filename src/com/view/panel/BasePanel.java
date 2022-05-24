@@ -11,6 +11,12 @@ import java.net.URL;
  * Basic panel with the possibility to set a background.
  */
 public class BasePanel extends JPanel {
+
+	/**
+	 * Transparency of the background image. Lower value means more transparency.
+	 * For exemple an alpha of 0.1 correspond to the image being 90% transparent.
+	 */
+	private float alpha = 0.6f;
 	
 	/**
 	 * 
@@ -51,12 +57,16 @@ public class BasePanel extends JPanel {
 			background = null;
 		}
 	}
-	
+
+	public void setAlpha(float alpha) {
+		this.alpha = alpha;
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		Composite composite = ((Graphics2D) g).getComposite();
-		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+		((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 		g.drawImage(background, 0, 0, getWidth(), getHeight(), null);
 		((Graphics2D) g).setComposite(composite);
 	}

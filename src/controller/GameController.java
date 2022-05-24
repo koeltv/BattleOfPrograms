@@ -1,7 +1,7 @@
 package controller;
 
+import com.model.Field;
 import com.model.Player;
-import com.view.panel.FieldPanel;
 
 public class GameController implements Runnable {
 	public final static Player[] players = new Player[2];
@@ -9,10 +9,10 @@ public class GameController implements Runnable {
 
 	private static final GameController instance = new GameController();
 
-	private FieldPanel[] fieldPanels;
+	private Field[] fields;
 
-	public static void addFieldPanels(FieldPanel[] fieldPanels) {
-		instance.fieldPanels = fieldPanels;
+	public static void addFieldPanels(Field[] fields) {
+		instance.fields = fields;
 	}
 
 	private GameController() {}
@@ -25,18 +25,17 @@ public class GameController implements Runnable {
 	public void run() {
 		int i = 0;
 		while (battleContinues) {
-			System.out.println("Now playing in field " + i);
+			i = i % fields.length;
+			System.out.println("\nNow playing in field " + fields[i].fieldProperties); //Used for debugging
+			fields[i++].battle();
 
 			synchronized (this) {
 				try {
-					wait(1000);
+					wait(250);
 				} catch (InterruptedException e) {
 					throw new RuntimeException(e);
 				}
 			}
-
-			i = i % fieldPanels.length;
-			fieldPanels[i++].battle();
 		}
 	}
 }

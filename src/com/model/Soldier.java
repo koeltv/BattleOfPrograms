@@ -2,13 +2,17 @@ package com.model;
 
 import com.view.component.FieldProperties;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 public class Soldier implements Fighter {
+	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+
 	protected boolean reservist = false;
 
 	protected final int maxLifePoints = 30;
-	protected int lifePoints = maxLifePoints;
+	protected float lifePoints = maxLifePoints;
 	protected int strength;
 	protected int dexterity;
 	protected int resistance;
@@ -91,7 +95,7 @@ public class Soldier implements Fighter {
 		return maxLifePoints;
 	}
 
-	public int getLifePoints() {
+	public float getLifePoints() {
 		return lifePoints;
 	}
 	
@@ -114,9 +118,11 @@ public class Soldier implements Fighter {
 		double random = Math.random();
 		System.out.println(random + " <= " + hitChance + " ?");
 		if(random <= hitChance) { //In that case he takes the hit
-			System.err.println("I took a hit ! " + this);
+			System.err.println(this.getClass() + " took " + damageValue + " ! " + lifePoints + " lefts");
 			damageValue -= (resistance * ((double) 5/100)) * damageValue;
 			lifePoints -= damageValue;
+
+			changeSupport.firePropertyChange(lifePoints > 0 ? "damage" : "dead", lifePoints + damageValue, lifePoints);
 			return true;
 		}
 		return false;
@@ -132,11 +138,15 @@ public class Soldier implements Fighter {
 
 	}
 	
-	public boolean isDead() {
-		return lifePoints <= 0;
+	public boolean isAlive() {
+		return lifePoints > 0;
 	}
 
 	public void sendToField(FieldProperties field) {
 		assignedField = field;
+	}
+
+	public void addObserver(PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(listener);
 	}
 }

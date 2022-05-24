@@ -1,5 +1,6 @@
 package com.view.panel;
 
+import com.model.Field;
 import com.view.MainView;
 import com.view.component.FieldProperties;
 import com.view.component.GraphicField;
@@ -25,90 +26,49 @@ public class GlobalFieldPanel extends BasePanel {
 
 	private boolean playing = false;
 
+	private final GraphicField[] graphicFields = new GraphicField[5];
+
 	/**
 	 * Create the panel.
 	 */
 	public GlobalFieldPanel() { //TODO Positioning is temporary, it needs to be redone
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
+		changeBackground(FieldPanel.class.getResource("/images/interactive_map.PNG"));
+		setAlpha(0.4f);
+		MainView.playerIndicator.setVisible(false);
 
 		GraphicField sportField = new GraphicField(FieldProperties.SPORTS_HALL);
 		springLayout.putConstraint(SpringLayout.NORTH, sportField, 58, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, sportField, 150, SpringLayout.WEST, this);
-		sportField.setBottomLabelText("Bataille en cours...");
 		add(sportField);
-		sportField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				MainView.switchToPanel(FieldProperties.SPORTS_HALL);
-			}
-		});
-		FieldPanel sportPanel = new FieldPanel(FieldProperties.SPORTS_HALL);
-		sportPanel.addObserver(sportField);
-		MainView.addPanel(sportPanel, FieldProperties.SPORTS_HALL);
+		graphicFields[0] = sportField;
 
 		GraphicField bdeField = new GraphicField(FieldProperties.BDE);
 		springLayout.putConstraint(SpringLayout.NORTH, bdeField, 250, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, bdeField, 450, SpringLayout.WEST, this);
-		bdeField.setBottomLabelText("Bataille en cours...");
 		add(bdeField);
-		bdeField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				MainView.switchToPanel(FieldProperties.BDE);
-			}
-		});
-		FieldPanel bdePanel = new FieldPanel(FieldProperties.BDE);
-		bdePanel.addObserver(bdeField);
-		MainView.addPanel(bdePanel, FieldProperties.BDE);
+		graphicFields[1] = bdeField;
 
 		GraphicField libraryField = new GraphicField(FieldProperties.LIBRARY);
 		springLayout.putConstraint(SpringLayout.WEST, libraryField, 600, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, libraryField, -300, SpringLayout.SOUTH, this);
-		libraryField.setBottomLabelText("Bataille en cours...");
 		add(libraryField);
-		libraryField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				MainView.switchToPanel(FieldProperties.LIBRARY);
-			}
-		});
-		FieldPanel libraryPanel = new FieldPanel(FieldProperties.LIBRARY);
-		libraryPanel.addObserver(libraryField);
-		MainView.addPanel(libraryPanel, FieldProperties.LIBRARY);
+		graphicFields[2] = libraryField;
 
 		GraphicField administrativeField = new GraphicField(FieldProperties.ADMINISTRATIVE_QUARTER);
 		springLayout.putConstraint(SpringLayout.NORTH, administrativeField, 200, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, administrativeField, -300, SpringLayout.EAST, this);
-		administrativeField.setBottomLabelText("Bataille en cours...");
 		add(administrativeField);
-		administrativeField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				MainView.switchToPanel(FieldProperties.ADMINISTRATIVE_QUARTER);
-			}
-		});
-		FieldPanel administrativePanel = new FieldPanel(FieldProperties.ADMINISTRATIVE_QUARTER);
-		administrativePanel.addObserver(administrativeField);
-		MainView.addPanel(administrativePanel, FieldProperties.ADMINISTRATIVE_QUARTER);
+		graphicFields[3] = administrativeField;
 
 		GraphicField industrialField = new GraphicField(FieldProperties.INDUSTRIAL_HALLS);
 		springLayout.putConstraint(SpringLayout.SOUTH, industrialField, -150, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, industrialField, -200, SpringLayout.EAST, this);
-		industrialField.setBottomLabelText("Bataille en cours...");
 		add(industrialField);
-		industrialField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				MainView.switchToPanel(FieldProperties.INDUSTRIAL_HALLS);
-			}
-		});
-		FieldPanel industrialPanel = new FieldPanel(FieldProperties.INDUSTRIAL_HALLS);
-		industrialPanel.addObserver(industrialField);
-		MainView.addPanel(industrialPanel, FieldProperties.INDUSTRIAL_HALLS);
+		graphicFields[4] = industrialField;
 
-		GameController.addFieldPanels(new FieldPanel[]{sportPanel, bdePanel, libraryPanel, administrativePanel, industrialPanel});
-		changeBackground(FieldPanel.class.getResource("/images/interactive_map.PNG"));
+		setupFields();
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -122,6 +82,27 @@ public class GlobalFieldPanel extends BasePanel {
 				}
 			}
 		});
+	}
+
+	public void setupFields() {
+		Field[] fields = new Field[5];
+		for (int i = 0; i < graphicFields.length; i++) {
+			GraphicField graphicField = graphicFields[i];
+			graphicField.setBottomLabelText("Bataille en cours...");
+			graphicField.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					MainView.switchToPanel(graphicField.getFieldProperties());
+				}
+			});
+
+			fields[i] = new Field(graphicField.getFieldProperties());
+			fields[i].addObserver(graphicField);
+			FieldPanel associatedPanel = new FieldPanel(fields[i]);
+			MainView.addPanel(associatedPanel, graphicField.getFieldProperties());
+		}
+
+		GameController.addFieldPanels(fields);
 	}
 
 }
