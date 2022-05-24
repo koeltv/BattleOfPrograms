@@ -6,7 +6,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
-public class Soldier implements Fighter {
+public class Soldier {
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
 	protected boolean reservist = false;
@@ -99,7 +99,7 @@ public class Soldier implements Fighter {
 		return lifePoints;
 	}
 	
-	public void attack(List<Fighter> fighters) {
+	public void attack(List<Soldier> fighters) {
 		float attackValue = 1;
 		attackValue += attackValue * ((double) strength / 10);
 		
@@ -109,8 +109,7 @@ public class Soldier implements Fighter {
 		ai.selectTarget(fighters).takeHit(new Hit(attackValue, hitChance));
 	}
 
-	@Override
-	public boolean takeHit(Hit hit) {
+	public void takeHit(Hit hit) {
 		float hitChance = hit.hitChance();
 		hitChance -= (dexterity * ((double) 3/100)) * hitChance;
 
@@ -123,19 +122,7 @@ public class Soldier implements Fighter {
 			lifePoints -= damageValue;
 
 			changeSupport.firePropertyChange(lifePoints > 0 ? "damage" : "dead", lifePoints + damageValue, lifePoints);
-			return true;
 		}
-		return false;
-	}
-
-
-	
-	public void rest() {
-		
-	}
-
-	public void heal() {
-
 	}
 	
 	public boolean isAlive() {
@@ -144,6 +131,10 @@ public class Soldier implements Fighter {
 
 	public void sendToField(FieldProperties field) {
 		assignedField = field;
+	}
+
+	public FieldProperties getAssignedField() {
+		return assignedField;
 	}
 
 	public void addObserver(PropertyChangeListener listener) {

@@ -16,6 +16,8 @@ import java.awt.event.MouseEvent;
  */
 public class MainView { //TODO Player transition
 
+	private static MainView instance;
+
 	private JFrame frame;
 
 	private static JPanel mainPanel;
@@ -31,8 +33,8 @@ public class MainView { //TODO Player transition
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
-				MainView window = new MainView();
-				window.frame.setVisible(true);
+				instance = new MainView();
+				instance.frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -99,8 +101,7 @@ public class MainView { //TODO Player transition
 		statsLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Dialog dialog = new Dialog(new Point(frame.getLocationOnScreen().x + frame.getWidth()/2, frame.getLocationOnScreen().y + frame.getHeight()/2),
-						"""
+				displayDialog("""
 								En-dessous de chaque combattant, vous pourrez voir 5 chiffres, ceux-ci correspondent aux statistiques F.R.I.C.D. :
         
 								Force : Les points affectés ici augmentent les dégâts du combattant de 10% par point affecté. Par ex, si un combattant à 2 points, il frappera avec 20% de force en plus. Il fera 20% de dégâts en plus.
@@ -112,10 +113,7 @@ public class MainView { //TODO Player transition
 								Constitution : Elle permet d’augmenter la constitution du combattant en lui donnant des points de vie supplémentaires. Par ex, 10 points de constitution feront augmenter les points de vie initiaux à 40 (au lieu de 30).
 								        
 								Dextérité : Les points affecté ici augmentent les chances de « toucher » son ennemi lors d’une attaque, ou d’esquiver lorsqu’on est attaqué. 1 point correspond à 3% de chance supplémentaire d’atteindre sa cible ou d’esquiver une attaque.
-								"""
-				);
-				dialog.disableButtons();
-				dialog.setVisible(true);
+								""", false);
 			}
 		});
 		
@@ -137,13 +135,21 @@ public class MainView { //TODO Player transition
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		mainPanel.setLayout(new CardLayout(0, 0));
 
-		btnMenu.addActionListener(e -> {
-			mainPanel.removeAll();
-			pointLabel.setVisible(false);
-			playerIndicator.setVisible(false);
-			confirmButton.setVisible(false);
-			MainView.addPanel(new StartingPanel(), PanelIdentifier.STARTING_PANEL);
-			MainView.switchToPanel(PanelIdentifier.STARTING_PANEL);
-		});
+		btnMenu.addActionListener(e -> reset());
+	}
+
+	public static void displayDialog(String text, boolean buttonsEnabled) {
+		Dialog dialog = new Dialog(new Point(instance.frame.getLocationOnScreen().x + instance.frame.getWidth()/2, instance.frame.getLocationOnScreen().y + instance.frame.getHeight()/2), text);
+		if (!buttonsEnabled) dialog.disableButtons();
+		dialog.setVisible(true);
+	}
+
+	public static void reset() {
+		mainPanel.removeAll();
+		pointLabel.setVisible(false);
+		playerIndicator.setVisible(false);
+		confirmButton.setVisible(false);
+		MainView.addPanel(new StartingPanel(), PanelIdentifier.STARTING_PANEL);
+		MainView.switchToPanel(PanelIdentifier.STARTING_PANEL);
 	}
 }

@@ -351,6 +351,7 @@ public class AttributePanel extends JPanel {
 							setupSoldiers();
 							MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
 						} else {
+							GameController.step++;
 							MainView.pointLabel.setVisible(false);
 							MainView.confirmButton.removeActionListener(this);
 							MainView.addPanel(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL);

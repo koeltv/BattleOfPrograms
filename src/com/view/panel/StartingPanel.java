@@ -1,6 +1,5 @@
 package com.view.panel;
 
-import com.view.Dialog;
 import com.view.MainView;
 
 import javax.swing.*;
@@ -42,18 +41,14 @@ public class StartingPanel extends BasePanel {
 		
 		JButton btnCredits = new JButton("Cr\u00E9dits");
 		buttonPanel.add(btnCredits);
-		btnCredits.addActionListener(e -> {
-			com.view.Dialog dialog = new Dialog(new Point(getLocationOnScreen().x + getWidth()/2, getLocationOnScreen().y + getHeight()/2),
-					"""
-							Crédits :
-							       
-							 - Valentin Koeltgen, étudiant en ISI1
-							 - Yichen Liu, étudiant en ISI3
-							"""
-			);
-			dialog.disableButtons();
-			dialog.setVisible(true);
-		});
+		btnCredits.addActionListener(e ->
+				MainView.displayDialog("""
+						Crédits :
+							   
+						 - Valentin Koeltgen, étudiant en ISI1
+						 - Yichen Liu, étudiant en ISI3
+						""", false)
+		);
 		
 		JButton btnQuit = new JButton("Quitter le jeu");
 		buttonPanel.add(btnQuit);

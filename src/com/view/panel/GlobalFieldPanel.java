@@ -7,16 +7,15 @@ import com.view.component.GraphicField;
 import controller.GameController;
 
 import javax.swing.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serial;
 
 /**
  * Panel used to display the overhaul battlefield.
  */
-public class GlobalFieldPanel extends BasePanel {
+public class GlobalFieldPanel extends BasePanel implements PropertyChangeListener {
 
 	/**
 	 *
@@ -24,9 +23,11 @@ public class GlobalFieldPanel extends BasePanel {
 	@Serial
 	private static final long serialVersionUID = -2611728061732290991L;
 
-	private boolean playing = false;
+	private int currentStep = -1;
 
 	private final GraphicField[] graphicFields = new GraphicField[5];
+
+	private final ActionListener passAction;
 
 	/**
 	 * Create the panel.
@@ -37,6 +38,14 @@ public class GlobalFieldPanel extends BasePanel {
 		changeBackground(FieldPanel.class.getResource("/images/interactive_map.PNG"));
 		setAlpha(0.4f);
 		MainView.playerIndicator.setVisible(false);
+
+		passAction = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				MainView.confirmButton.removeActionListener(this);
+				GameController.skipBattle();
+			}
+		};
 
 		GraphicField sportField = new GraphicField(FieldProperties.SPORTS_HALL);
 		springLayout.putConstraint(SpringLayout.NORTH, sportField, 58, SpringLayout.NORTH, this);
@@ -74,35 +83,42 @@ public class GlobalFieldPanel extends BasePanel {
 			@Override
 			public void componentShown(ComponentEvent e) {
 				MainView.confirmButton.setText("Passer");
+				MainView.confirmButton.addActionListener(passAction);
 
-				if (!playing) {
+				if (currentStep != GameController.step) {
 					Thread thread = new Thread(GameController.getInstance());
 					thread.start();
-					playing = true;
+					currentStep = GameController.step;
 				}
 			}
 		});
 	}
 
 	public void setupFields() {
-		Field[] fields = new Field[5];
+		Field[] fields = GameController.getFields();
 		for (int i = 0; i < graphicFields.length; i++) {
 			GraphicField graphicField = graphicFields[i];
 			graphicField.setBottomLabelText("Bataille en cours...");
 			graphicField.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
+					MainView.confirmButton.removeActionListener(passAction);
 					MainView.switchToPanel(graphicField.getFieldProperties());
 				}
 			});
 
-			fields[i] = new Field(graphicField.getFieldProperties());
 			fields[i].addObserver(graphicField);
+			fields[i].addObserver(this);
 			FieldPanel associatedPanel = new FieldPanel(fields[i]);
 			MainView.addPanel(associatedPanel, graphicField.getFieldProperties());
 		}
-
-		GameController.addFieldPanels(fields);
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals("battleState")) {
+			GameController.step++;
+			MainView.switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
+		}
+	}
 }

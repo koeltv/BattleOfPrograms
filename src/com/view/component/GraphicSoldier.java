@@ -10,10 +10,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serial;
 import java.net.URL;
-import java.util.List;
 import java.util.Objects;
 
-public class GraphicSoldier extends JPanel implements Fighter, PropertyChangeListener {
+public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 
 	/**
 	 * 
@@ -203,33 +202,20 @@ public class GraphicSoldier extends JPanel implements Fighter, PropertyChangeLis
 		soldier.setAi(ai);
 	}
 
-	@Override
-	public void heal() {
-
-	}
-
-	public void sendToField(FieldProperties field) {
-		soldier.sendToField(field);
-	}
-
-	public boolean isAlive() {
-		return soldier.isAlive();
+	public FieldProperties getAssignedField() {
+		return soldier.getAssignedField();
 	}
 
 	@Override
-	public void attack(List<Fighter> fighters) {
-		soldier.attack(fighters);
+	public boolean equals(Object obj) {
+		if (obj instanceof Soldier soldier) return this.soldier == soldier;
+		else if (obj instanceof GraphicSoldier graphicSoldier) return this.soldier == graphicSoldier.soldier;
+		else return false;
 	}
 
-	@Override
-	public boolean takeHit(Hit hit) {
-		return soldier.takeHit(hit);
-	}
-
-	@Override
-	public void rest() {
-
-	}
+	///////////////////////////////////////////////////////////////////////////
+	// PropertyChange method
+	///////////////////////////////////////////////////////////////////////////
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

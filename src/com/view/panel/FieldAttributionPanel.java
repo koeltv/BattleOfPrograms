@@ -71,20 +71,16 @@ public class FieldAttributionPanel extends JPanel {
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
+				currentPlayerIndex = 0;
 				setupSoldiers();
+				MainView.playerIndicator.setVisible(true);
 				MainView.playerIndicator.setPlayer(GameController.players[0]);
 
+				MainView.confirmButton.setText("Valider");
+				MainView.confirmButton.setEnabled(checkAttribution());
 				MainView.confirmButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						fields.forEach((fieldName, column) -> {
-							for (Component component : column.getComponents()) {
-								if (component instanceof GraphicSoldier graphicSoldier) {
-									graphicSoldier.sendToField(fieldName);
-								}
-							}
-						});
-
 						if (currentPlayerIndex < 1) {
 							currentPlayerIndex++;
 							soldierPanel.removeAll();
@@ -98,6 +94,7 @@ public class FieldAttributionPanel extends JPanel {
 							MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
 							setupSoldiers();
 						} else {
+							GameController.step++;
 							MainView.confirmButton.removeActionListener(this);
 							MainView.addPanel(new GlobalFieldPanel(), PanelIdentifier.GLOBAL_FIELD_PANEL);
 							MainView.switchToPanel(PanelIdentifier.GLOBAL_FIELD_PANEL);
@@ -113,50 +110,85 @@ public class FieldAttributionPanel extends JPanel {
 	 * If a soldier is a reservist he won't be displayed on the first round.
 	 */
 	private void setupSoldiers() {
+		soldierPanel.removeAll();
+		fields.values().forEach(column -> {
+			for (Component component : column.getComponents()) {
+				if (component instanceof GraphicSoldier soldier) column.remove(soldier);
+			}
+		});
+
 		for (Soldier soldier : GameController.players[currentPlayerIndex].soldiers) {
-			if (!soldier.isReservist()) {
+			if (!soldier.isReservist() || GameController.step > 3) {
 				GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
-				graphicSoldier.setSelected(true);
 				graphicSoldier.enableInfos();
-				soldierPanel.add(graphicSoldier);
 
-				graphicSoldier.addMouseMotionListener(new MouseAdapter() {
-					@Override
-					public void mouseDragged(MouseEvent E) {
-						int x = graphicSoldier.getX(), y = graphicSoldier.getY();
+				if (graphicSoldier.getAssignedField() == null) soldierPanel.add(graphicSoldier);
+				else fields.get(graphicSoldier.getAssignedField()).add(graphicSoldier);
 
-						x += E.getX() - graphicSoldier.getWidth() / 2;
-						y += E.getY() - graphicSoldier.getHeight() / 2;
-						graphicSoldier.setBounds(x, y, graphicSoldier.getWidth(), graphicSoldier.getHeight());
-					}
-				});
-				graphicSoldier.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseReleased(MouseEvent e) {
-						Rectangle soldierAbsoluteBounds = SwingUtilities.convertRectangle(graphicSoldier.getParent(), graphicSoldier.getBounds(), SwingUtilities.getRoot(graphicSoldier));
-						boolean intersectionFound = false;
+				if (soldierCanBeMoved(graphicSoldier)) {
+					graphicSoldier.setSelected(true);
+					graphicSoldier.addMouseMotionListener(new MouseAdapter() {
+						@Override
+						public void mouseDragged(MouseEvent E) {
+							int x = graphicSoldier.getX(), y = graphicSoldier.getY();
 
-						for (FieldColumn field : fields.values()) {
-							Rectangle fieldBounds = SwingUtilities.convertRectangle(field.getParent(), field.getBounds(), SwingUtilities.getRoot(field));
+							x += E.getX() - graphicSoldier.getWidth() / 2;
+							y += E.getY() - graphicSoldier.getHeight() / 2;
+							graphicSoldier.setBounds(x, y, graphicSoldier.getWidth(), graphicSoldier.getHeight());
+						}
+					});
+					graphicSoldier.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseReleased(MouseEvent e) {
+							Rectangle soldierAbsoluteBounds = SwingUtilities.convertRectangle(graphicSoldier.getParent(), graphicSoldier.getBounds(), SwingUtilities.getRoot(graphicSoldier));
+							boolean intersectionFound = false;
 
-							if (intersects(soldierAbsoluteBounds, fieldBounds)) {
-								intersectionFound = true;
-								graphicSoldier.getParent().remove(graphicSoldier);
-								field.add(graphicSoldier);
-								break;
+							for (FieldProperties field : fields.keySet()) {
+								Rectangle fieldBounds = SwingUtilities.convertRectangle(fields.get(field).getParent(), fields.get(field).getBounds(), SwingUtilities.getRoot(fields.get(field)));
+
+								if (intersects(soldierAbsoluteBounds, fieldBounds)) {
+									intersectionFound = true;
+									graphicSoldier.getParent().remove(graphicSoldier);
+
+									GameController.moveSoldierToField(soldier, GameController.findFieldByProperties(field));
+									fields.get(field).add(graphicSoldier);
+									break;
+								}
 							}
-						}
 
-						if (!intersectionFound) {
-							graphicSoldier.getParent().remove(graphicSoldier);
-							soldierPanel.add(graphicSoldier);
+							if (!intersectionFound) {
+								GameController.moveSoldierToField(soldier, null);
+								graphicSoldier.getParent().remove(graphicSoldier);
+								soldierPanel.add(graphicSoldier);
+							}
+
+							MainView.confirmButton.setEnabled(checkAttribution());
+
+							repaint();
+							revalidate();
 						}
-						repaint();
-						revalidate();
-					}
-				});
+					});
+				}
 			}
 		}
+	}
+
+	private boolean soldierCanBeMoved(GraphicSoldier graphicSoldier) { //TODO Check if a soldier can be moved from a field
+		return true;
+	}
+
+	private boolean checkAttribution() { //TODO Enable verify if all soldiers are attributed
+//		if (soldierPanel.getComponents() != null) return false;
+
+		for (FieldColumn column : fields.values()) {
+			Component[] components = column.getComponents();
+			for (int i = 0; i < components.length; i++) {
+				if (components[i] instanceof GraphicSoldier) break;
+				else if (i == components.length - 1) return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

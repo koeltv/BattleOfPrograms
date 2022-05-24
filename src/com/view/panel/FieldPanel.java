@@ -1,7 +1,6 @@
 package com.view.panel;
 
 import com.model.Field;
-import com.model.Fighter;
 import com.model.Soldier;
 import com.view.MainView;
 import com.view.component.GraphicSoldier;
@@ -12,12 +11,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serial;
 
 /**
  * Panel used to display one specific battlefield.
  */
-public class FieldPanel extends BasePanel { //TODO Animations ?
+public class FieldPanel extends BasePanel implements PropertyChangeListener { //TODO Animations ?
 
 	/**
 	 *
@@ -36,6 +37,7 @@ public class FieldPanel extends BasePanel { //TODO Animations ?
 	 */
 	public FieldPanel(Field field) {
 		this.field = field;
+		field.addObserver(this);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setOpaque(false);
 
@@ -79,16 +81,14 @@ public class FieldPanel extends BasePanel { //TODO Animations ?
 	 * Set up the soldiers on both sides.
 	 */
 	private void setupSoldiers() {
-		field.assignSoldiers();
-
-		for (Fighter fighter : field.leftSide) {
-			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics((Soldier) fighter);
+		for (Soldier soldier : field.leftSide) {
+			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
 			graphicSoldier.setSelected(true);
 			graphicSoldier.enableInfos();
 			firstPlayerPanel.add(graphicSoldier);
 		}
-		for (Fighter fighter : field.rightSide) {
-			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics((Soldier) fighter);
+		for (Soldier soldier : field.rightSide) {
+			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
 			graphicSoldier.setSelected(true);
 			graphicSoldier.enableInfos();
 			secondPlayerPanel.add(graphicSoldier);
@@ -101,5 +101,27 @@ public class FieldPanel extends BasePanel { //TODO Animations ?
 
 	public String getName() {
 		return field.fieldProperties.toString();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		switch (evt.getPropertyName()) {
+			case "soldierRemoved" -> {
+				for (Component component : firstPlayerPanel.getComponents()) {
+					if (component.equals(evt.getOldValue())) {
+						firstPlayerPanel.remove(component);
+						return;
+					}
+				}
+				for (Component component : secondPlayerPanel.getComponents()) {
+					if (component.equals(evt.getOldValue())) {
+						secondPlayerPanel.remove(component);
+						return;
+					}
+				}
+			}
+			case "soldierP1Added" -> firstPlayerPanel.add(GraphicSoldier.createGraphics((Soldier) evt.getNewValue()));
+			case "soldierP2Added" -> secondPlayerPanel.add(GraphicSoldier.createGraphics((Soldier) evt.getNewValue()));
+		}
 	}
 }

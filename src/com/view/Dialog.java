@@ -71,6 +71,10 @@ public class Dialog extends JDialog {
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
+				okButton.addActionListener(e -> {
+					MainView.reset();
+					dispose();
+				});
 			}
 			{
 				JButton cancelButton = new JButton("Quitter le jeu");
