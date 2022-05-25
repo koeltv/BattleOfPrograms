@@ -1,6 +1,7 @@
 package com.model;
 
 import com.view.component.FieldProperties;
+import controller.GameController;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -20,6 +21,8 @@ public class Soldier {
 	protected int initiative;
 
 	public FieldProperties assignedField;
+
+	private boolean recentlyDeployed = false;
 
 	/**
 	 * Defensive, offensive, random
@@ -100,6 +103,7 @@ public class Soldier {
 	}
 	
 	public void attack(List<Soldier> fighters) {
+		recentlyDeployed = false;
 		float attackValue = 1;
 		attackValue += attackValue * ((double) strength / 10);
 		
@@ -110,6 +114,7 @@ public class Soldier {
 	}
 
 	public void takeHit(Hit hit) {
+		recentlyDeployed = false;
 		float hitChance = hit.hitChance();
 		hitChance -= (dexterity * ((double) 3/100)) * hitChance;
 
@@ -131,10 +136,36 @@ public class Soldier {
 
 	public void sendToField(FieldProperties field) {
 		assignedField = field;
+		recentlyDeployed = true;
 	}
 
 	public FieldProperties getAssignedField() {
 		return assignedField;
+	}
+
+	/**
+	 * Check if a soldier can be moved.
+	 * A soldier can be moved if :
+	 * - he hasn't been assigned yet
+	 * - he belongs to the controller of a field & the field has at least 2 soldiers of the controller
+	 * He cannot be moved if :
+	 * - He died
+	 * - The battle in the field he is in is still going
+	 * @return true if he can change field, false otherwise
+	 */
+	public boolean canBeMoved() {
+		if (assignedField == null || GameController.step < 3) return true;
+
+		Field field = GameController.findFieldByProperties(assignedField);
+		if (field == null || !isAlive()) return false;
+
+		Player fieldController = field.getController();
+		if (fieldController == null) { //If no controller, the battle is still going so the soldier cannot be moved
+			return recentlyDeployed;
+		} else { //If there is a controller, the soldier can move if it belongs to the controller and there is more than one (and he is still alive)
+			List<Soldier> controllerSoldiers = field.getPlayerSoldiers(fieldController);
+			return controllerSoldiers.contains(this) && controllerSoldiers.size() > 1;
+		}
 	}
 
 	public void addObserver(PropertyChangeListener listener) {

@@ -28,6 +28,10 @@ public class Field implements PropertyChangeListener {
 		this.fieldProperties = fieldProperties;
 	}
 
+	public List<Soldier> getPlayerSoldiers(Player player) {
+		return player == GameController.players[0] ? leftSide : rightSide;
+	}
+
 	public void addSoldier(Soldier soldier) {
 		soldier.sendToField(fieldProperties);
 		if (Arrays.stream(GameController.players[0].soldiers).anyMatch(soldier1 -> soldier1 == soldier)) {
@@ -91,6 +95,16 @@ public class Field implements PropertyChangeListener {
 
 	public boolean contains(Soldier soldier) {
 		return leftSide.contains(soldier) || rightSide.contains(soldier);
+	}
+
+	/**
+	 * Check if soldiers can be assigned to a field.
+	 * Soldiers cannot be added if :
+	 * - The field is under control
+	 * @return true if soldiers can be added, false otherwise
+	 */
+	public boolean isAssignable() {
+		return GameController.step < 3 || !isControlled;
 	}
 
 	///////////////////////////////////////////////////////////////////////////

@@ -117,6 +117,18 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		statsLabel.setVisible(true);
 	}
 
+	public Soldier getSoldier() {
+		return soldier;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof GraphicSoldier graphicSoldier) {
+			return this.soldier == graphicSoldier.soldier;
+		}
+		return false;
+	}
+
 	///////////////////////////////////////////////////////////////////////////
 	// Interface for soldier
 	///////////////////////////////////////////////////////////////////////////
@@ -204,13 +216,6 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 
 	public FieldProperties getAssignedField() {
 		return soldier.getAssignedField();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Soldier soldier) return this.soldier == soldier;
-		else if (obj instanceof GraphicSoldier graphicSoldier) return this.soldier == graphicSoldier.soldier;
-		else return false;
 	}
 
 	///////////////////////////////////////////////////////////////////////////

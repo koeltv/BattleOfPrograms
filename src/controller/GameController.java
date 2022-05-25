@@ -6,6 +6,8 @@ import com.model.Soldier;
 import com.view.MainView;
 import com.view.component.FieldProperties;
 
+import java.util.Arrays;
+
 public class GameController implements Runnable {
 	public final static Player[] players = new Player[2];
 
@@ -92,5 +94,10 @@ public class GameController implements Runnable {
 			if (field.fieldProperties == fieldProperties) return field;
 		}
 		return null;
+	}
+
+	public static boolean checkAttribution(int playerIndex) { //TODO Enable verify if all soldiers are attributed
+//		Arrays.stream(players[playerIndex].soldiers).noneMatch(soldier -> soldier.getAssignedField() == null);
+		return Arrays.stream(instance.fields).noneMatch(field -> (playerIndex < 1 ? field.leftSide : field.rightSide).size() < 1);
 	}
 }

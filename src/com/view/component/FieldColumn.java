@@ -15,12 +15,15 @@ public class FieldColumn extends JScrollPane {
 	 */
 	@Serial
 	private static final long serialVersionUID = 1762692385236278793L;
+
+	public final FieldProperties fieldProperties;
 	
 	private final JPanel panel;
 
 	public FieldColumn(JPanel panel, FieldProperties fieldProperties) {
 		super(panel);
 		this.panel = panel;
+		this.fieldProperties = fieldProperties;
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		add(new GraphicField(fieldProperties));
