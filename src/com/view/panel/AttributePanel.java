@@ -83,6 +83,8 @@ public class AttributePanel extends JPanel {
 			long numberOfReservist = Arrays.stream(GameController.players[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
 			reservistCheckBox.setEnabled(numberOfReservist < 5  || reservistCheckBox.isSelected());
 			reservistCheckBox.setText(numberOfReservist + "/5");
+
+			MainView.confirmButton.setEnabled(numberOfReservist >= 5);
 		});
 
 		JLabel strengthLabel = new JLabel("Force");
@@ -326,6 +328,7 @@ public class AttributePanel extends JPanel {
 				MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
 				MainView.playerIndicator.setVisible(true);
 				MainView.confirmButton.setVisible(true);
+				MainView.confirmButton.setEnabled(false);
 
 				MainView.confirmButton.addActionListener(new ActionListener() {
 					@Override
@@ -341,6 +344,7 @@ public class AttributePanel extends JPanel {
 							resetPoints();
 							currentGraphicSoldier = null;
 							reservistCheckBox.setSelected(false);
+							reservistCheckBox.setText("0/5");
 							strengthSlider.setValue(0);
 							resistanceSlider.setValue(0);
 							initiativeSlider.setValue(0);

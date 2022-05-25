@@ -96,8 +96,8 @@ public class GameController implements Runnable {
 		return null;
 	}
 
-	public static boolean checkAttribution(int playerIndex) { //TODO Enable verify if all soldiers are attributed
-//		Arrays.stream(players[playerIndex].soldiers).noneMatch(soldier -> soldier.getAssignedField() == null);
-		return Arrays.stream(instance.fields).noneMatch(field -> (playerIndex < 1 ? field.leftSide : field.rightSide).size() < 1);
+	public static boolean checkAttribution(int playerIndex) {
+		return Arrays.stream(players[playerIndex].soldiers).filter(soldier -> !soldier.isReservist()).noneMatch(soldier -> soldier.getAssignedField() == null) &&
+				Arrays.stream(instance.fields).noneMatch(field -> field.getPlayerSoldiers(players[playerIndex]).size() < 1);
 	}
 }
