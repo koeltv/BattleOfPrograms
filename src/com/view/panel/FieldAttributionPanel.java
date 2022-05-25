@@ -135,6 +135,20 @@ public class FieldAttributionPanel extends JPanel {
 							x += E.getX() - graphicSoldier.getWidth() / 2;
 							y += E.getY() - graphicSoldier.getHeight() / 2;
 							graphicSoldier.setBounds(x, y, graphicSoldier.getWidth(), graphicSoldier.getHeight());
+
+							Rectangle soldierAbsoluteBounds = SwingUtilities.convertRectangle(graphicSoldier.getParent(), graphicSoldier.getBounds(), SwingUtilities.getRoot(graphicSoldier));
+
+							boolean fieldFound = false;
+							for (FieldProperties field : fields.keySet()) {
+								Rectangle fieldBounds = SwingUtilities.convertRectangle(fields.get(field).getParent(), fields.get(field).getBounds(), SwingUtilities.getRoot(fields.get(field)));
+								if (!fieldFound && intersects(soldierAbsoluteBounds, fieldBounds)) {
+									fields.get(field).setOpaque(true);
+									fieldFound = true;
+								} else {
+									fields.get(field).setOpaque(false);
+								}
+								fields.get(field).repaint();
+							}
 						}
 					});
 					graphicSoldier.addMouseListener(new MouseAdapter() {
@@ -149,6 +163,7 @@ public class FieldAttributionPanel extends JPanel {
 								if (intersects(soldierAbsoluteBounds, fieldBounds)) {
 									intersectionFound = true;
 									graphicSoldier.getParent().remove(graphicSoldier);
+									fields.get(field).setOpaque(false);
 
 									GameController.moveSoldierToField(soldier, GameController.findFieldByProperties(field));
 									fields.get(field).add(graphicSoldier);
