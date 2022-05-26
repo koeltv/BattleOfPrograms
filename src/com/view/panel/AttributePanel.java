@@ -45,7 +45,7 @@ public class AttributePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public AttributePanel() {
+	public AttributePanel() { //TODO Add randomize button
 		GridLayout gridLayout = new GridLayout(1, 2);
 		setLayout(gridLayout);
 
@@ -363,6 +363,17 @@ public class AttributePanel extends JPanel {
 						}
 					}
 				});
+
+				if (GameController.firstGame) {
+					MainView.displayDialog("""
+							Sur cette interface, tu peux assigner des points aux statistiques des différents soldats.
+														
+							Pour choisir un soldat il suffit de cliquer dessus, tu pourras ensuite bouger les sliders pour changer les stats.
+														
+							Tu as un indicateur en haut de la fenêtre pour savoir le nombre de points qu'il te reste.
+							Attention ! Il te faut sélectionner 5 réservistes pour continuer !
+							""", false);
+				}
 			}
 		});
 	}

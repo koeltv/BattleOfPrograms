@@ -1,11 +1,13 @@
 package com.view;
 
 import com.view.component.PlayerIndicator;
+import com.view.panel.EventPanel;
 import com.view.panel.PanelIdentifier;
 import com.view.panel.StartingPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -20,7 +22,7 @@ public class MainView { //TODO Player transition
 
 	private JFrame frame;
 
-	private static JPanel mainPanel;
+	private static EventPanel mainPanel;
 
 	public static JLabel pointLabel;
 
@@ -131,7 +133,7 @@ public class MainView { //TODO Player transition
 		playerIndicator.setVisible(false);
 		confirmButton.setVisible(false);
 		
-		mainPanel = new JPanel();
+		mainPanel = new EventPanel();
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		mainPanel.setLayout(new CardLayout(0, 0));
 
@@ -151,5 +153,13 @@ public class MainView { //TODO Player transition
 		confirmButton.setVisible(false);
 		MainView.addPanel(new StartingPanel(), PanelIdentifier.STARTING_PANEL);
 		MainView.switchToPanel(PanelIdentifier.STARTING_PANEL);
+	}
+
+	public static void removeConfirmationListeners() {
+		for (ActionListener listener : confirmButton.getActionListeners()) confirmButton.removeActionListener(listener);
+	}
+
+	public static void setEvent(String text) {
+		mainPanel.setEvent(text);
 	}
 }

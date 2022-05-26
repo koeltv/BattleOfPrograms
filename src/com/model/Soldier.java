@@ -60,7 +60,7 @@ public class Soldier {
 	/**
 	 * Instantiates a new Soldier.
 	 */
-	public Soldier () {
+	public Soldier () { //TODO When a new round start, if he wasn't moved, heal 5pts (rest)
 
 	}
 
@@ -254,9 +254,7 @@ public class Soldier {
 
 		float damageValue = hit.attackValue();
 		double random = Math.random();
-		System.out.println(random + " <= " + hitChance + " ?");
 		if(random <= hitChance) { //In that case he takes the hit
-			System.err.println(this.getClass() + " took " + damageValue + " ! " + lifePoints + " lefts");
 			damageValue -= (resistance * ((double) 5/100)) * damageValue;
 			lifePoints -= damageValue;
 
@@ -329,5 +327,13 @@ public class Soldier {
 	 */
 	public void addObserver(PropertyChangeListener listener) {
 		changeSupport.addPropertyChangeListener(listener);
+	}
+
+	public void addObserver(String property, PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(property, listener);
+	}
+
+	public void removeObserver(PropertyChangeListener listener) {
+		changeSupport.removePropertyChangeListener(listener);
 	}
 }

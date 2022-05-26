@@ -36,7 +36,7 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
 		changeBackground(FieldPanel.class.getResource("/images/interactive_map.PNG"));
-		setAlpha(0.4f);
+		setAlpha(0.3f);
 		MainView.playerIndicator.setVisible(false);
 
 		passAction = new ActionListener() {
@@ -86,6 +86,19 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 				MainView.confirmButton.addActionListener(passAction);
 
 				if (currentStep != GameController.step) {
+					if (GameController.firstGame) {
+						MainView.displayDialog("""
+							C'est ici que le combat se déroule. Tu peux cliquer sur les différents champs de bataille pour voir les batailles se dérouler.
+							
+							Une bataille se terminera par le contrôle d'un des champs par l'un des deux joueurs.
+							
+							Tu peux accélérer le déroulement de la bataille en cliquant sur le bouton "Passer".
+							
+							Le jeu sera terminé quand l'un des 2 joueurs aura le contrôle de la majorité des champs de bataille (3/5).
+							""", false);
+						GameController.firstGame = false;
+					}
+
 					Thread thread = new Thread(GameController.getInstance());
 					thread.start();
 					currentStep = GameController.step;
@@ -108,7 +121,7 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 			});
 
 			fields[i].addObserver(graphicField);
-			fields[i].addObserver(this);
+			fields[i].addObserver("battleState", this);
 			FieldPanel associatedPanel = new FieldPanel(fields[i]);
 			MainView.addPanel(associatedPanel, graphicField.getFieldProperties());
 		}
@@ -118,7 +131,9 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals("battleState")) {
 			GameController.step++;
+			MainView.setEvent(((Field) evt.getSource()).fieldProperties.toString() + " was taken by " + ((Field) evt.getSource()).getController().name + " !");
 			MainView.switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
+			MainView.removeConfirmationListeners();
 		}
 	}
 }

@@ -66,6 +66,7 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener { //
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
+				MainView.confirmButton.setText("Retour");
 				MainView.confirmButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -97,10 +98,6 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener { //
 		revalidate();
 
 		field.setAttackOrder();
-	}
-
-	public String getName() {
-		return field.fieldProperties.toString();
 	}
 
 	@Override

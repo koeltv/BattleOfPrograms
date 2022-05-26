@@ -36,7 +36,7 @@ public class FieldAttributionPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public FieldAttributionPanel() {
+	public FieldAttributionPanel() { //TODO Add randomize button
 		GridLayout gridLayout = new GridLayout(1, 2);
 		setLayout(gridLayout);
 
@@ -95,6 +95,16 @@ public class FieldAttributionPanel extends JPanel {
 						}
 					}
 				});
+
+				if (GameController.firstGame) {
+					MainView.displayDialog("""
+							Sur cette interface, tu peux assigner les soldats aux différents champs de batailles.
+														
+							Pour choisir un soldat il suffit de cliquer dessus, puis de le faire glisser sur un champ de bataille.
+														
+							Attention ! Il faut que tous les soldats soient attribués à un champ pour continuer !
+							""", false);
+				}
 			}
 		});
 	}
@@ -175,7 +185,7 @@ public class FieldAttributionPanel extends JPanel {
 					}
 				}
 
-				if (!intersectionFound) {
+				if (!intersectionFound && GameController.step < 3) {
 					GameController.moveSoldierToField(((GraphicSoldier) e.getComponent()).getSoldier(), null);
 					e.getComponent().getParent().remove(e.getComponent());
 					soldierPanel.add(e.getComponent());

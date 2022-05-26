@@ -20,8 +20,8 @@ public class Field implements PropertyChangeListener {
 
 	public final FieldProperties fieldProperties;
 
-	private final List<Soldier> leftSide = new ArrayList<>();
-	private final List<Soldier> rightSide = new ArrayList<>();
+	public final List<Soldier> leftSide = new ArrayList<>();
+	public final List<Soldier> rightSide = new ArrayList<>();
 
 	private List<Soldier> attackOrder = new ArrayList<>();
 
@@ -52,6 +52,7 @@ public class Field implements PropertyChangeListener {
 	 * @param soldier - soldier to add
 	 */
 	public void addSoldier(Soldier soldier) {
+		soldier.addObserver("dead", this);
 		soldier.sendToField(fieldProperties);
 		if (Arrays.stream(GameController.players[0].soldiers).anyMatch(soldier1 -> soldier1 == soldier)) {
 			leftSide.add(soldier);
@@ -69,6 +70,7 @@ public class Field implements PropertyChangeListener {
 	 */
 	public void removeSoldier(Soldier soldier) {
 		soldier.sendToField(null);
+		soldier.removeObserver(this);
 		if (leftSide.stream().anyMatch(soldier1 -> soldier1 == soldier)) {
 			leftSide.remove(soldier);
 			changeSupport.firePropertyChange("soldierRemoved", soldier, null);
@@ -82,10 +84,12 @@ public class Field implements PropertyChangeListener {
 	 * Sets the attack order based on the initiative stat.
 	 */
 	public void setAttackOrder() {
+		attackOrder.clear();
 		attackOrder.addAll(leftSide.stream().toList());
 		attackOrder.addAll(rightSide.stream().toList());
-		attackOrder = attackOrder.stream().sorted(Comparator.comparingInt(Soldier::getInitiative)).collect(Collectors.toList());
-		changeSupport.firePropertyChange("initialSoldierAmount", 0, attackOrder.size());
+		int initialSize = attackOrder.size();
+		attackOrder = attackOrder.stream().filter(Soldier::isAlive).sorted(Comparator.comparingInt(Soldier::getInitiative)).collect(Collectors.toList());
+		changeSupport.firePropertyChange("initialSoldierAmount", (initialSize == attackOrder.size() ? -1 : initialSize), attackOrder.size());
 	}
 
 	/**
@@ -155,10 +159,20 @@ public class Field implements PropertyChangeListener {
 	/**
 	 * Add an observer.
 	 *
-	 * @param propertyChangeListener the property change listener
+	 * @param propertyChangeListener - the property change listener
 	 */
 	public void addObserver(PropertyChangeListener propertyChangeListener) {
 		this.changeSupport.addPropertyChangeListener(propertyChangeListener);
+	}
+
+	/**
+	 * Add an observer for a given property.
+	 *
+	 * @param property - the property to listen to
+	 * @param propertyChangeListener - the property change listener
+	 */
+	public void addObserver(String property, PropertyChangeListener propertyChangeListener) {
+		this.changeSupport.addPropertyChangeListener(property, propertyChangeListener);
 	}
 
 	@Override

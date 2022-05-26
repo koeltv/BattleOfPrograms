@@ -19,6 +19,8 @@ public class GameController implements Runnable {
 
 	private static int waitingTime = 200;
 
+	public static boolean firstGame = true;
+
 	private GameController() {
 		FieldProperties[] values = FieldProperties.values();
 		for (int i = 0; i < values.length; i++) {
@@ -39,10 +41,7 @@ public class GameController implements Runnable {
 		int i = 0;
 		while (!Thread.interrupted()) {
 			i = i % fields.length;
-			System.out.println("\nNow playing in field " + fields[i].fieldProperties); //Used for debugging
-
-			if (!fields[i].battle()) break;
-			i++;
+			if (!fields[i++].battle()) break;
 
 			try {
 				wait(waitingTime);

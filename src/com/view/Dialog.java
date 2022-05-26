@@ -36,7 +36,7 @@ public class Dialog extends JDialog {
 
 		contentPanel.setOpaque(false);
 		Color color = ColorPalette.BLUE_BACKGROUND.color;
-		Color backgroundColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), 220);
+		Color backgroundColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), 240);
 		setBackground(backgroundColor);
 
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -67,7 +67,7 @@ public class Dialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			{
-				JButton okButton = new JButton("Nouveau Jeu");
+				JButton okButton = new JButton("Menu");
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);

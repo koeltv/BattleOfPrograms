@@ -12,7 +12,7 @@ import java.util.Objects;
 public class GraphicField extends JPanel implements PropertyChangeListener {
 
 	/**
-	 * 
+	 *
 	 */
 	@Serial
 	private static final long serialVersionUID = 368210040522610077L;
@@ -39,7 +39,7 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(iconLabel);
-		
+
 		bottomLabel = new JLabel(fieldProperties.name);
 		bottomLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		bottomLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -61,13 +61,17 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
 			case "battleState" -> {
-				if (evt.getNewValue() instanceof Boolean isBattleHappening) {
-					if (isBattleHappening) setBottomLabelText("Bataille en cours...");
-					else bottomLabel.setVisible(false);
+				if ((boolean) evt.getNewValue()) setBottomLabelText("Bataille en cours...");
+				else {
+					setBottomLabelText("");
+					bottomLabel.setVisible(false);
 				}
 			}
 			case "soldierAmount" -> setUpperLabelText(evt.getNewValue() + "/" + evt.getOldValue() + " soldats survivants");
-			case "initialSoldierAmount" -> setUpperLabelText(evt.getNewValue() + "/" + evt.getNewValue() + " soldats survivants");
+			case "initialSoldierAmount" -> {
+				int highBound = (int) ((int) evt.getOldValue() == -1 ? evt.getNewValue() : evt.getOldValue());
+				setUpperLabelText(evt.getNewValue() + "/" + highBound + " soldats survivants");
+			}
 		}
 		repaint();
 		revalidate();
