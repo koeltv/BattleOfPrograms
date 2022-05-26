@@ -26,20 +26,21 @@ public class MainView { //TODO Player transition
 
 	private static EventPanel mainPanel;
 
-	public static JLabel pointLabel;
+	private static JLabel pointLabel;
+
+	private static PlayerIndicator playerIndicator;
 
 	public static JButton confirmButton;
-	public static PlayerIndicator playerIndicator;
 
 	/**
 	 * Launch the application.
+	 *
+	 * @param args the input arguments
 	 */
 	public static void main(String[] args) {
-		boolean debug = args.length > 0 && args[0].equalsIgnoreCase("debug");
-
 		EventQueue.invokeLater(() -> {
 			try {
-				instance = new MainView(debug);
+				instance = new MainView(args.length > 0 && args[0].equalsIgnoreCase("debug"));
 				instance.frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -49,13 +50,10 @@ public class MainView { //TODO Player transition
 
 	/**
 	 * Create the application.
+	 *
+	 * @param debug the debug
 	 * @wbp.parser.entryPoint
 	 */
-	public MainView() {
-		initialize();
-		mainPanel.add(new StartingPanel(), PanelIdentifier.STARTING_PANEL.toString());
-	}
-
 	public MainView(boolean debug) {
 		initialize();
 		mainPanel.add(new StartingPanel(), PanelIdentifier.STARTING_PANEL.toString());
@@ -65,9 +63,9 @@ public class MainView { //TODO Player transition
 		if (debug) {
 			mainPanel.add(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL.toString());
 
-			GameController.firstGame = false;
-			GameController.step = 2;
-			Player[] players = GameController.players;
+			GameController.passTutorial();
+			GameController.nextStep();
+			Player[] players = GameController.getPlayers();
 			for (int i = 0; i < players.length; i++) {
 				players[i] = new Player("P" + (i + 1), "");
 				for (int j = 0; j < players[i].soldiers.length; j++) {
@@ -89,10 +87,23 @@ public class MainView { //TODO Player transition
 		}
 	}
 
+	/**
+	 * Add a panel.
+	 *
+	 * @param <T>        the type of the identifier use, can be {@link FieldProperties} or {@link PanelIdentifier}
+	 * @param panel      the panel
+	 * @param identifier the identifier
+	 */
 	public static <T extends Enum<T>> void addPanel(JPanel panel, T identifier) {
 		mainPanel.add(panel, identifier.toString());
 	}
 
+	/**
+	 * Switch to panel.
+	 *
+	 * @param <T>        the type of the identifier use, can be {@link FieldProperties} or {@link PanelIdentifier}
+	 * @param identifier the identifier
+	 */
 	public static <T extends Enum<T>> void switchToPanel(T identifier) {
 		((CardLayout) mainPanel.getLayout()).show(mainPanel, identifier.toString());
 	}
@@ -177,25 +188,81 @@ public class MainView { //TODO Player transition
 		btnMenu.addActionListener(e -> reset());
 	}
 
+	/**
+	 * Show point label.
+	 *
+	 * @param show whether to show the point label or not
+	 */
+	public static void showPointLabel(boolean show) {
+		pointLabel.setVisible(show);
+	}
+
+	/**
+	 * Sets points left.
+	 *
+	 * @param pointsLeft the points left
+	 */
+	public static void setPointsLeft(int pointsLeft) {
+		pointLabel.setText("Points \u00E0 assigner : " + pointsLeft + " pts");
+	}
+
+	/**
+	 * Sets current player.
+	 *
+	 * @param player the player
+	 */
+	public static void setPlayerIndicator(Player player) {
+		playerIndicator.setPlayer(player);
+	}
+
+	/**
+	 * Show player indicator.
+	 *
+	 * @param show whether to show the player indicator or not
+	 */
+	public static void showPlayerIndicator(boolean show) {
+		playerIndicator.setVisible(show);
+	}
+
+	/**
+	 * Display dialog.
+	 *
+	 * @param text           the text
+	 * @param buttonsEnabled whether buttons should be enabled or not
+	 */
 	public static void displayDialog(String text, boolean buttonsEnabled) {
 		Dialog dialog = new Dialog(new Point(instance.frame.getLocationOnScreen().x + instance.frame.getWidth()/2, instance.frame.getLocationOnScreen().y + instance.frame.getHeight()/2), text);
 		if (!buttonsEnabled) dialog.disableButtons();
 		dialog.setVisible(true);
 	}
 
+	/**
+	 * Reset.
+	 */
 	public static void reset() {
+		mainPanel.stopEvent();
 		mainPanel.removeAll();
 		pointLabel.setVisible(false);
 		playerIndicator.setVisible(false);
 		confirmButton.setVisible(false);
+		removeConfirmationListeners();
+		GameController.reset();
 		MainView.addPanel(new StartingPanel(), PanelIdentifier.STARTING_PANEL);
 		MainView.switchToPanel(PanelIdentifier.STARTING_PANEL);
 	}
 
+	/**
+	 * Remove confirmation listeners.
+	 */
 	public static void removeConfirmationListeners() {
 		for (ActionListener listener : confirmButton.getActionListeners()) confirmButton.removeActionListener(listener);
 	}
 
+	/**
+	 * Sets event.
+	 *
+	 * @param text the text of the event
+	 */
 	public static void setEvent(String text) {
 		mainPanel.setEvent(text);
 	}

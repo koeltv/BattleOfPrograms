@@ -302,7 +302,7 @@ public class Soldier {
 	 * @return true if he can change field, false otherwise
 	 */
 	public boolean canBeMoved() {
-		if (assignedField == null || GameController.step < 3) return true;
+		if (assignedField == null || GameController.getStep() < 3) return true;
 
 		Field field = GameController.findFieldByProperties(assignedField);
 		if (field == null || !isAlive()) return false;

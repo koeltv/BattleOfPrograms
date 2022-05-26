@@ -37,8 +37,8 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
 		changeBackground(FieldPanel.class.getResource("/images/interactive_map.PNG"));
-		setAlpha(0.3f);
-		MainView.playerIndicator.setVisible(false);
+		setAlpha(0.2f);
+		MainView.showPlayerIndicator(false);
 
 		passAction = new ActionListener() {
 			@Override
@@ -86,8 +86,8 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 				MainView.confirmButton.setText("Passer");
 				MainView.confirmButton.addActionListener(passAction);
 
-				if (currentStep != GameController.step) {
-					if (GameController.firstGame) {
+				if (currentStep != GameController.getStep()) {
+					if (GameController.displayTutorial()) {
 						MainView.displayDialog("""
 							C'est ici que le combat se déroule. Tu peux cliquer sur les différents champs de bataille pour voir les batailles se dérouler.
 							
@@ -97,12 +97,12 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 							
 							Le jeu sera terminé quand l'un des 2 joueurs aura le contrôle de la majorité des champs de bataille (3/5).
 							""", false);
-						GameController.firstGame = false;
+						GameController.passTutorial();
 					}
 
 					Thread thread = new Thread(GameController.getInstance());
 					thread.start();
-					currentStep = GameController.step;
+					currentStep = GameController.getStep();
 				}
 			}
 		});
@@ -115,7 +115,7 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 
 			Player controller = fields[i].getController();
 			if (controller == null) graphicField.setBottomLabelText("Bataille en cours...");
-			else graphicField.setBottomLabelText("Controllé par " + controller.name);
+			else graphicField.setBottomLabelText("Contrôlé par " + controller.name);
 
 			graphicField.addMouseListener(new MouseAdapter() {
 				@Override

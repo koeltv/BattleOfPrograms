@@ -61,6 +61,18 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		bottomLabel.setVisible(true);
 	}
 
+	public FieldProperties getFieldProperties() {
+		return fieldProperties;
+	}
+
+	///////////////////////////////////////////////////////////////////////////
+	// PropertyChange methods
+	///////////////////////////////////////////////////////////////////////////
+
+	public void addObserver(String battleState, PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(battleState, listener);
+	}
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {
@@ -79,13 +91,5 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		}
 		repaint();
 		revalidate();
-	}
-
-	public FieldProperties getFieldProperties() {
-		return fieldProperties;
-	}
-
-	public void addObserver(String battleState, PropertyChangeListener listener) {
-		changeSupport.addPropertyChangeListener(battleState, listener);
 	}
 }

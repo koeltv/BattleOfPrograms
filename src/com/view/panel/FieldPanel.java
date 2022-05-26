@@ -100,6 +100,10 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener { //
 		field.setAttackOrder();
 	}
 
+	///////////////////////////////////////////////////////////////////////////
+	// PropertyChange method
+	///////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		switch (evt.getPropertyName()) {

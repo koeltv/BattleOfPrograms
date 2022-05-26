@@ -1,6 +1,9 @@
 package com.view.component;
 
-import com.model.*;
+import com.model.AI;
+import com.model.EliteSoldier;
+import com.model.Soldier;
+import com.model.WarMaster;
 import com.view.ColorPalette;
 import com.view.panel.AttributePanel;
 
@@ -42,8 +45,6 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 
 		add(lifeBar);
 		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentWarMasterUrl)));
-		add(soldierDisplay);
-		add(statsLabel);
 	}
 
 	private GraphicSoldier(EliteSoldier soldier) {
@@ -53,8 +54,6 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 
 		add(lifeBar);
 		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentEliteSoldierUrl)));
-		add(soldierDisplay);
-		add(statsLabel);
 	}
 
 	/**
@@ -67,10 +66,14 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 
 		add(lifeBar);
 		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentSoldierUrl)));
-		add(soldierDisplay);
-		add(statsLabel);
 	}
 
+	/**
+	 * Create the graphics corresponding to a soldier.
+	 *
+	 * @param soldier the soldier to create graphics for
+	 * @return the corresponding graphic soldier
+	 */
 	public static GraphicSoldier createGraphics(Soldier soldier) {
 		GraphicSoldier graphicSoldier;
 		if (soldier instanceof WarMaster warMaster) {
@@ -80,6 +83,9 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		} else {
 			graphicSoldier = new GraphicSoldier(soldier);
 		}
+
+		graphicSoldier.add(graphicSoldier.soldierDisplay);
+		graphicSoldier.add(graphicSoldier.statsLabel);
 
 		soldier.addObserver(graphicSoldier);
 		graphicSoldier.setOpaque(false);
@@ -216,6 +222,10 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 
 	public FieldProperties getAssignedField() {
 		return soldier.getAssignedField();
+	}
+
+	public boolean canBeMoved() {
+		return soldier.canBeMoved();
 	}
 
 	///////////////////////////////////////////////////////////////////////////

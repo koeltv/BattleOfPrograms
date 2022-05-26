@@ -31,7 +31,6 @@ public class AttributePanel extends JPanel {
 
 	private int currentPlayerIndex = 0;
 
-
 	private final JCheckBox reservistCheckBox;
 	private final JSlider strengthSlider;
 	private final JSlider resistanceSlider;
@@ -80,7 +79,7 @@ public class AttributePanel extends JPanel {
 		statPanel.add(reservistCheckBox, gbc_reservistCheckBox);
 		reservistCheckBox.addActionListener(e -> {
 			currentGraphicSoldier.setReservist(reservistCheckBox.isSelected());
-			long numberOfReservist = Arrays.stream(GameController.players[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
+			long numberOfReservist = Arrays.stream(GameController.getPlayers()[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
 			reservistCheckBox.setEnabled(numberOfReservist < 5  || reservistCheckBox.isSelected());
 			reservistCheckBox.setText(numberOfReservist + "/5");
 
@@ -95,13 +94,7 @@ public class AttributePanel extends JPanel {
 		statPanel.add(strengthLabel, gbc_strengthLabel);
 
 		strengthSlider = new JSlider();
-		strengthSlider.setPaintLabels(true);
-		strengthSlider.setMinorTickSpacing(1);
-		strengthSlider.setMajorTickSpacing(10);
-		strengthSlider.setValue(0);
-		strengthSlider.setPaintTicks(true);
-		strengthSlider.setSnapToTicks(true);
-		strengthSlider.setMaximum(10);
+		setupSlider(strengthSlider, 10, 10);
 		GridBagConstraints gbc_strengthSlider = new GridBagConstraints();
 		gbc_strengthSlider.anchor = GridBagConstraints.NORTH;
 		gbc_strengthSlider.fill = GridBagConstraints.HORIZONTAL;
@@ -128,13 +121,7 @@ public class AttributePanel extends JPanel {
 		statPanel.add(resistanceLabel, gbc_resistanceLabel);
 
 		resistanceSlider = new JSlider();
-		resistanceSlider.setPaintLabels(true);
-		resistanceSlider.setMajorTickSpacing(10);
-		resistanceSlider.setMinorTickSpacing(1);
-		resistanceSlider.setValue(0);
-		resistanceSlider.setPaintTicks(true);
-		resistanceSlider.setSnapToTicks(true);
-		resistanceSlider.setMaximum(10);
+		setupSlider(resistanceSlider, 10, 10);
 		GridBagConstraints gbc_resistanceSlider = new GridBagConstraints();
 		gbc_resistanceSlider.anchor = GridBagConstraints.NORTH;
 		gbc_resistanceSlider.fill = GridBagConstraints.HORIZONTAL;
@@ -161,13 +148,7 @@ public class AttributePanel extends JPanel {
 		statPanel.add(initiativeLabel, gbc_initiativeLabel);
 
 		initiativeSlider = new JSlider();
-		initiativeSlider.setPaintLabels(true);
-		initiativeSlider.setMajorTickSpacing(10);
-		initiativeSlider.setMinorTickSpacing(1);
-		initiativeSlider.setPaintTicks(true);
-		initiativeSlider.setSnapToTicks(true);
-		initiativeSlider.setValue(0);
-		initiativeSlider.setMaximum(10);
+		setupSlider(initiativeSlider, 10, 10);
 		GridBagConstraints gbc_initiativeSlider = new GridBagConstraints();
 		gbc_initiativeSlider.anchor = GridBagConstraints.NORTH;
 		gbc_initiativeSlider.fill = GridBagConstraints.HORIZONTAL;
@@ -194,14 +175,7 @@ public class AttributePanel extends JPanel {
 		statPanel.add(constitutionLabel, gbc_constitutionLabel);
 
 		constitutionSlider = new JSlider();
-		constitutionSlider.setMajorTickSpacing(5);
-		constitutionSlider.setMinorTickSpacing(1);
-		constitutionSlider.setPaintLabels(true);
-		constitutionSlider.setPaintTrack(true);
-		constitutionSlider.setValue(0);
-		constitutionSlider.setSnapToTicks(true);
-		constitutionSlider.setPaintTicks(true);
-		constitutionSlider.setMaximum(30);
+		setupSlider(constitutionSlider, 30, 5);
 		GridBagConstraints gbc_constitutionSlider = new GridBagConstraints();
 		gbc_constitutionSlider.anchor = GridBagConstraints.NORTH;
 		gbc_constitutionSlider.fill = GridBagConstraints.HORIZONTAL;
@@ -229,13 +203,7 @@ public class AttributePanel extends JPanel {
 		statPanel.add(dexterityLabel, gbc_dexterityLabel);
 
 		dexteritySlider = new JSlider();
-		dexteritySlider.setPaintLabels(true);
-		dexteritySlider.setMajorTickSpacing(10);
-		dexteritySlider.setMinorTickSpacing(1);
-		dexteritySlider.setValue(0);
-		dexteritySlider.setPaintTicks(true);
-		dexteritySlider.setSnapToTicks(true);
-		dexteritySlider.setMaximum(10);
+		setupSlider(dexteritySlider, 10, 10);
 		GridBagConstraints gbc_dexteritySlider = new GridBagConstraints();
 		gbc_dexteritySlider.anchor = GridBagConstraints.NORTH;
 		gbc_dexteritySlider.fill = GridBagConstraints.HORIZONTAL;
@@ -301,21 +269,11 @@ public class AttributePanel extends JPanel {
 		aiLabel.setForeground(ColorPalette.WHITE.color);
 
 		reservistCheckBox.setForeground(ColorPalette.WHITE.color);
-		strengthSlider.setForeground(ColorPalette.WHITE.color);
-		resistanceSlider.setForeground(ColorPalette.WHITE.color);
-		initiativeSlider.setForeground(ColorPalette.WHITE.color);
-		constitutionSlider.setForeground(ColorPalette.WHITE.color);
-		dexteritySlider.setForeground(ColorPalette.WHITE.color);
 		defensiveRadioButton.setForeground(ColorPalette.WHITE.color);
 		offensiveRadioButton.setForeground(ColorPalette.WHITE.color);
 		randomRadioButton.setForeground(ColorPalette.WHITE.color);
 
 		reservistCheckBox.setBackground(null);
-		strengthSlider.setBackground(null);
-		resistanceSlider.setBackground(null);
-		initiativeSlider.setBackground(null);
-		constitutionSlider.setBackground(null);
-		dexteritySlider.setBackground(null);
 		defensiveRadioButton.setBackground(null);
 		offensiveRadioButton.setBackground(null);
 		randomRadioButton.setBackground(null);
@@ -324,16 +282,16 @@ public class AttributePanel extends JPanel {
 			@Override
 			public void componentShown(ComponentEvent e) {
 				setupSoldiers();
-				MainView.pointLabel.setVisible(true);
-				MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
-				MainView.playerIndicator.setVisible(true);
+				MainView.showPointLabel(true);
+				MainView.setPlayerIndicator(GameController.getPlayers()[currentPlayerIndex]);
+				MainView.showPlayerIndicator(true);
 				MainView.confirmButton.setVisible(true);
 				MainView.confirmButton.setEnabled(false);
 
 				MainView.confirmButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						for (Soldier soldier : GameController.players[currentPlayerIndex].soldiers) {
+						for (Soldier soldier : GameController.getPlayers()[currentPlayerIndex].soldiers) {
 							if (soldier.getAi() == null) soldier.setAi(Math.random() > 0.5 ? new OffensiveAI() : new DefensiveAI());
 						}
 
@@ -353,10 +311,10 @@ public class AttributePanel extends JPanel {
 							randomRadioButton.doClick();
 
 							setupSoldiers();
-							MainView.playerIndicator.setPlayer(GameController.players[currentPlayerIndex]);
+							MainView.setPlayerIndicator(GameController.getPlayers()[currentPlayerIndex]);
 						} else {
-							GameController.step++;
-							MainView.pointLabel.setVisible(false);
+							GameController.nextStep();
+							MainView.showPointLabel(false);
 							MainView.confirmButton.removeActionListener(this);
 							MainView.addPanel(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
 							MainView.switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
@@ -364,7 +322,7 @@ public class AttributePanel extends JPanel {
 					}
 				});
 
-				if (GameController.firstGame) {
+				if (GameController.displayTutorial()) {
 					MainView.displayDialog("""
 							Sur cette interface, tu peux assigner des points aux statistiques des différents soldats.
 														
@@ -378,20 +336,36 @@ public class AttributePanel extends JPanel {
 		});
 	}
 
+	private void setupSlider(JSlider slider, int maximum, int majorTickSpacing) {
+		slider.setValue(0);
+		slider.setMaximum(maximum);
+
+		slider.setMajorTickSpacing(majorTickSpacing);
+		slider.setMinorTickSpacing(1);
+
+		slider.setPaintLabels(true);
+		slider.setPaintTicks(true);
+		slider.setSnapToTicks(true);
+		if (maximum > 10) slider.setPaintTrack(true);
+
+		slider.setForeground(ColorPalette.WHITE.color);
+		slider.setBackground(null);
+	}
+
 	private void updatePoints(int difference) {
 		assignablePoints -= difference;
-		MainView.pointLabel.setText("Points \u00E0 assigner : " + assignablePoints + " pts");
+		MainView.setPointsLeft(assignablePoints);
 	}
 
 	private void resetPoints() {
 		assignablePoints = 400;
-		MainView.pointLabel.setText("Points \u00E0 assigner : " + assignablePoints + " pts");
+		MainView.setPointsLeft(assignablePoints);
 	}
 
 	/**
 	 * Set up the soldiers on the left side.
 	 */
-	public void setupSoldiers() {
+	private void setupSoldiers() {
 		assignablePoints = 400;
 
 		for (int i = 0; i < 20; i++) {
@@ -401,7 +375,7 @@ public class AttributePanel extends JPanel {
 			else soldier = new WarMaster();
 
 			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
-			GameController.players[currentPlayerIndex].soldiers[i] = soldier;
+			GameController.getPlayers()[currentPlayerIndex].soldiers[i] = soldier;
 			soldierPanel.add(graphicSoldier);
 
 			if (i == 0) {
@@ -417,7 +391,7 @@ public class AttributePanel extends JPanel {
 					currentGraphicSoldier.setSelected(true);
 
 					reservistCheckBox.setSelected(currentGraphicSoldier.isReservist());
-					long numberOfReservist = Arrays.stream(GameController.players[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
+					long numberOfReservist = Arrays.stream(GameController.getPlayers()[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
 					reservistCheckBox.setEnabled(numberOfReservist < 5 || reservistCheckBox.isSelected());
 
 					strengthSlider.setValue(currentGraphicSoldier.getStrength());

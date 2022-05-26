@@ -43,7 +43,7 @@ public class Field implements PropertyChangeListener {
 	 * @return the player soldiers
 	 */
 	public List<Soldier> getPlayerSoldiers(Player player) {
-		return player == GameController.players[0] ? leftSide : rightSide;
+		return player == GameController.getPlayers()[0] ? leftSide : rightSide;
 	}
 
 	/**
@@ -54,10 +54,10 @@ public class Field implements PropertyChangeListener {
 	public void addSoldier(Soldier soldier) {
 		soldier.addObserver("dead", this);
 		soldier.sendToField(fieldProperties);
-		if (Arrays.stream(GameController.players[0].soldiers).anyMatch(soldier1 -> soldier1 == soldier)) {
+		if (Arrays.stream(GameController.getPlayers()[0].soldiers).anyMatch(soldier1 -> soldier1 == soldier)) {
 			leftSide.add(soldier);
 			changeSupport.firePropertyChange("soldierP1Added", null, soldier);
-		} else if (Arrays.stream(GameController.players[1].soldiers).anyMatch(soldier1 -> soldier1 == soldier)) {
+		} else if (Arrays.stream(GameController.getPlayers()[1].soldiers).anyMatch(soldier1 -> soldier1 == soldier)) {
 			rightSide.add(soldier);
 			changeSupport.firePropertyChange("soldierP2Added", null, soldier);
 		}
@@ -127,8 +127,8 @@ public class Field implements PropertyChangeListener {
 	 * @return the controller of the field or null if there isn't any
 	 */
 	public Player getController() {
-		if (leftSide.stream().noneMatch(Soldier::isAlive)) return GameController.players[1];
-		else if (rightSide.stream().noneMatch(Soldier::isAlive)) return GameController.players[0];
+		if (leftSide.stream().noneMatch(Soldier::isAlive)) return GameController.getPlayers()[1];
+		else if (rightSide.stream().noneMatch(Soldier::isAlive)) return GameController.getPlayers()[0];
 		else return null;
 	}
 
@@ -150,7 +150,7 @@ public class Field implements PropertyChangeListener {
 	 * @return true if soldiers can be added, false otherwise
 	 */
 	public boolean isAssignable() {
-		return GameController.step < 3 || !isControlled;
+		return GameController.getStep() < 3 || !isControlled;
 	}
 
 	///////////////////////////////////////////////////////////////////////////

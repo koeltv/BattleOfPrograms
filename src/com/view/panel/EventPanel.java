@@ -98,4 +98,8 @@ public class EventPanel extends JPanel {
 			event.notifyAll();
 		}
 	}
+
+	public void stopEvent() {
+		event.displayTime = 0;
+	}
 }

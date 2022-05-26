@@ -75,8 +75,8 @@ public class FieldAttributionPanel extends JPanel {
 			public void componentShown(ComponentEvent e) {
 				currentPlayerIndex = 0;
 				setupSoldiers();
-				MainView.playerIndicator.setVisible(true);
-				MainView.playerIndicator.setPlayer(GameController.players[0]);
+				MainView.showPlayerIndicator(true);
+				MainView.setPlayerIndicator(GameController.getPlayers()[0]);
 
 				MainView.confirmButton.setVisible(true);
 				MainView.confirmButton.setText("Valider");
@@ -85,11 +85,11 @@ public class FieldAttributionPanel extends JPanel {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						if (currentPlayerIndex < 1) {
-							MainView.playerIndicator.setPlayer(GameController.players[++currentPlayerIndex]);
+							MainView.setPlayerIndicator(GameController.getPlayers()[++currentPlayerIndex]);
 							MainView.confirmButton.setEnabled(GameController.checkAttribution(currentPlayerIndex));
 							setupSoldiers();
 						} else {
-							GameController.step++;
+							GameController.nextStep();
 							MainView.confirmButton.removeActionListener(this);
 							MainView.addPanel(new GlobalFieldPanel(), PanelIdentifier.GLOBAL_FIELD_PANEL);
 							MainView.switchToPanel(PanelIdentifier.GLOBAL_FIELD_PANEL);
@@ -97,7 +97,7 @@ public class FieldAttributionPanel extends JPanel {
 					}
 				});
 
-				if (GameController.firstGame) {
+				if (GameController.displayTutorial()) {
 					MainView.displayDialog("""
 							Sur cette interface, tu peux assigner les soldats aux différents champs de batailles.
 														
@@ -122,8 +122,8 @@ public class FieldAttributionPanel extends JPanel {
 			}
 		}
 
-		for (Soldier soldier : GameController.players[currentPlayerIndex].soldiers) {
-			if (!soldier.isReservist() || GameController.step > 3) {
+		for (Soldier soldier : GameController.getPlayers()[currentPlayerIndex].soldiers) {
+			if (!soldier.isReservist() || GameController.getStep() > 3) {
 				GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
 				graphicSoldier.enableInfos();
 
@@ -138,6 +138,10 @@ public class FieldAttributionPanel extends JPanel {
 		revalidate();
 	}
 
+	/**
+	 * Add the listeners for the drag&drop.
+	 * @param graphicSoldier the component to add listeners on
+	 */
 	private void addSoldierListeners(GraphicSoldier graphicSoldier) {
 		MouseAdapter dragSoldier = new MouseAdapter() {
 			@Override
@@ -186,7 +190,7 @@ public class FieldAttributionPanel extends JPanel {
 					}
 				}
 
-				if (!intersectionFound && GameController.step < 3) {
+				if (!intersectionFound && GameController.getStep() < 3) {
 					GameController.moveSoldierToField(((GraphicSoldier) e.getComponent()).getSoldier(), null);
 					e.getComponent().getParent().remove(e.getComponent());
 					soldierPanel.add(e.getComponent());
@@ -199,7 +203,7 @@ public class FieldAttributionPanel extends JPanel {
 			}
 		};
 
-		if (graphicSoldier.getSoldier().canBeMoved()) {
+		if (graphicSoldier.canBeMoved()) {
 			graphicSoldier.setSelected(true);
 			graphicSoldier.addMouseMotionListener(dragSoldier);
 			graphicSoldier.addMouseListener(dropSoldier);
@@ -215,14 +219,14 @@ public class FieldAttributionPanel extends JPanel {
 					for (FieldColumn column : fieldColumns) {
 						for (Component component : column.getComponents()) {
 							if (!component.equals(e.getComponent()) && component instanceof GraphicSoldier columnSoldier) {
-								if (columnSoldier.getSoldier().canBeMoved()) addListeners(columnSoldier);
+								if (columnSoldier.canBeMoved()) addListeners(columnSoldier);
 								else removeListeners(columnSoldier);
 							}
 						}
 					}
 				}
 
-				if (!((GraphicSoldier) e.getComponent()).getSoldier().canBeMoved()) {
+				if (!((GraphicSoldier) e.getComponent()).canBeMoved()) {
 					removeListeners((GraphicSoldier) e.getComponent());
 				}
 
@@ -248,6 +252,11 @@ public class FieldAttributionPanel extends JPanel {
 		});
 	}
 
+	/**
+	 * Get the column corresponding to a field.
+	 * @param fieldProperties the properties of the field
+	 * @return the corresponding column
+	 */
 	private FieldColumn getColumn(FieldProperties fieldProperties) {
 		for (FieldColumn column : fieldColumns) {
 			if (column.fieldProperties == fieldProperties) return column;
