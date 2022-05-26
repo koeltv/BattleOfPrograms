@@ -26,12 +26,14 @@ public class EventPanel extends JPanel {
 	 * @see Event
 	 */
 	public void setEvent(String text) {
-		if (thread != null) thread.interrupt();
-		try {
-			synchronized (event) {
-				event.wait();
-			}
-		} catch (InterruptedException ignored) {}
+		if (thread != null) {
+			thread.interrupt();
+			try {
+				synchronized (event) {
+					event.wait(500);
+				}
+			} catch (InterruptedException ignored) {}
+		}
 		event.setText(text);
 		thread = new Thread(this::run);
 		thread.start();
@@ -89,7 +91,7 @@ public class EventPanel extends JPanel {
 				while (event.displayTime > 0) {
 					event.displayTime -= 10;
 					repaint();
-					wait(10);
+					event.wait(10);
 				}
 			} catch (InterruptedException ignored) {}
 			repaint();

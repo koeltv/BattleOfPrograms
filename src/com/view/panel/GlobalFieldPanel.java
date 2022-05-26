@@ -1,6 +1,7 @@
 package com.view.panel;
 
 import com.model.Field;
+import com.model.Player;
 import com.view.MainView;
 import com.view.component.FieldProperties;
 import com.view.component.GraphicField;
@@ -51,7 +52,7 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 		springLayout.putConstraint(SpringLayout.NORTH, sportField, 58, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.WEST, sportField, 150, SpringLayout.WEST, this);
 		add(sportField);
-		graphicFields[0] = sportField;
+		graphicFields[4] = sportField;
 
 		GraphicField bdeField = new GraphicField(FieldProperties.BDE);
 		springLayout.putConstraint(SpringLayout.NORTH, bdeField, 250, SpringLayout.NORTH, this);
@@ -63,19 +64,19 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 		springLayout.putConstraint(SpringLayout.WEST, libraryField, 600, SpringLayout.WEST, this);
 		springLayout.putConstraint(SpringLayout.SOUTH, libraryField, -300, SpringLayout.SOUTH, this);
 		add(libraryField);
-		graphicFields[2] = libraryField;
+		graphicFields[0] = libraryField;
 
 		GraphicField administrativeField = new GraphicField(FieldProperties.ADMINISTRATIVE_QUARTER);
 		springLayout.putConstraint(SpringLayout.NORTH, administrativeField, 200, SpringLayout.NORTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, administrativeField, -300, SpringLayout.EAST, this);
 		add(administrativeField);
-		graphicFields[3] = administrativeField;
+		graphicFields[2] = administrativeField;
 
 		GraphicField industrialField = new GraphicField(FieldProperties.INDUSTRIAL_HALLS);
 		springLayout.putConstraint(SpringLayout.SOUTH, industrialField, -150, SpringLayout.SOUTH, this);
 		springLayout.putConstraint(SpringLayout.EAST, industrialField, -200, SpringLayout.EAST, this);
 		add(industrialField);
-		graphicFields[4] = industrialField;
+		graphicFields[3] = industrialField;
 
 		setupFields();
 
@@ -111,7 +112,11 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 		Field[] fields = GameController.getFields();
 		for (int i = 0; i < graphicFields.length; i++) {
 			GraphicField graphicField = graphicFields[i];
-			graphicField.setBottomLabelText("Bataille en cours...");
+
+			Player controller = fields[i].getController();
+			if (controller == null) graphicField.setBottomLabelText("Bataille en cours...");
+			else graphicField.setBottomLabelText("Controllé par " + controller.name);
+
 			graphicField.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -121,17 +126,16 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 			});
 
 			fields[i].addObserver(graphicField);
-			fields[i].addObserver("battleState", this);
+			graphicField.addObserver("battleState", this);
 			FieldPanel associatedPanel = new FieldPanel(fields[i]);
-			MainView.addPanel(associatedPanel, graphicField.getFieldProperties());
+			MainView.addPanel(associatedPanel, fields[i].fieldProperties);
 		}
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals("battleState")) {
-			GameController.step++;
-			MainView.setEvent(((Field) evt.getSource()).fieldProperties.toString() + " was taken by " + ((Field) evt.getSource()).getController().name + " !");
+			MainView.setEvent(((Field) evt.getSource()).fieldProperties.toString() + " a été pris par " + ((Field) evt.getSource()).getController().name + " !");
 			MainView.switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
 			MainView.removeConfirmationListeners();
 		}

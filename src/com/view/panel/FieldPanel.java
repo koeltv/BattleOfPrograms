@@ -41,7 +41,7 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener { //
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setOpaque(false);
 
-		JLabel fieldNameLabel = new JLabel("Champ de bataille : " + field.fieldProperties.name);
+		JLabel fieldNameLabel = new JLabel("Champ de bataille : " + field.fieldProperties.toString());
 		fieldNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		fieldNameLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		add(fieldNameLabel);

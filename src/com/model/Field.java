@@ -104,18 +104,19 @@ public class Field implements PropertyChangeListener {
 			List<Soldier> left = leftSide.stream().filter(Soldier::isAlive).toList();
 			List<Soldier> right = rightSide.stream().filter(Soldier::isAlive).toList();
 
-			if (left.size() < 1 || right.size() < 1) {
-				changeSupport.firePropertyChange("battleState", true, false);
-				isControlled = true;
-				return false;
-			} else {
+			if (left.size() >= 1 && right.size() >= 1) {
 				Soldier soldier = attackOrder.get(0);
 				soldier.attack(left.contains(soldier) ? right : left);
 				attackOrder.remove(soldier);
 				attackOrder.add(soldier);
-
-				return getController() == null;
 			}
+
+			if (getController() != null) {
+				changeSupport.firePropertyChange("battleState", true, false);
+				isControlled = true;
+				return false;
+			} else
+				return true;
 		}
 		return true;
 	}
@@ -163,16 +164,6 @@ public class Field implements PropertyChangeListener {
 	 */
 	public void addObserver(PropertyChangeListener propertyChangeListener) {
 		this.changeSupport.addPropertyChangeListener(propertyChangeListener);
-	}
-
-	/**
-	 * Add an observer for a given property.
-	 *
-	 * @param property - the property to listen to
-	 * @param propertyChangeListener - the property change listener
-	 */
-	public void addObserver(String property, PropertyChangeListener propertyChangeListener) {
-		this.changeSupport.addPropertyChangeListener(property, propertyChangeListener);
 	}
 
 	@Override

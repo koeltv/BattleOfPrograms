@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serial;
 import java.util.Objects;
 
@@ -16,6 +17,8 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	 */
 	@Serial
 	private static final long serialVersionUID = 368210040522610077L;
+
+	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
 	private final FieldProperties fieldProperties;
 
@@ -40,7 +43,7 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(iconLabel);
 
-		bottomLabel = new JLabel(fieldProperties.name);
+		bottomLabel = new JLabel(fieldProperties.toString());
 		bottomLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		bottomLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(bottomLabel);
@@ -55,6 +58,7 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	public void setBottomLabelText(String text) {
 		bottomLabel.setText(text);
 		bottomLabel.setForeground(ColorPalette.TEXT_BLUE.color);
+		bottomLabel.setVisible(true);
 	}
 
 	@Override
@@ -63,8 +67,8 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 			case "battleState" -> {
 				if ((boolean) evt.getNewValue()) setBottomLabelText("Bataille en cours...");
 				else {
-					setBottomLabelText("");
 					bottomLabel.setVisible(false);
+					changeSupport.firePropertyChange(evt);
 				}
 			}
 			case "soldierAmount" -> setUpperLabelText(evt.getNewValue() + "/" + evt.getOldValue() + " soldats survivants");
@@ -79,5 +83,9 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 
 	public FieldProperties getFieldProperties() {
 		return fieldProperties;
+	}
+
+	public void addObserver(String battleState, PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(battleState, listener);
 	}
 }
