@@ -12,8 +12,7 @@ public enum ColorPalette {
 	BLUE_BACKGROUND (new Color(14, 99, 161)),
 	MENU_BLUE (new Color(95, 185, 246)),
 	ORANGE (new Color(236, 127, 33)),
-	TEXT_BLUE (new Color(14, 99, 161)),
-	LIFEBAR_GREY (new Color(196, 196, 196));
+	TEXT_BLUE (new Color(14, 99, 161));
 
 	public final Color color;
 

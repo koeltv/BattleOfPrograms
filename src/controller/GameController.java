@@ -40,8 +40,10 @@ public class GameController implements Runnable {
 	public synchronized void run() {
 		int i = 0;
 		while (!Thread.interrupted()) {
-			i = i % fields.length;
-			if (!fields[i++].battle()) break;
+			System.out.println("Currently running in " + fields[(i+1) % fields.length].fieldProperties);
+
+			if (!fields[i].battle()) break;
+			i = ++i % fields.length;
 
 			try {
 				wait(waitingTime);
@@ -74,7 +76,7 @@ public class GameController implements Runnable {
 	}
 
 	public static void skipBattle() {
-		waitingTime = 10;
+		waitingTime = 5;
 	}
 
 	public static void moveSoldierToField(Soldier soldier, Field destinationField) {

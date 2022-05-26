@@ -1,15 +1,17 @@
 package com.view;
 
+import com.model.*;
+import com.view.component.FieldProperties;
 import com.view.component.PlayerIndicator;
-import com.view.panel.EventPanel;
-import com.view.panel.PanelIdentifier;
-import com.view.panel.StartingPanel;
+import com.view.panel.*;
+import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Random;
 
 /**
  * Main View containing all panels.
@@ -33,9 +35,11 @@ public class MainView { //TODO Player transition
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		boolean debug = args.length > 0 && args[0].equalsIgnoreCase("debug");
+
 		EventQueue.invokeLater(() -> {
 			try {
-				instance = new MainView();
+				instance = new MainView(debug);
 				instance.frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -50,6 +54,39 @@ public class MainView { //TODO Player transition
 	public MainView() {
 		initialize();
 		mainPanel.add(new StartingPanel(), PanelIdentifier.STARTING_PANEL.toString());
+	}
+
+	public MainView(boolean debug) {
+		initialize();
+		mainPanel.add(new StartingPanel(), PanelIdentifier.STARTING_PANEL.toString());
+		mainPanel.add(new PlayerInfoPanel(), PanelIdentifier.PLAYER_INFO_PANEL.toString());
+		mainPanel.add(new AttributePanel(), PanelIdentifier.ATTRIBUTE_PANEL.toString());
+
+		if (debug) {
+			mainPanel.add(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL.toString());
+
+			GameController.firstGame = false;
+			GameController.step = 2;
+			Player[] players = GameController.players;
+			for (int i = 0; i < players.length; i++) {
+				players[i] = new Player("P" + (i + 1), "");
+				for (int j = 0; j < players[i].soldiers.length; j++) {
+					if (j < 15) {
+						players[i].soldiers[j] = new Soldier();
+					} else if (j < 19) {
+						players[i].soldiers[j] = new EliteSoldier();
+					} else {
+						players[i].soldiers[j] = new WarMaster();
+					}
+					players[i].soldiers[j].setAi(new Random().nextInt(2) > 0 ? new DefensiveAI() : new OffensiveAI());
+
+					if (j < 5) players[i].soldiers[j].setReservist(true);
+					else GameController.moveSoldierToField(players[i].soldiers[j], GameController.findFieldByProperties(FieldProperties.values()[new Random().nextInt(FieldProperties.values().length)]));
+				}
+			}
+
+			switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
+		}
 	}
 
 	public static <T extends Enum<T>> void addPanel(JPanel panel, T identifier) {

@@ -78,6 +78,7 @@ public class FieldAttributionPanel extends JPanel {
 				MainView.playerIndicator.setVisible(true);
 				MainView.playerIndicator.setPlayer(GameController.players[0]);
 
+				MainView.confirmButton.setVisible(true);
 				MainView.confirmButton.setText("Valider");
 				MainView.confirmButton.setEnabled(GameController.checkAttribution(currentPlayerIndex));
 				MainView.confirmButton.addActionListener(new ActionListener() {

@@ -9,7 +9,7 @@ public enum FieldProperties {
 	INDUSTRIAL_HALLS ("Halles industrielles", FieldProperties.class.getResource("/images/industrial_halls.png")),
 	SPORTS_HALL ("Halle Sportive", FieldProperties.class.getResource("/images/sports_hall.png"));
 
-	public final String name;
+	private final String name;
 	public final URL url;
 
 	FieldProperties(String name, URL url) {
@@ -19,10 +19,6 @@ public enum FieldProperties {
 
 	@Override
 	public String toString() {
-		char[] charArray = super.toString().replace("_", " ").toCharArray();
-		for (int i = 1; i < charArray.length; i++) {
-			if (charArray[i - 1] != ' ') charArray[i] = Character.toLowerCase(charArray[i]);
-		}
-		return new String(charArray);
+		return this.name;
 	}
 }
