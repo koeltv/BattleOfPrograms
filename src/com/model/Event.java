@@ -25,6 +25,11 @@ public class Event {
      */
     public int displayTime;
 
+    /**
+     * Set content of the event
+     *
+     * @param text text to display
+     */
     public void setText(String text) {
         this.text = text;
         this.displayTime = (int) (text.length() * AVG_CHAR_PER_SECOND * 1000);

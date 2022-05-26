@@ -124,7 +124,7 @@ public class GameController implements Runnable {
 
 		if (winningPlayerIndex > -1) {
 			MainView.displayDialog(
-					"Félicitations " + getPlayers()[winningPlayerIndex].name + ", tu as gagné !\nTu peux être fière d'avoir représenté le programme " + getPlayers()[winningPlayerIndex].program,
+					"Félicitations " + getPlayers()[winningPlayerIndex].getName() + ", tu as gagné !\nTu peux être fière d'avoir représenté le programme " + getPlayers()[winningPlayerIndex].getProgram(),
 					true
 			);
 		}
@@ -176,7 +176,7 @@ public class GameController implements Runnable {
 	 * @return true if the player has assigned all his soldiers correctly, false otherwise
 	 */
 	public static boolean checkAttribution(int playerIndex) {
-		return Arrays.stream(getPlayers()[playerIndex].soldiers).filter(soldier -> !soldier.isReservist()).noneMatch(soldier -> soldier.getAssignedField() == null) &&
+		return Arrays.stream(getPlayers()[playerIndex].getSoldiers()).filter(soldier -> !soldier.isReservist()).noneMatch(soldier -> soldier.getAssignedField() == null) &&
 				Arrays.stream(instance.fields).noneMatch(field -> field.getPlayerSoldiers(getPlayers()[playerIndex]).size() < 1);
 	}
 

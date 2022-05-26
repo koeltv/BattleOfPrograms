@@ -122,7 +122,7 @@ public class FieldAttributionPanel extends JPanel {
 			}
 		}
 
-		for (Soldier soldier : GameController.getPlayers()[currentPlayerIndex].soldiers) {
+		for (Soldier soldier : GameController.getPlayers()[currentPlayerIndex].getSoldiers()) {
 			if (!soldier.isReservist() || GameController.getStep() > 3) {
 				GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
 				graphicSoldier.enableInfos();
@@ -139,7 +139,7 @@ public class FieldAttributionPanel extends JPanel {
 	}
 
 	/**
-	 * Add the listeners for the drag&drop.
+	 * Add the listeners for the drag and drop.
 	 * @param graphicSoldier the component to add listeners on
 	 */
 	private void addSoldierListeners(GraphicSoldier graphicSoldier) {

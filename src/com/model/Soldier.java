@@ -52,6 +52,7 @@ public class Soldier {
 	public FieldProperties assignedField;
 
 	private boolean recentlyDeployed = false;
+
 	/**
 	 * The assigned AI. Can be defensive, offensive or random.
 	 */
@@ -294,7 +295,7 @@ public class Soldier {
 	 * Check if a soldier can be moved.
 	 * A soldier can be moved if :
 	 * - he hasn't been assigned yet
-	 * - he belongs to the controller of a field & the field has at least 2 soldiers of the controller
+	 * - he belongs to the controller of a field and the field has at least 2 soldiers of the controller
 	 * He cannot be moved if :
 	 * - He died
 	 * - The battle in the field he is in is still going
@@ -329,10 +330,21 @@ public class Soldier {
 		changeSupport.addPropertyChangeListener(listener);
 	}
 
+	/**
+	 * Add an observer.
+	 *
+	 * @param property the property to listen to
+	 * @param listener the listener
+	 */
 	public void addObserver(String property, PropertyChangeListener listener) {
 		changeSupport.addPropertyChangeListener(property, listener);
 	}
 
+	/**
+	 * Remove an observer.
+	 *
+	 * @param listener the listener
+	 */
 	public void removeObserver(PropertyChangeListener listener) {
 		changeSupport.removePropertyChangeListener(listener);
 	}

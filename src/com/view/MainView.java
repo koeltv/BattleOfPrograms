@@ -52,7 +52,6 @@ public class MainView { //TODO Player transition
 	 * Create the application.
 	 *
 	 * @param debug the debug
-	 * @wbp.parser.entryPoint
 	 */
 	public MainView(boolean debug) {
 		initialize();
@@ -68,18 +67,18 @@ public class MainView { //TODO Player transition
 			Player[] players = GameController.getPlayers();
 			for (int i = 0; i < players.length; i++) {
 				players[i] = new Player("P" + (i + 1), "");
-				for (int j = 0; j < players[i].soldiers.length; j++) {
+				for (int j = 0; j < players[i].getSoldiers().length; j++) {
 					if (j < 15) {
-						players[i].soldiers[j] = new Soldier();
+						players[i].getSoldiers()[j] = new Soldier();
 					} else if (j < 19) {
-						players[i].soldiers[j] = new EliteSoldier();
+						players[i].getSoldiers()[j] = new EliteSoldier();
 					} else {
-						players[i].soldiers[j] = new WarMaster();
+						players[i].getSoldiers()[j] = new WarMaster();
 					}
-					players[i].soldiers[j].setAi(new Random().nextInt(2) > 0 ? new DefensiveAI() : new OffensiveAI());
+					players[i].getSoldiers()[j].setAi(new Random().nextInt(2) > 0 ? new DefensiveAI() : new OffensiveAI());
 
-					if (j < 5) players[i].soldiers[j].setReservist(true);
-					else GameController.moveSoldierToField(players[i].soldiers[j], GameController.findFieldByProperties(FieldProperties.values()[new Random().nextInt(FieldProperties.values().length)]));
+					if (j < 5) players[i].getSoldiers()[j].setReservist(true);
+					else GameController.moveSoldierToField(players[i].getSoldiers()[j], GameController.findFieldByProperties(FieldProperties.values()[new Random().nextInt(FieldProperties.values().length)]));
 				}
 			}
 

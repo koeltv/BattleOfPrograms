@@ -85,6 +85,9 @@ public class EventPanel extends JPanel {
 		drawAction((Graphics2D) g);
 	}
 
+	/**
+	 * Run.
+	 */
 	public void run() {
 		synchronized (event) {
 			try {
@@ -99,6 +102,9 @@ public class EventPanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Stop event displaying.
+	 */
 	public void stopEvent() {
 		event.displayTime = 0;
 	}

@@ -79,7 +79,7 @@ public class AttributePanel extends JPanel {
 		statPanel.add(reservistCheckBox, gbc_reservistCheckBox);
 		reservistCheckBox.addActionListener(e -> {
 			currentGraphicSoldier.setReservist(reservistCheckBox.isSelected());
-			long numberOfReservist = Arrays.stream(GameController.getPlayers()[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
+			long numberOfReservist = Arrays.stream(GameController.getPlayers()[currentPlayerIndex].getSoldiers()).filter(Soldier::isReservist).count();
 			reservistCheckBox.setEnabled(numberOfReservist < 5  || reservistCheckBox.isSelected());
 			reservistCheckBox.setText(numberOfReservist + "/5");
 
@@ -291,7 +291,7 @@ public class AttributePanel extends JPanel {
 				MainView.confirmButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						for (Soldier soldier : GameController.getPlayers()[currentPlayerIndex].soldiers) {
+						for (Soldier soldier : GameController.getPlayers()[currentPlayerIndex].getSoldiers()) {
 							if (soldier.getAi() == null) soldier.setAi(Math.random() > 0.5 ? new OffensiveAI() : new DefensiveAI());
 						}
 
@@ -375,7 +375,7 @@ public class AttributePanel extends JPanel {
 			else soldier = new WarMaster();
 
 			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
-			GameController.getPlayers()[currentPlayerIndex].soldiers[i] = soldier;
+			GameController.getPlayers()[currentPlayerIndex].getSoldiers()[i] = soldier;
 			soldierPanel.add(graphicSoldier);
 
 			if (i == 0) {
@@ -391,7 +391,7 @@ public class AttributePanel extends JPanel {
 					currentGraphicSoldier.setSelected(true);
 
 					reservistCheckBox.setSelected(currentGraphicSoldier.isReservist());
-					long numberOfReservist = Arrays.stream(GameController.getPlayers()[currentPlayerIndex].soldiers).filter(Soldier::isReservist).count();
+					long numberOfReservist = Arrays.stream(GameController.getPlayers()[currentPlayerIndex].getSoldiers()).filter(Soldier::isReservist).count();
 					reservistCheckBox.setEnabled(numberOfReservist < 5 || reservistCheckBox.isSelected());
 
 					strengthSlider.setValue(currentGraphicSoldier.getStrength());

@@ -56,9 +56,6 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentEliteSoldierUrl)));
 	}
 
-	/**
-	 * @wbp.parser.constructor
-	 */
 	private GraphicSoldier(Soldier soldier) {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

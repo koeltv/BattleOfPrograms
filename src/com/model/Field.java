@@ -18,9 +18,19 @@ import java.util.stream.Collectors;
 public class Field implements PropertyChangeListener {
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
+	/**
+	 * The Field properties.
+	 */
 	public final FieldProperties fieldProperties;
 
+	/**
+	 * The Left side corresponding to player 1.
+	 */
 	public final List<Soldier> leftSide = new ArrayList<>();
+
+	/**
+	 * The Right side corresponding to player 2.
+	 */
 	public final List<Soldier> rightSide = new ArrayList<>();
 
 	private List<Soldier> attackOrder = new ArrayList<>();
@@ -54,10 +64,10 @@ public class Field implements PropertyChangeListener {
 	public void addSoldier(Soldier soldier) {
 		soldier.addObserver("dead", this);
 		soldier.sendToField(fieldProperties);
-		if (Arrays.stream(GameController.getPlayers()[0].soldiers).anyMatch(soldier1 -> soldier1 == soldier)) {
+		if (Arrays.stream(GameController.getPlayers()[0].getSoldiers()).anyMatch(soldier1 -> soldier1 == soldier)) {
 			leftSide.add(soldier);
 			changeSupport.firePropertyChange("soldierP1Added", null, soldier);
-		} else if (Arrays.stream(GameController.getPlayers()[1].soldiers).anyMatch(soldier1 -> soldier1 == soldier)) {
+		} else if (Arrays.stream(GameController.getPlayers()[1].getSoldiers()).anyMatch(soldier1 -> soldier1 == soldier)) {
 			rightSide.add(soldier);
 			changeSupport.firePropertyChange("soldierP2Added", null, soldier);
 		}

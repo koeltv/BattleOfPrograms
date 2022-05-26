@@ -1,7 +1,13 @@
 package com.model;
 
+/**
+ * The type War master.
+ */
 public class WarMaster extends Soldier {
-	
+
+	/**
+	 * Instantiates a new War master.
+	 */
 	public WarMaster() {
 		super();
 		super.strength += 2;

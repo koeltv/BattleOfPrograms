@@ -10,6 +10,9 @@ import java.beans.PropertyChangeSupport;
 import java.io.Serial;
 import java.util.Objects;
 
+/**
+ * The type Graphic field.
+ */
 public class GraphicField extends JPanel implements PropertyChangeListener {
 
 	/**
@@ -26,6 +29,8 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 
 	/**
 	 * Create the panel.
+	 *
+	 * @param fieldProperties the field properties
 	 */
 	public GraphicField(FieldProperties fieldProperties) {
 		this.fieldProperties = fieldProperties;
@@ -49,18 +54,33 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		add(bottomLabel);
 	}
 
+	/**
+	 * Sets the upper label text.
+	 *
+	 * @param text the text
+	 */
 	public void setUpperLabelText(String text) {
 		upperLabel.setText(text);
 		upperLabel.setForeground(ColorPalette.ORANGE.color);
 		upperLabel.setVisible(true);
 	}
 
+	/**
+	 * Sets the bottom label text.
+	 *
+	 * @param text the text
+	 */
 	public void setBottomLabelText(String text) {
 		bottomLabel.setText(text);
 		bottomLabel.setForeground(ColorPalette.TEXT_BLUE.color);
 		bottomLabel.setVisible(true);
 	}
 
+	/**
+	 * Gets field properties.
+	 *
+	 * @return the field properties
+	 */
 	public FieldProperties getFieldProperties() {
 		return fieldProperties;
 	}
@@ -69,8 +89,14 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	// PropertyChange methods
 	///////////////////////////////////////////////////////////////////////////
 
-	public void addObserver(String battleState, PropertyChangeListener listener) {
-		changeSupport.addPropertyChangeListener(battleState, listener);
+	/**
+	 * Add an observer.
+	 *
+	 * @param property the property to listen to
+	 * @param listener    the listener
+	 */
+	public void addObserver(String property, PropertyChangeListener listener) {
+		changeSupport.addPropertyChangeListener(property, listener);
 	}
 
 	@Override

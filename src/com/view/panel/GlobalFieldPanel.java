@@ -115,7 +115,7 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 
 			Player controller = fields[i].getController();
 			if (controller == null) graphicField.setBottomLabelText("Bataille en cours...");
-			else graphicField.setBottomLabelText("Contrôlé par " + controller.name);
+			else graphicField.setBottomLabelText("Contrôlé par " + controller.getName());
 
 			graphicField.addMouseListener(new MouseAdapter() {
 				@Override
@@ -135,7 +135,7 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals("battleState")) {
-			MainView.setEvent(((Field) evt.getSource()).fieldProperties.toString() + " a été pris par " + ((Field) evt.getSource()).getController().name + " !");
+			MainView.setEvent(((Field) evt.getSource()).fieldProperties.toString() + " a été pris par " + ((Field) evt.getSource()).getController().getName() + " !");
 			MainView.switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
 			MainView.removeConfirmationListeners();
 		}

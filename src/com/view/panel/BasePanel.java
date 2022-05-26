@@ -58,6 +58,11 @@ public class BasePanel extends JPanel {
 		}
 	}
 
+	/**
+	 * Sets the alpha of the background panel.
+	 *
+	 * @param alpha the alpha
+	 */
 	public void setAlpha(float alpha) {
 		this.alpha = alpha;
 	}

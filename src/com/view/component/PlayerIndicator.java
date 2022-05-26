@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.Serial;
 
+/**
+ * The type Player indicator.
+ */
 public class PlayerIndicator extends JPanel {
 
 	/**
@@ -22,6 +25,9 @@ public class PlayerIndicator extends JPanel {
 
 	private Player player;
 
+	/**
+	 * Instantiates a new Player indicator.
+	 */
 	public PlayerIndicator() {
 		color = ColorPalette.RED.color;
 
@@ -39,10 +45,15 @@ public class PlayerIndicator extends JPanel {
 		playerCircle.setPreferredSize(new Dimension(20, 20));
 	}
 
+	/**
+	 * Sets the player to display.
+	 *
+	 * @param player the player
+	 */
 	public void setPlayer(Player player) {
 		if (this.player != player) {
 			this.player = player;
-			playerLabel.setText("  " + player.name + " (" + player.program + ")");
+			playerLabel.setText("  " + player.getName() + " (" + player.getProgram() + ")");
 
 			if (color == ColorPalette.RED.color) color = ColorPalette.MENU_BLUE.color;
 			else color = ColorPalette.RED.color;

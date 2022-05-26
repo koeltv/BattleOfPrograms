@@ -1,7 +1,13 @@
 package com.model;
 
+/**
+ * The type Elite soldier.
+ */
 public class EliteSoldier extends Soldier {
-	
+
+	/**
+	 * Instantiates a new Elite soldier.
+	 */
 	public EliteSoldier() {
 		super();
 		super.strength += 1;

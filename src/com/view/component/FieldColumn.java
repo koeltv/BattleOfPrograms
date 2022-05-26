@@ -16,10 +16,19 @@ public class FieldColumn extends JScrollPane {
 	@Serial
 	private static final long serialVersionUID = 1762692385236278793L;
 
+	/**
+	 * The Field properties.
+	 */
 	public final FieldProperties fieldProperties;
 	
 	private final JPanel panel;
 
+	/**
+	 * Instantiates a new Field column.
+	 *
+	 * @param panel           the content panel
+	 * @param fieldProperties the field properties
+	 */
 	public FieldColumn(JPanel panel, FieldProperties fieldProperties) {
 		super(panel);
 		this.panel = panel;
