@@ -3,7 +3,10 @@ package com.view;
 import com.model.*;
 import com.view.component.FieldProperties;
 import com.view.component.PlayerIndicator;
-import com.view.panel.*;
+import com.view.panel.EventPanel;
+import com.view.panel.FieldAttributionPanel;
+import com.view.panel.PanelIdentifier;
+import com.view.panel.StartingPanel;
 import controller.GameController;
 
 import javax.swing.*;
@@ -18,7 +21,7 @@ import java.util.Random;
  * The panels are added to the card layout and can be changed that way.
  * The menu bar always stay at the top.
  */
-public class MainView { //TODO Player transition
+public class MainView {
 
 	private static MainView instance;
 
@@ -55,9 +58,7 @@ public class MainView { //TODO Player transition
 	 */
 	public MainView(boolean debug) {
 		initialize();
-		mainPanel.add(new StartingPanel(), PanelIdentifier.STARTING_PANEL.toString());
-		mainPanel.add(new PlayerInfoPanel(), PanelIdentifier.PLAYER_INFO_PANEL.toString());
-		mainPanel.add(new AttributePanel(), PanelIdentifier.ATTRIBUTE_PANEL.toString());
+		reset();
 
 		if (debug) {
 			mainPanel.add(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL.toString());
@@ -208,10 +209,14 @@ public class MainView { //TODO Player transition
 	/**
 	 * Sets current player.
 	 *
-	 * @param player the player
+	 * @param nextPlayer the player to set as current player
 	 */
-	public static void setPlayerIndicator(Player player) {
-		playerIndicator.setPlayer(player);
+	public static void setPlayerIndicator(Player nextPlayer) {
+		Player player = playerIndicator.getPlayer();
+		if (player != null && nextPlayer != player) {
+			mainPanel.setFullWindowEvent("Please pass to player " + nextPlayer.getName() + " and click");
+		}
+		playerIndicator.setPlayer(nextPlayer);
 	}
 
 	/**

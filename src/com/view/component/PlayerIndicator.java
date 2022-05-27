@@ -62,6 +62,15 @@ public class PlayerIndicator extends JPanel {
 		}
 	}
 
+	/**
+	 * Gets player.
+	 *
+	 * @return the player
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);

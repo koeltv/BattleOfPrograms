@@ -311,6 +311,7 @@ public class AttributePanel extends JPanel {
 							randomRadioButton.doClick();
 
 							setupSoldiers();
+							MainView.confirmButton.setEnabled(false);
 							MainView.setPlayerIndicator(GameController.getPlayers()[currentPlayerIndex]);
 						} else {
 							GameController.nextStep();

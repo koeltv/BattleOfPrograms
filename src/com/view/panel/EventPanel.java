@@ -5,6 +5,8 @@ import com.view.ColorPalette;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Panel used as main panel to display actions.
@@ -16,6 +18,8 @@ public class EventPanel extends JPanel {
 	 * @see Event
 	 */
 	private final Event event = new Event();
+
+	private boolean fullScreenEvent;
 
 	private Thread thread;
 
@@ -40,6 +44,29 @@ public class EventPanel extends JPanel {
 	}
 
 	/**
+	 * Sets a full window event.
+	 *
+	 * @param text the text to display
+	 */
+	public void setFullWindowEvent(String text) {
+		event.displayTime = 0;
+		fullScreenEvent = true;
+		event.setText(text);
+
+		getRootPane().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				getRootPane().removeMouseListener(this);
+				fullScreenEvent = false;
+				event.displayTime = 0;
+				repaint();
+			}
+		});
+
+		repaint();
+	}
+
+	/**
 	 * Draw x centered string within [x; x + width].
 	 *
 	 * @param string the string
@@ -56,8 +83,8 @@ public class EventPanel extends JPanel {
 	 *
 	 * @see Event
 	 */
-	private void drawAction(Graphics2D g2D) {
-		if (event.displayTime > 0) {
+	private void drawAction(Graphics2D g2D, boolean fullScreenEvent) {
+		if (event.displayTime > 0 || fullScreenEvent) {
 			int padding = getWidth() / 20;
 
 			//We adapt the size to the current screen size
@@ -68,9 +95,12 @@ public class EventPanel extends JPanel {
 
 			//We do a background on which we put the text
 			Graphics2D tempGraph = (Graphics2D) g2D.create();
-			tempGraph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.75f));
+			tempGraph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fullScreenEvent ? 0.97f : 0.75f));
 			tempGraph.setColor(ColorPalette.BLUE_BACKGROUND.color);
-			tempGraph.fillRect(getWidth() / 2 - width / 2 - padding, getHeight() / 2 - height / 2, width + 2 * padding, height);
+
+			if (fullScreenEvent) tempGraph.fillRect(0, 0, getWidth(), getHeight());
+			else tempGraph.fillRect(getWidth() / 2 - width / 2 - padding, getHeight() / 2 - height / 2, width + 2 * padding, height);
+
 			tempGraph.dispose();
 
 			//We add the text
@@ -82,7 +112,7 @@ public class EventPanel extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		drawAction((Graphics2D) g);
+		drawAction((Graphics2D) g, fullScreenEvent);
 	}
 
 	/**
@@ -107,5 +137,6 @@ public class EventPanel extends JPanel {
 	 */
 	public void stopEvent() {
 		event.displayTime = 0;
+		fullScreenEvent = false;
 	}
 }
