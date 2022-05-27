@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * Panel used to display one specific battlefield.
  */
-public class FieldPanel extends BasePanel implements PropertyChangeListener { //TODO Animations ?
+public class FieldPanel extends BasePanel implements PropertyChangeListener {
 
 	/**
 	 *
