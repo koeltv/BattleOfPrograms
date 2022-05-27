@@ -1,5 +1,8 @@
 package com.view.panel;
 
+/**
+ * Enumeration used to facilitate the manipulation of panels.
+ */
 public enum PanelIdentifier {
 	STARTING_PANEL,
 	PLAYER_INFO_PANEL,

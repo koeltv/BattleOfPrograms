@@ -55,6 +55,7 @@ public class MainView {
 	 * Create the application.
 	 *
 	 * @param debug the debug
+	 * @wbp.parser.entryPoint
 	 */
 	public MainView(boolean debug) {
 		initialize();
@@ -116,12 +117,12 @@ public class MainView {
 		frame.setBounds(100, 100, 1536, 864);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel menuBar = new JPanel();
 		menuBar.setPreferredSize(new Dimension(10, 23));
 		menuBar.setBackground(ColorPalette.BLACK.color);
 		frame.getContentPane().add(menuBar, BorderLayout.NORTH);
-		
+
 		JButton btnMenu = new JButton("Menu");
 		btnMenu.setForeground(ColorPalette.MENU_BLUE.color);
 		SpringLayout sl_menuBar = new SpringLayout();
@@ -129,7 +130,7 @@ public class MainView {
 		sl_menuBar.putConstraint(SpringLayout.WEST, btnMenu, 1, SpringLayout.WEST, menuBar);
 		menuBar.setLayout(sl_menuBar);
 		menuBar.add(btnMenu);
-		
+
 		pointLabel = new JLabel("Points \u00E0 assigner : 400 pts");
 		sl_menuBar.putConstraint(SpringLayout.NORTH, pointLabel, 1, SpringLayout.NORTH, menuBar);
 		sl_menuBar.putConstraint(SpringLayout.WEST, pointLabel, 50, SpringLayout.EAST, btnMenu);
@@ -138,7 +139,7 @@ public class MainView {
 		pointLabel.setForeground(Color.WHITE);
 		menuBar.add(pointLabel);
 		pointLabel.setVisible(false);
-		
+
 		JLabel statsLabel = new JLabel("F.R.I.C.D");
 		sl_menuBar.putConstraint(SpringLayout.NORTH, statsLabel, 1, SpringLayout.NORTH, menuBar);
 		sl_menuBar.putConstraint(SpringLayout.WEST, statsLabel, 200, SpringLayout.WEST, menuBar);
@@ -166,7 +167,7 @@ public class MainView {
 								""", false);
 			}
 		});
-		
+
 		confirmButton = new JButton("Valider");
 		sl_menuBar.putConstraint(SpringLayout.NORTH, confirmButton, 1, SpringLayout.NORTH, menuBar);
 		menuBar.add(confirmButton);
@@ -180,7 +181,7 @@ public class MainView {
 
 		playerIndicator.setVisible(false);
 		confirmButton.setVisible(false);
-		
+
 		mainPanel = new EventPanel();
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		mainPanel.setLayout(new CardLayout(0, 0));
