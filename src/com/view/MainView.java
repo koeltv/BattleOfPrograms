@@ -117,6 +117,7 @@ public class MainView {
 		frame.setBounds(100, 100, 1536, 864);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
+		frame.setMinimumSize(new Dimension(1330, 748));
 
 		JPanel menuBar = new JPanel();
 		menuBar.setPreferredSize(new Dimension(10, 23));
@@ -270,5 +271,13 @@ public class MainView {
 	 */
 	public static void setEvent(String text) {
 		mainPanel.setEvent(text);
+	}
+
+	/**
+	 * Check if an event is displayed.
+	 * @return false if an event is displayed, false otherwise
+	 */
+	public static boolean noEvent() {
+		return mainPanel.noEvent();
 	}
 }

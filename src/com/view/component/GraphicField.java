@@ -1,6 +1,9 @@
 package com.view.component;
 
+import com.model.Field;
 import com.view.ColorPalette;
+import com.view.MainView;
+import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +29,10 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	private final FieldProperties fieldProperties;
 
 	private final JLabel upperLabel, bottomLabel;
+
+	private final Image whiteFlag = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/white_flag.gif"))).getImage();
+
+	private final Image dustCloud = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/dust_cloud.gif"))).getImage();
 
 	/**
 	 * Create the panel.
@@ -117,5 +124,24 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		}
 		repaint();
 		revalidate();
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+
+		if (MainView.noEvent()) {
+			Field field = GameController.findFieldByProperties(fieldProperties);
+			Image displayImage = null;
+			if (field != null) {
+				if (field.getController() != null) {
+					displayImage = whiteFlag;
+				} else if (GameController.getStep() > 2) {
+					displayImage = dustCloud;
+				}
+			}
+
+			g.drawImage(displayImage, 0, 0, getWidth(), getHeight(), this);
+		}
 	}
 }

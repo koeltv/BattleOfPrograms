@@ -23,7 +23,7 @@ public class StartingPanel extends BasePanel {
 		setLayout(new BorderLayout(0, 0));
 		
 		JLabel title = new JLabel("La bataille des programmes");
-		title.setFont(new Font("Tahoma", Font.BOLD, 20));
+		title.setFont(new Font("Tahoma", Font.BOLD, 40));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		add(title, BorderLayout.CENTER);
 		

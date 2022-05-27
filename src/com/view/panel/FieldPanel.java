@@ -14,6 +14,7 @@ import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serial;
+import java.util.Objects;
 
 /**
  * Panel used to display one specific battlefield.
@@ -29,6 +30,8 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener { //
 	private final JPanel secondPlayerPanel;
 
 	private final Field field;
+
+	private final Image vsImage = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/vs.gif"))).getImage();
 
 	/**
 	 * Create the panel.
@@ -84,7 +87,7 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener { //
 	private void setupSoldiers() {
 		for (Soldier soldier : field.leftSide) {
 			GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
-			graphicSoldier.setSelected(true);
+			graphicSoldier.setSelected(soldier.isAlive());
 			graphicSoldier.enableInfos();
 			firstPlayerPanel.add(graphicSoldier);
 		}
@@ -123,6 +126,16 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener { //
 			}
 			case "soldierP1Added" -> firstPlayerPanel.add(GraphicSoldier.createGraphics((Soldier) evt.getNewValue()));
 			case "soldierP2Added" -> secondPlayerPanel.add(GraphicSoldier.createGraphics((Soldier) evt.getNewValue()));
+		}
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+
+		if (MainView.noEvent() && field.getController() == null) {
+			int marginHorizontal = (int) (getWidth() / 2.5), marginVertical = (int) (getHeight() / 2.5);
+			g.drawImage(vsImage, marginHorizontal, marginVertical , getWidth() - 2*marginHorizontal, getHeight() - 2*marginVertical, this);
 		}
 	}
 }

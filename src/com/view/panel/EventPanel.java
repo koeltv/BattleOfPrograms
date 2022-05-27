@@ -139,4 +139,12 @@ public class EventPanel extends JPanel {
 		event.displayTime = 0;
 		fullScreenEvent = false;
 	}
+
+	/**
+	 * Check if an event is displayed.
+	 * @return false if an event is displayed, false otherwise
+	 */
+	public boolean noEvent() {
+		return event.displayTime <= 0 && !fullScreenEvent;
+	}
 }

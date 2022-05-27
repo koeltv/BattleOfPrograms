@@ -1,5 +1,5 @@
 # Project exclude paths
-/classes/
+/classes/production/
 /.idea
 /BattleOfPrograms.iml
 /bin

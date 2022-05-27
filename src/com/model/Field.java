@@ -137,8 +137,8 @@ public class Field implements PropertyChangeListener {
 	 * @return the controller of the field or null if there isn't any
 	 */
 	public Player getController() {
-		if (leftSide.stream().noneMatch(Soldier::isAlive)) return GameController.getPlayers()[1];
-		else if (rightSide.stream().noneMatch(Soldier::isAlive)) return GameController.getPlayers()[0];
+		if (leftSide.stream().noneMatch(Soldier::isAlive) && GameController.getStep() > 2) return GameController.getPlayers()[1];
+		else if (rightSide.stream().noneMatch(Soldier::isAlive) && GameController.getStep() > 2) return GameController.getPlayers()[0];
 		else return null;
 	}
 
