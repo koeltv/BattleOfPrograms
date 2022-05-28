@@ -91,6 +91,7 @@ public class Dialog extends JDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
+				getRootPane().repaint();
 			}
 		};
 		this.addMouseListener(mouseAdapter);

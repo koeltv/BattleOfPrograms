@@ -38,7 +38,7 @@ public class PlayerInfoPanel extends BasePanel {
 		add(panel, BorderLayout.SOUTH);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		btnConfirm = new JButton("Confirm");
+		btnConfirm = new JButton("Confirmer");
 		btnConfirm.setEnabled(false);
 		panel.add(btnConfirm);
 

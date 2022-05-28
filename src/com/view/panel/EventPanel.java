@@ -53,17 +53,19 @@ public class EventPanel extends JPanel {
 		fullScreenEvent = true;
 		event.setText(text);
 
-		getRootPane().addMouseListener(new MouseAdapter() {
+		thread = new Thread(this::run);
+		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				getRootPane().removeMouseListener(this);
+				removeMouseListener(this);
+				thread.interrupt();
 				fullScreenEvent = false;
 				event.displayTime = 0;
 				repaint();
 			}
 		});
 
-		repaint();
+		thread.start();
 	}
 
 	/**
@@ -95,7 +97,7 @@ public class EventPanel extends JPanel {
 
 			//We do a background on which we put the text
 			Graphics2D tempGraph = (Graphics2D) g2D.create();
-			tempGraph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fullScreenEvent ? 0.97f : 0.75f));
+			tempGraph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fullScreenEvent ? 0.99f : 0.75f));
 			tempGraph.setColor(ColorPalette.BLUE_BACKGROUND.color);
 
 			if (fullScreenEvent) tempGraph.fillRect(0, 0, getWidth(), getHeight());
@@ -121,7 +123,7 @@ public class EventPanel extends JPanel {
 	public void run() {
 		synchronized (event) {
 			try {
-				while (event.displayTime > 0) {
+				while (event.displayTime > 0 || fullScreenEvent) {
 					event.displayTime -= 10;
 					repaint();
 					event.wait(10);

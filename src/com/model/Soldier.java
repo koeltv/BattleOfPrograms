@@ -313,7 +313,7 @@ public class Soldier {
 			return recentlyDeployed;
 		} else { //If there is a controller, the soldier can move if it belongs to the controller and there is more than one (and he is still alive)
 			List<Soldier> controllerSoldiers = field.getPlayerSoldiers(fieldController);
-			return controllerSoldiers.contains(this) && controllerSoldiers.size() > 1;
+			return controllerSoldiers.contains(this) && controllerSoldiers.stream().filter(Soldier::isAlive).toList().size() > 1;
 		}
 	}
 

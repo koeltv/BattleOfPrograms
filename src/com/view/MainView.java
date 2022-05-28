@@ -35,6 +35,8 @@ public class MainView {
 
 	public static JButton confirmButton;
 
+	private static Dialog dialog;
+
 	/**
 	 * Launch the application.
 	 *
@@ -232,13 +234,31 @@ public class MainView {
 
 	/**
 	 * Display dialog.
+	 * Prepare a dialog and display it when possible.
 	 *
 	 * @param text           the text
 	 * @param buttonsEnabled whether buttons should be enabled or not
 	 */
 	public static void displayDialog(String text, boolean buttonsEnabled) {
-		Dialog dialog = new Dialog(new Point(instance.frame.getLocationOnScreen().x + instance.frame.getWidth()/2, instance.frame.getLocationOnScreen().y + instance.frame.getHeight()/2), text);
+		dialog = new Dialog(new Point(instance.frame.getLocationOnScreen().x + instance.frame.getWidth()/2, instance.frame.getLocationOnScreen().y + instance.frame.getHeight()/2), text);
 		if (!buttonsEnabled) dialog.disableButtons();
+
+		new Thread(MainView::showDialog).start();
+	}
+
+	/**
+	 * Show dialog.
+	 * Display the dialog when there is no event displayed.
+	 */
+	@SuppressWarnings("BusyWait")
+	public static void showDialog() {
+		while (!mainPanel.noEvent()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		dialog.setVisible(true);
 	}
 
