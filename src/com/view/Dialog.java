@@ -87,15 +87,11 @@ public class Dialog extends JDialog {
 
 	public void disableButtons() {
 		buttonPane.setVisible(false);
-		MouseAdapter mouseAdapter = new MouseAdapter() {
+		textPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
-				getRootPane().repaint();
 			}
-		};
-		this.addMouseListener(mouseAdapter);
-		textPane.addMouseListener(mouseAdapter);
+		});
 	}
-
 }

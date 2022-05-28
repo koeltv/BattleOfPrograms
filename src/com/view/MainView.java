@@ -116,10 +116,12 @@ public class MainView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1536, 864);
+		frame.setBounds(5, 5, 1536, 864);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		frame.setMinimumSize(new Dimension(1330, 748));
+		frame.setTitle("La bataille des programmes");
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(MainView.class.getResource("/images/soldier.png")));
 
 		JPanel menuBar = new JPanel();
 		menuBar.setPreferredSize(new Dimension(10, 23));
@@ -252,12 +254,10 @@ public class MainView {
 	 */
 	@SuppressWarnings("BusyWait")
 	public static void showDialog() {
-		while (!mainPanel.noEvent()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		try {
+			while (!mainPanel.noEvent()) Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		dialog.setVisible(true);
 	}
