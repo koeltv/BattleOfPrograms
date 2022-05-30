@@ -13,16 +13,28 @@ import java.io.Serial;
 public class PlayerIndicator extends JPanel {
 
 	/**
-	 * 
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = 5731537562132378545L;
-	
-	private Color color;
-	private final JPanel playerCircle;
 
+	/**
+	 * The Color.
+	 */
+	private Color color;
+	/**
+	 * The Player circle.
+	 */
+	private final JPanel colorCircle;
+
+	/**
+	 * The Player label.
+	 */
 	private final JLabel playerLabel;
 
+	/**
+	 * The Player.
+	 */
 	private Player player;
 
 	/**
@@ -34,15 +46,15 @@ public class PlayerIndicator extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		setBackground(null);
 
-		playerCircle = new JPanel();
-		add(playerCircle, BorderLayout.WEST);
-		playerCircle.setBackground(null);
-		playerCircle.setOpaque(false);
+		colorCircle = new JPanel();
+		add(colorCircle, BorderLayout.WEST);
+		colorCircle.setBackground(null);
+		colorCircle.setOpaque(false);
 
 		playerLabel = new JLabel();
 		add(playerLabel, BorderLayout.CENTER);
 
-		playerCircle.setPreferredSize(new Dimension(20, 20));
+		colorCircle.setPreferredSize(new Dimension(20, 20));
 	}
 
 	/**
@@ -76,6 +88,6 @@ public class PlayerIndicator extends JPanel {
 		super.paintComponent(g);
 		int diameter = 20;
 		g.setColor(color);
-		g.fillOval(0, (playerCircle.getHeight() - diameter) / 2, diameter, diameter);
+		g.fillOval(0, (colorCircle.getHeight() - diameter) / 2, diameter, diameter);
 	}
 }

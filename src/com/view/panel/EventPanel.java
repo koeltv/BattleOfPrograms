@@ -19,8 +19,14 @@ public class EventPanel extends JPanel {
 	 */
 	private final Event event = new Event();
 
+	/**
+	 * The Full screen event.
+	 */
 	private boolean fullScreenEvent;
 
+	/**
+	 * The Thread printing the event.
+	 */
 	private Thread thread;
 
 	/**
@@ -71,6 +77,7 @@ public class EventPanel extends JPanel {
 	/**
 	 * Draw x centered string within [x; x + width].
 	 *
+	 * @param g2D    the 2d Graphics
 	 * @param string the string
 	 * @param x      the x coordinate used as center
 	 * @param y      the y coordinate
@@ -83,6 +90,8 @@ public class EventPanel extends JPanel {
 	/**
 	 * Display the current action if there is one.
 	 *
+	 * @param g2D             the 2d Graphics
+	 * @param fullScreenEvent the full screen event
 	 * @see Event
 	 */
 	private void drawAction(Graphics2D g2D, boolean fullScreenEvent) {
@@ -144,6 +153,7 @@ public class EventPanel extends JPanel {
 
 	/**
 	 * Check if an event is displayed.
+	 *
 	 * @return false if an event is displayed, false otherwise
 	 */
 	public boolean noEvent() {

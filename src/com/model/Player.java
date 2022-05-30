@@ -6,9 +6,18 @@ import java.util.Arrays;
  * The model used to store data related to a player.
  */
 public class Player {
+	/**
+	 * The Name.
+	 */
 	private final String name;
+	/**
+	 * The Program.
+	 */
 	private final String program;
 
+	/**
+	 * The Soldiers.
+	 */
 	private final Soldier[] soldiers = new Soldier[20];
 
 	/**
@@ -31,6 +40,12 @@ public class Player {
 		return soldiers;
 	}
 
+	/**
+	 * Check if a soldier belong to the player.
+	 *
+	 * @param soldier the soldier
+	 * @return true if he belongs to the player, false otherwise
+	 */
 	public boolean containsSoldier(Soldier soldier) {
 		return Arrays.stream(soldiers).anyMatch(s -> s == soldier);
 	}

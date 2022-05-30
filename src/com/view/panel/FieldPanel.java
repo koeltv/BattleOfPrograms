@@ -22,15 +22,27 @@ import java.util.Objects;
 public class FieldPanel extends BasePanel implements PropertyChangeListener {
 
 	/**
-	 *
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = -6721489079020570444L;
+	/**
+	 * The First player panel.
+	 */
 	private final JPanel firstPlayerPanel;
+	/**
+	 * The Second player panel.
+	 */
 	private final JPanel secondPlayerPanel;
 
+	/**
+	 * The linked Field.
+	 */
 	private final Field field;
 
+	/**
+	 * The VS image.
+	 */
 	private final Image vsImage = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/vs.gif"))).getImage();
 
 	/**

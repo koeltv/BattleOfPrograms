@@ -13,16 +13,25 @@ import java.io.Serial;
 public class Dialog extends JDialog {
 
 	/**
-	 * 
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = -5301893305124026332L;
-	
+
+	/**
+	 * The Button pane.
+	 */
 	private final JPanel buttonPane;
+	/**
+	 * The Text pane.
+	 */
 	private final JTextPane textPane;
 
 	/**
 	 * Create the dialog.
+	 *
+	 * @param center the center
+	 * @param text   the text
 	 */
 	public Dialog(Point center, String text) {
 		int width = 800, height = 400;
@@ -85,6 +94,9 @@ public class Dialog extends JDialog {
 		}
 	}
 
+	/**
+	 * Disable the buttons and replace them by a dialog-wide click event.
+	 */
 	public void disableButtons() {
 		buttonPane.setVisible(false);
 		textPane.addMouseListener(new MouseAdapter() {

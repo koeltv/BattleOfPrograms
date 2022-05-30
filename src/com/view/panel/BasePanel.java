@@ -17,12 +17,15 @@ public class BasePanel extends JPanel {
 	 * For exemple an alpha of 0.1 correspond to the image being 90% transparent.
 	 */
 	private float alpha = 0.6f;
-	
+
 	/**
-	 * 
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = -5114453698893412532L;
+	/**
+	 * The Background image.
+	 */
 	private Image background;
 
 	/**

@@ -22,15 +22,24 @@ import java.util.Objects;
 public class FieldAttributionPanel extends JPanel {
 
 	/**
-	 *
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = -2108193670223851849L;
 
+	/**
+	 * The Soldier panel.
+	 */
 	private final BasePanel soldierPanel;
 
+	/**
+	 * The Field columns.
+	 */
 	private final List<FieldColumn> fieldColumns = new ArrayList<>(5);
 
+	/**
+	 * The Current player index.
+	 */
 	private int currentPlayerIndex = 0;
 
 	/**
@@ -140,6 +149,7 @@ public class FieldAttributionPanel extends JPanel {
 
 	/**
 	 * Add the listeners for the drag and drop.
+	 *
 	 * @param graphicSoldier the component to add listeners on
 	 */
 	private void addSoldierListeners(GraphicSoldier graphicSoldier) {
@@ -254,6 +264,7 @@ public class FieldAttributionPanel extends JPanel {
 
 	/**
 	 * Get the column corresponding to a field.
+	 *
 	 * @param fieldProperties the properties of the field
 	 * @return the corresponding column
 	 */
@@ -267,6 +278,7 @@ public class FieldAttributionPanel extends JPanel {
 	/**
 	 * Check for intersection of 2 rectangles
 	 * Strongly inspired by <a href="https://stackoverflow.com/a/39319801">https://stackoverflow.com/a/39319801</a>.
+	 *
 	 * @param r1 - first rectangle
 	 * @param r2 - second rectangle
 	 * @return true if the intersection exist, false otherwise

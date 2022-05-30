@@ -12,6 +12,9 @@ import java.util.List;
  * This class represent a soldier.
  */
 public class Soldier {
+	/**
+	 * The Change support.
+	 */
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
 	/**
@@ -52,6 +55,9 @@ public class Soldier {
 	 */
 	public FieldProperties assignedField;
 
+	/**
+	 * Whether the soldier was recently deployed or not.
+	 */
 	private boolean recentlyDeployed = false;
 
 	/**

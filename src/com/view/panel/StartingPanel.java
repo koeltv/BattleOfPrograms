@@ -11,7 +11,7 @@ import java.io.Serial;
  */
 public class StartingPanel extends BasePanel {
 	/**
-	 * 
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = 4291077835233086734L;

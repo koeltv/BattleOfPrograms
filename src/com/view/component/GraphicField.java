@@ -19,19 +19,38 @@ import java.util.Objects;
 public class GraphicField extends JPanel implements PropertyChangeListener {
 
 	/**
-	 *
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = 368210040522610077L;
 
+	/**
+	 * The Change support.
+	 */
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
+	/**
+	 * The Field properties.
+	 */
 	private final FieldProperties fieldProperties;
 
-	private final JLabel upperLabel, bottomLabel;
+	/**
+	 * The Upper label.
+	 */
+	private final JLabel upperLabel,
+	/**
+	 * The Bottom label.
+	 */
+	bottomLabel;
 
+	/**
+	 * The White flag animated image.
+	 */
 	private final Image whiteFlag = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/white_flag.gif"))).getImage();
 
+	/**
+	 * The Dust cloud animated image.
+	 */
 	private final Image dustCloud = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/dust_cloud.gif"))).getImage();
 
 	/**
@@ -100,7 +119,7 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	 * Add an observer.
 	 *
 	 * @param property the property to listen to
-	 * @param listener    the listener
+	 * @param listener the listener
 	 */
 	public void addObserver(String property, PropertyChangeListener listener) {
 		changeSupport.addPropertyChangeListener(property, listener);

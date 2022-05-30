@@ -18,27 +18,66 @@ import java.util.Arrays;
 public class AttributePanel extends JPanel {
 
 	/**
-	 *
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = 6364406918777401302L;
 
+	/**
+	 * The Soldier panel.
+	 */
 	private final BasePanel soldierPanel;
 
+	/**
+	 * The Assignable points.
+	 */
 	private int assignablePoints = 400;
 
+	/**
+	 * The Current graphic soldier.
+	 */
 	private GraphicSoldier currentGraphicSoldier;
 
+	/**
+	 * The Current player index.
+	 */
 	private int currentPlayerIndex = 0;
 
+	/**
+	 * The Reservist check box.
+	 */
 	private final JCheckBox reservistCheckBox;
+	/**
+	 * The Strength slider.
+	 */
 	private final JSlider strengthSlider;
+	/**
+	 * The Resistance slider.
+	 */
 	private final JSlider resistanceSlider;
+	/**
+	 * The Initiative slider.
+	 */
 	private final JSlider initiativeSlider;
+	/**
+	 * The Constitution slider.
+	 */
 	private final JSlider constitutionSlider;
+	/**
+	 * The Dexterity slider.
+	 */
 	private final JSlider dexteritySlider;
+	/**
+	 * The Defensive radio button.
+	 */
 	private final JRadioButton defensiveRadioButton;
+	/**
+	 * The Offensive radio button.
+	 */
 	private final JRadioButton offensiveRadioButton;
+	/**
+	 * The Random radio button.
+	 */
 	private final JRadioButton randomRadioButton;
 
 	/**
@@ -340,6 +379,13 @@ public class AttributePanel extends JPanel {
 		});
 	}
 
+	/**
+	 * Set up a slider.
+	 *
+	 * @param slider           the slider
+	 * @param maximum          the maximum value
+	 * @param majorTickSpacing the major tick spacing
+	 */
 	private void setupSlider(JSlider slider, int maximum, int majorTickSpacing) {
 		slider.setValue(0);
 		slider.setMaximum(maximum);
@@ -356,11 +402,19 @@ public class AttributePanel extends JPanel {
 		slider.setBackground(null);
 	}
 
+	/**
+	 * Update assignables points.
+	 *
+	 * @param difference the difference
+	 */
 	private void updatePoints(int difference) {
 		assignablePoints -= difference;
 		MainView.setPointsLeft(assignablePoints);
 	}
 
+	/**
+	 * Reset assignables points.
+	 */
 	private void resetPoints() {
 		assignablePoints = 400;
 		MainView.setPointsLeft(assignablePoints);

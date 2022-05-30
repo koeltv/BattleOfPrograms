@@ -11,7 +11,7 @@ import java.io.Serial;
 public class FieldColumn extends JScrollPane {
 
 	/**
-	 * 
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = 1762692385236278793L;
@@ -20,7 +20,10 @@ public class FieldColumn extends JScrollPane {
 	 * The Field properties.
 	 */
 	public final FieldProperties fieldProperties;
-	
+
+	/**
+	 * The Panel.
+	 */
 	private final JPanel panel;
 
 	/**

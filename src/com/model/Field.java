@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
  * This class represent one of the possibles battle zone.
  */
 public class Field implements PropertyChangeListener {
+	/**
+	 * The Change support.
+	 */
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
 	/**
@@ -30,11 +33,21 @@ public class Field implements PropertyChangeListener {
 	 */
 	public final HashSet<Soldier> rightSide = new HashSet<>();
 
+	/**
+	 * The Attack order.
+	 * Used to make the soldiers attack in decreasing order of initiative.
+	 */
 	private LinkedList<Soldier> attackOrder = new LinkedList<>();
 
+	/**
+	 * The soldiers that were in this field before its capture.
+	 */
 	private final HashSet<Soldier> previousSoldiers = new HashSet<>();
 
-	private boolean isControlled = false;
+	/**
+	 * Whether the field is controlled or not.
+	 */
+	private boolean controlled = false;
 
 	/**
 	 * Instantiates a new Field.
@@ -80,7 +93,7 @@ public class Field implements PropertyChangeListener {
 	public void removeSoldier(Soldier soldier) {
 		soldier.sendToField(null);
 		soldier.removeObserver(this);
-		if (isControlled) previousSoldiers.add(soldier);
+		if (controlled) previousSoldiers.add(soldier);
 		if (leftSide.stream().anyMatch(soldier1 -> soldier1 == soldier)) {
 			leftSide.remove(soldier);
 			changeSupport.firePropertyChange("soldierRemoved", soldier, null);
@@ -103,13 +116,13 @@ public class Field implements PropertyChangeListener {
 	}
 
 	/**
-	 * Launch the next attack.
+	 * Launch the next attack.<br>
 	 * The next soldier to attack (based on the initiative stat) will launch an attack on his chosen target.
 	 *
 	 * @return true if the battle is still going, false otherwise
 	 */
 	public boolean battle() {
-		if (!isControlled) {
+		if (!controlled) {
 			attackOrder = attackOrder.stream().filter(Soldier::isAlive).collect(Collectors.toCollection(LinkedList::new));
 			List<Soldier> left = leftSide.stream().filter(Soldier::isAlive).toList();
 			List<Soldier> right = rightSide.stream().filter(Soldier::isAlive).toList();
@@ -124,10 +137,12 @@ public class Field implements PropertyChangeListener {
 
 			if (getController() != null) {
 				changeSupport.firePropertyChange("battleState", true, false);
-				isControlled = true;
+				controlled = true;
 				return false;
 			} else
 				return true;
+		} else {
+			previousSoldiers.clear();
 		}
 		return true;
 	}
@@ -165,10 +180,11 @@ public class Field implements PropertyChangeListener {
 	}
 
 	/**
-	 * Check if soldiers can be assigned to a field.
-	 * Soldiers cannot be added if :
+	 * Check if soldiers can be assigned to a field.<br>
+	 * Soldiers cannot be added if :<br>
 	 * - The field is under control
 	 *
+	 * @param soldier the soldier to check for
 	 * @return true if soldiers can be added, false otherwise
 	 */
 	public boolean isAssignable(Soldier soldier) {
@@ -176,7 +192,7 @@ public class Field implements PropertyChangeListener {
 		if (player != null && player.containsSoldier(soldier))
 			return previousSoldiers.contains(soldier);
 		else
-			return GameController.getStep() < 3 || !isControlled;
+			return GameController.getStep() < 3 || !controlled;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -186,7 +202,7 @@ public class Field implements PropertyChangeListener {
 	/**
 	 * Add an observer.
 	 *
-	 * @param propertyChangeListener - the property change listener
+	 * @param propertyChangeListener the property change listener
 	 */
 	public void addObserver(PropertyChangeListener propertyChangeListener) {
 		this.changeSupport.addPropertyChangeListener(propertyChangeListener);

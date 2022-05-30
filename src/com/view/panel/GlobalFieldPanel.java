@@ -19,15 +19,24 @@ import java.io.Serial;
 public class GlobalFieldPanel extends BasePanel implements PropertyChangeListener {
 
 	/**
-	 *
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = -2611728061732290991L;
 
+	/**
+	 * The Current step.
+	 */
 	private int currentStep = -1;
 
+	/**
+	 * The Graphic fields.
+	 */
 	private final GraphicField[] graphicFields = new GraphicField[5];
 
+	/**
+	 * The Pass action.
+	 */
 	private final ActionListener passAction;
 
 	/**
@@ -108,6 +117,9 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 		});
 	}
 
+	/**
+	 * Sets fields.
+	 */
 	public void setupFields() {
 		Field[] fields = GameController.getFields();
 		for (int i = 0; i < graphicFields.length; i++) {

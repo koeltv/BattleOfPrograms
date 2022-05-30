@@ -15,17 +15,29 @@ import java.io.Serial;
  */
 public class PlayerInfoPanel extends BasePanel {
 	/**
-	 *
+	 * The constant serialVersionUID.
 	 */
 	@Serial
 	private static final long serialVersionUID = 6378665743080841415L;
-	
+
+	/**
+	 * The Name field.
+	 */
 	private final JTextField nameField;
 
+	/**
+	 * The confirm button.
+	 */
 	private final JButton btnConfirm;
 
+	/**
+	 * The Program list.
+	 */
 	private final JList<String> programList;
 
+	/**
+	 * The Player id.
+	 */
 	private int playerId = 0;
 
 	/**

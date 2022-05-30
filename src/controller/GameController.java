@@ -12,18 +12,39 @@ import java.util.Arrays;
  * The controller supervising access to model and the fighting step.
  */
 public class GameController implements Runnable {
+	/**
+	 * The only GameController instance.
+	 */
 	private static final GameController instance = new GameController();
 
+	/**
+	 * Whether to display the tutorial or not.
+	 */
 	private static boolean displayTutorial = true;
 
+	/**
+	 * The Players.
+	 */
 	private final Player[] players = new Player[2];
 
+	/**
+	 * The Fields.
+	 */
 	private final Field[] fields = new Field[FieldProperties.values().length];
 
+	/**
+	 * The Step.
+	 */
 	private int step = 1;
 
+	/**
+	 * The constant waitingTime.
+	 */
 	private static int waitingTime = 200;
 
+	/**
+	 * Instantiates a new Game controller.
+	 */
 	private GameController() {
 		FieldProperties[] values = FieldProperties.values();
 		for (int i = 0; i < values.length; i++) {
@@ -115,6 +136,9 @@ public class GameController implements Runnable {
 		checkForWinner();
 	}
 
+	/**
+	 * Check for winner.
+	 */
 	private void checkForWinner() {
 		int numberOfPlayer1Field = 0, numberOfPlayer2Field = 0;
 		for (Field field : fields) {

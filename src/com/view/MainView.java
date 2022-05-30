@@ -23,18 +23,39 @@ import java.util.Random;
  */
 public class MainView {
 
+	/**
+	 * The constant instance.
+	 */
 	private static MainView instance;
 
+	/**
+	 * The Frame.
+	 */
 	private JFrame frame;
 
+	/**
+	 * The constant mainPanel.
+	 */
 	private static EventPanel mainPanel;
 
+	/**
+	 * The constant pointLabel.
+	 */
 	private static JLabel pointLabel;
 
+	/**
+	 * The constant playerIndicator.
+	 */
 	private static PlayerIndicator playerIndicator;
 
+	/**
+	 * The constant confirmButton.
+	 */
 	public static JButton confirmButton;
 
+	/**
+	 * The constant dialog.
+	 */
 	private static Dialog dialog;
 
 	/**
@@ -300,6 +321,7 @@ public class MainView {
 
 	/**
 	 * Check if an event is displayed.
+	 *
 	 * @return false if an event is displayed, false otherwise
 	 */
 	public static boolean noEvent() {
