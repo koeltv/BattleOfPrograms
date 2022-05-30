@@ -70,7 +70,7 @@ public class MainView {
 			GameController.nextStep();
 			Player[] players = GameController.getPlayers();
 			for (int i = 0; i < players.length; i++) {
-				players[i] = new Player("P" + (i + 1), "");
+				players[i] = new Player("J" + (i + 1), "Debug");
 				for (int j = 0; j < players[i].getSoldiers().length; j++) {
 					if (j < 15) {
 						players[i].getSoldiers()[j] = new Soldier();
@@ -79,7 +79,12 @@ public class MainView {
 					} else {
 						players[i].getSoldiers()[j] = new WarMaster();
 					}
-					players[i].getSoldiers()[j].setAi(new Random().nextInt(2) > 0 ? new DefensiveAI() : new OffensiveAI());
+
+					players[i].getSoldiers()[j].setAi(switch(new Random().nextInt(3)) {
+						case 0 -> new OffensiveAI();
+						case 1 -> new DefensiveAI();
+						default -> new RandomAI();
+					});
 
 					if (j < 5) players[i].getSoldiers()[j].setReservist(true);
 					else GameController.moveSoldierToField(players[i].getSoldiers()[j], GameController.findFieldByProperties(FieldProperties.values()[new Random().nextInt(FieldProperties.values().length)]));

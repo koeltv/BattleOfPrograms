@@ -259,6 +259,9 @@ public class AttributePanel extends JPanel {
 		randomRadioButton.setSelected(true);
 		buttonGroup.add(randomRadioButton);
 		aiSelectionPanel.add(randomRadioButton);
+		offensiveRadioButton.addActionListener(l -> {
+			if (offensiveRadioButton.isSelected()) currentGraphicSoldier.setAi(new RandomAI());
+		});
 
 		reservistLabel.setForeground(ColorPalette.WHITE.color);
 		strengthLabel.setForeground(ColorPalette.WHITE.color);
@@ -292,7 +295,7 @@ public class AttributePanel extends JPanel {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						for (Soldier soldier : GameController.getPlayers()[currentPlayerIndex].getSoldiers()) {
-							if (soldier.getAi() == null) soldier.setAi(Math.random() > 0.5 ? new OffensiveAI() : new DefensiveAI());
+							if (soldier.getAi() == null) soldier.setAi(new RandomAI());
 						}
 
 						if (currentPlayerIndex < 1) {
