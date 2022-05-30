@@ -5,14 +5,12 @@ import com.model.EliteSoldier;
 import com.model.Soldier;
 import com.model.WarMaster;
 import com.view.ColorPalette;
-import com.view.panel.AttributePanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serial;
-import java.net.URL;
 import java.util.Objects;
 
 public class GraphicSoldier extends JPanel implements PropertyChangeListener {
@@ -22,13 +20,13 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 	 */
 	@Serial
 	private static final long serialVersionUID = -5370972161337730381L;
-	
-	private static final URL soldierUrl = AttributePanel.class.getResource("/images/soldier.png");
-	private static final URL transparentSoldierUrl = AttributePanel.class.getResource("/images/soldier-t.png");
-	private static final URL eliteSoldierUrl = AttributePanel.class.getResource("/images/elite_soldier.png");
-	private static final URL transparentEliteSoldierUrl = AttributePanel.class.getResource("/images/elite_soldier-t.png");
-	private static final URL warMasterUrl = AttributePanel.class.getResource("/images/commander.png");
-	private static final URL transparentWarMasterUrl = AttributePanel.class.getResource("/images/commander-t.png");
+
+	private static final ImageIcon soldierImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/soldier.png")));
+	private static final ImageIcon transparentSoldierImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/soldier-t.png")));
+	private static final ImageIcon eliteSoldierImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/elite_soldier.png")));
+	private static final ImageIcon transparentEliteSoldierImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/elite_soldier-t.png")));
+	private static final ImageIcon warMasterImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/commander.png")));
+	private static final ImageIcon transparentWarMasterImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/commander-t.png")));
 
 	private final Soldier soldier;
 
@@ -44,7 +42,7 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		this.soldier = soldier;
 
 		add(lifeBar);
-		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentWarMasterUrl)));
+		soldierDisplay = new JLabel(transparentWarMasterImage);
 	}
 
 	private GraphicSoldier(EliteSoldier soldier) {
@@ -53,7 +51,7 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		this.soldier = soldier;
 
 		add(lifeBar);
-		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentEliteSoldierUrl)));
+		soldierDisplay = new JLabel(transparentEliteSoldierImage);
 	}
 
 	private GraphicSoldier(Soldier soldier) {
@@ -62,7 +60,7 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		this.soldier = soldier;
 
 		add(lifeBar);
-		soldierDisplay = new JLabel(new ImageIcon(Objects.requireNonNull(transparentSoldierUrl)));
+		soldierDisplay = new JLabel(transparentSoldierImage);
 	}
 
 	/**
@@ -94,12 +92,12 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 	}
 
 	public void setSelected(boolean selected) {
-		URL url;
-		if (soldier instanceof WarMaster) url = selected ? warMasterUrl : transparentWarMasterUrl;
-		else if (soldier instanceof EliteSoldier) url = selected ? eliteSoldierUrl : transparentEliteSoldierUrl;
-		else url = selected ? soldierUrl : transparentSoldierUrl;
+		ImageIcon image;
+		if (soldier instanceof WarMaster) image = selected ? warMasterImage : transparentWarMasterImage;
+		else if (soldier instanceof EliteSoldier) image = selected ? eliteSoldierImage : transparentEliteSoldierImage;
+		else image = selected ? soldierImage : transparentSoldierImage;
 
-		soldierDisplay.setIcon(new ImageIcon(Objects.requireNonNull(url)));
+		soldierDisplay.setIcon(image);
 		repaint();
 	}
 
