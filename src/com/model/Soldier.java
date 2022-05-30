@@ -5,6 +5,7 @@ import controller.GameController;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -60,8 +61,10 @@ public class Soldier {
 
 	/**
 	 * Instantiates a new Soldier.
+	 *
+	 * A soldier can attack, heal another and rest between rounds.
 	 */
-	public Soldier () { //TODO When a new round start, if he wasn't moved, heal 5pts (rest)
+	public Soldier () {
 
 	}
 
@@ -228,6 +231,18 @@ public class Soldier {
 	///////////////////////////////////////////////////////////////////////////
 
 	/**
+	 * Regain 5 life points.
+	 */
+	public void rest() {
+		float previousValue = lifePoints;
+		lifePoints += 5;
+		if (lifePoints > maxLifePoints) {
+			lifePoints = maxLifePoints;
+		}
+		changeSupport.firePropertyChange("damage", previousValue, lifePoints);
+	}
+
+	/**
 	 * Attack.
 	 *
 	 * @param soldiers the list of soldiers to choose a target from
@@ -236,7 +251,7 @@ public class Soldier {
 		recentlyDeployed = false;
 		float attackValue = 1;
 		attackValue += attackValue * ((double) strength / 10);
-		
+
 		float hitChance = 1;
 		hitChance += (dexterity * ((double) 3/100)) * hitChance;
 
@@ -312,7 +327,7 @@ public class Soldier {
 		if (fieldController == null) { //If no controller, the battle is still going so the soldier cannot be moved
 			return recentlyDeployed;
 		} else { //If there is a controller, the soldier can move if it belongs to the controller and there is more than one (and he is still alive)
-			List<Soldier> controllerSoldiers = field.getPlayerSoldiers(fieldController);
+			HashSet<Soldier> controllerSoldiers = field.getPlayerSoldiers(fieldController);
 			return controllerSoldiers.contains(this) && controllerSoldiers.stream().filter(Soldier::isAlive).toList().size() > 1;
 		}
 	}

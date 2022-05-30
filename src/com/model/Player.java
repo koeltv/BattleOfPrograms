@@ -1,5 +1,7 @@
 package com.model;
 
+import java.util.Arrays;
+
 /**
  * The model used to store data related to a player.
  */
@@ -27,6 +29,10 @@ public class Player {
 	 */
 	public Soldier[] getSoldiers() {
 		return soldiers;
+	}
+
+	public boolean containsSoldier(Soldier soldier) {
+		return Arrays.stream(soldiers).anyMatch(s -> s == soldier);
 	}
 
 	/**

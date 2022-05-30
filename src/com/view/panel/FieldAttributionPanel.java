@@ -36,7 +36,7 @@ public class FieldAttributionPanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public FieldAttributionPanel() { //TODO Add randomize button
+	public FieldAttributionPanel() {
 		GridLayout gridLayout = new GridLayout(1, 2);
 		setLayout(gridLayout);
 
@@ -180,7 +180,7 @@ public class FieldAttributionPanel extends JPanel {
 					if (intersects(soldierAbsoluteBounds, fieldBounds)) {
 						intersectionFound = true;
 						column.setOpaque(false);
-						if (Objects.requireNonNull(GameController.findFieldByProperties(column.fieldProperties)).isAssignable()) {
+						if (Objects.requireNonNull(GameController.findFieldByProperties(column.fieldProperties)).isAssignable(((GraphicSoldier) e.getComponent()).getSoldier())) {
 							e.getComponent().getParent().remove(e.getComponent());
 
 							GameController.moveSoldierToField(((GraphicSoldier) e.getComponent()).getSoldier(), GameController.findFieldByProperties(column.fieldProperties));

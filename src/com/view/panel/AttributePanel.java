@@ -44,7 +44,7 @@ public class AttributePanel extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public AttributePanel() { //TODO Add randomize button
+	public AttributePanel() {
 		GridLayout gridLayout = new GridLayout(1, 2);
 		setLayout(gridLayout);
 

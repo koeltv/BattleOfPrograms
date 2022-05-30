@@ -6,10 +6,7 @@ import controller.GameController;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,14 +23,16 @@ public class Field implements PropertyChangeListener {
 	/**
 	 * The Left side corresponding to player 1.
 	 */
-	public final List<Soldier> leftSide = new ArrayList<>();
+	public final HashSet<Soldier> leftSide = new HashSet<>();
 
 	/**
 	 * The Right side corresponding to player 2.
 	 */
-	public final List<Soldier> rightSide = new ArrayList<>();
+	public final HashSet<Soldier> rightSide = new HashSet<>();
 
-	private List<Soldier> attackOrder = new ArrayList<>();
+	private LinkedList<Soldier> attackOrder = new LinkedList<>();
+
+	private final HashSet<Soldier> previousSoldiers = new HashSet<>();
 
 	private boolean isControlled = false;
 
@@ -52,7 +51,7 @@ public class Field implements PropertyChangeListener {
 	 * @param player the player
 	 * @return the player soldiers
 	 */
-	public List<Soldier> getPlayerSoldiers(Player player) {
+	public HashSet<Soldier> getPlayerSoldiers(Player player) {
 		return player == GameController.getPlayers()[0] ? leftSide : rightSide;
 	}
 
@@ -81,6 +80,7 @@ public class Field implements PropertyChangeListener {
 	public void removeSoldier(Soldier soldier) {
 		soldier.sendToField(null);
 		soldier.removeObserver(this);
+		if (isControlled) previousSoldiers.add(soldier);
 		if (leftSide.stream().anyMatch(soldier1 -> soldier1 == soldier)) {
 			leftSide.remove(soldier);
 			changeSupport.firePropertyChange("soldierRemoved", soldier, null);
@@ -98,7 +98,7 @@ public class Field implements PropertyChangeListener {
 		attackOrder.addAll(leftSide.stream().toList());
 		attackOrder.addAll(rightSide.stream().toList());
 		int initialSize = attackOrder.size();
-		attackOrder = attackOrder.stream().filter(Soldier::isAlive).sorted(Comparator.comparingInt(Soldier::getInitiative)).collect(Collectors.toList());
+		attackOrder = attackOrder.stream().filter(Soldier::isAlive).sorted(Comparator.comparingInt(Soldier::getInitiative)).collect(Collectors.toCollection(LinkedList::new));
 		changeSupport.firePropertyChange("initialSoldierAmount", (initialSize == attackOrder.size() ? -1 : initialSize), attackOrder.size());
 	}
 
@@ -110,15 +110,16 @@ public class Field implements PropertyChangeListener {
 	 */
 	public boolean battle() {
 		if (!isControlled) {
-			attackOrder = attackOrder.stream().filter(Soldier::isAlive).collect(Collectors.toList());
+			attackOrder = attackOrder.stream().filter(Soldier::isAlive).collect(Collectors.toCollection(LinkedList::new));
 			List<Soldier> left = leftSide.stream().filter(Soldier::isAlive).toList();
 			List<Soldier> right = rightSide.stream().filter(Soldier::isAlive).toList();
 
 			if (left.size() >= 1 && right.size() >= 1) {
-				Soldier soldier = attackOrder.get(0);
-				soldier.attack(left.contains(soldier) ? right : left);
-				attackOrder.remove(soldier);
-				attackOrder.add(soldier);
+				Soldier soldier = attackOrder.poll();
+				if (soldier != null) {
+					soldier.attack(left.contains(soldier) ? right : left);
+					attackOrder.offer(soldier);
+				}
 			}
 
 			if (getController() != null) {
@@ -129,6 +130,17 @@ public class Field implements PropertyChangeListener {
 				return true;
 		}
 		return true;
+	}
+
+	/**
+	 * The soldiers will heal a bit if the zone is controlled, and they weren't moved since the previous battle (rest).
+	 */
+	public void rest() {
+		if (getController() == GameController.getPlayers()[0]) {
+			leftSide.stream().filter(soldier -> attackOrder.contains(soldier)).forEach(Soldier::rest);
+		} else if (getController() == GameController.getPlayers()[1]) {
+			rightSide.stream().filter(soldier -> attackOrder.contains(soldier)).forEach(Soldier::rest);
+		}
 	}
 
 	/**
@@ -159,8 +171,12 @@ public class Field implements PropertyChangeListener {
 	 *
 	 * @return true if soldiers can be added, false otherwise
 	 */
-	public boolean isAssignable() {
-		return GameController.getStep() < 3 || !isControlled;
+	public boolean isAssignable(Soldier soldier) {
+		Player player = getController();
+		if (player != null && player.containsSoldier(soldier))
+			return previousSoldiers.contains(soldier);
+		else
+			return GameController.getStep() < 3 || !isControlled;
 	}
 
 	///////////////////////////////////////////////////////////////////////////

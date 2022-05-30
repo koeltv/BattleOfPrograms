@@ -97,6 +97,10 @@ public class GameController implements Runnable {
 	@Override
 	public synchronized void run() {
 		int i = 0;
+		for (Field field : fields) {
+			field.rest();
+		}
+
 		while (!Thread.interrupted()) {
 			if (!fields[i].battle()) break;
 			i = ++i % fields.length;
@@ -171,6 +175,9 @@ public class GameController implements Runnable {
 
 	/**
 	 * Check attribution.
+	 * - All soldiers that are not reservists should be attributed to a field.
+	 * - All fields should have at least one soldier.
+	 * - All recently moved soldier (redeployed) should not be in a captured field.
 	 *
 	 * @param playerIndex the player index
 	 * @return true if the player has assigned all his soldiers correctly, false otherwise
