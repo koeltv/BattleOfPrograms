@@ -3,6 +3,9 @@ package com.view.utils;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * This class contains some useful methods to deal with geometry.
+ */
 public class GeometryUtils {
 	/**
 	 * Check for intersection of 2 rectangles

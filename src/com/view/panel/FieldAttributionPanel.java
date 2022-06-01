@@ -45,6 +45,9 @@ public class FieldAttributionPanel extends JPanel {
 	 */
 	private int currentPlayerIndex = 0;
 
+	/**
+	 * The drag and drop functionalities used for moving soldiers.
+	 */
 	private final DragAndDrop dragAndDrop = new DragAndDrop();
 
 	/**
@@ -154,6 +157,9 @@ public class FieldAttributionPanel extends JPanel {
 		revalidate();
 	}
 
+	/**
+	 * Create the needed drag and drop functionalities.
+	 */
 	private void setupDragAndDrop() {
 		/*
 		  Change the opacity of the columns.

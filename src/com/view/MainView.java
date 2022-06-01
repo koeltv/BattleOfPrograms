@@ -303,6 +303,9 @@ public class MainView {
 		MainView.switchToPanel(PanelIdentifier.STARTING_PANEL);
 	}
 
+	/**
+	 * Stops all events.
+	 */
 	public static void stopEvent() {
 		mainPanel.stopEvent();
 	}
