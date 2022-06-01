@@ -151,6 +151,7 @@ public class GameController implements Runnable {
 		else if (numberOfPlayer2Field >= 3) winningPlayerIndex = 1;
 
 		if (winningPlayerIndex > -1) {
+			MainView.stopEvent();
 			MainView.displayDialog(
 					"Félicitations " + getPlayers()[winningPlayerIndex].getName() + ", tu as gagné !\nTu peux être fière d'avoir représenté le programme " + getPlayers()[winningPlayerIndex].getProgram(),
 					true

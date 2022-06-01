@@ -40,7 +40,7 @@ public class EliteSoldier extends Soldier {
 
 	@Override
 	public boolean setConstitution(int constitution) {
-		if (constitution > 0) return super.setConstitution(constitution);
+		if (constitution > 4) return super.setConstitution(constitution);
 		else return false;
 	}
 

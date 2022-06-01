@@ -303,6 +303,10 @@ public class MainView {
 		MainView.switchToPanel(PanelIdentifier.STARTING_PANEL);
 	}
 
+	public static void stopEvent() {
+		mainPanel.stopEvent();
+	}
+
 	/**
 	 * Remove confirmation listeners.
 	 */
