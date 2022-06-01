@@ -1,12 +1,10 @@
 package controller;
 
-import com.model.Field;
-import com.model.Player;
-import com.model.Soldier;
+import com.model.*;
 import com.view.MainView;
-import com.view.component.FieldProperties;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * The controller supervising access to model and the fighting step.
@@ -222,5 +220,36 @@ public class GameController implements Runnable {
 			instance.fields[i] = new Field(values[i]);
 		}
 		instance.step = 1;
+	}
+
+	/**
+	 * Start the game in debug mode.
+	 * Start on the attribution screen with players and soldiers pre-made and attributed.
+	 */
+	public static void startDebugMode() {
+		passTutorial();
+		nextStep();
+		Player[] players = getPlayers();
+		for (int i = 0; i < players.length; i++) {
+			players[i] = new Player("J" + (i + 1), "Debug");
+			for (int j = 0; j < players[i].getSoldiers().length; j++) {
+				if (j < 15) {
+					players[i].getSoldiers()[j] = new Soldier();
+				} else if (j < 19) {
+					players[i].getSoldiers()[j] = new EliteSoldier();
+				} else {
+					players[i].getSoldiers()[j] = new WarMaster();
+				}
+
+				players[i].getSoldiers()[j].setAi(switch(new Random().nextInt(3)) {
+					case 0 -> new OffensiveAI();
+					case 1 -> new DefensiveAI();
+					default -> new RandomAI();
+				});
+
+				if (j < 5) players[i].getSoldiers()[j].setReservist(true);
+				else moveSoldierToField(players[i].getSoldiers()[j], findFieldByProperties(FieldProperties.values()[new Random().nextInt(FieldProperties.values().length)]));
+			}
+		}
 	}
 }

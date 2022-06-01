@@ -3,7 +3,6 @@ package com.view.panel;
 import com.model.Field;
 import com.model.Player;
 import com.view.MainView;
-import com.view.component.FieldProperties;
 import com.view.component.GraphicField;
 import controller.GameController;
 
@@ -30,11 +29,6 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 	private int currentStep = -1;
 
 	/**
-	 * The Graphic fields.
-	 */
-	private final GraphicField[] graphicFields = new GraphicField[5];
-
-	/**
 	 * The Pass action.
 	 */
 	private final ActionListener passAction;
@@ -57,37 +51,7 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 			}
 		};
 
-		GraphicField sportField = new GraphicField(FieldProperties.SPORTS_HALL);
-		springLayout.putConstraint(SpringLayout.NORTH, sportField, 58, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, sportField, 150, SpringLayout.WEST, this);
-		add(sportField);
-		graphicFields[4] = sportField;
-
-		GraphicField bdeField = new GraphicField(FieldProperties.BDE);
-		springLayout.putConstraint(SpringLayout.NORTH, bdeField, 250, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.WEST, bdeField, 450, SpringLayout.WEST, this);
-		add(bdeField);
-		graphicFields[1] = bdeField;
-
-		GraphicField libraryField = new GraphicField(FieldProperties.LIBRARY);
-		springLayout.putConstraint(SpringLayout.WEST, libraryField, 600, SpringLayout.WEST, this);
-		springLayout.putConstraint(SpringLayout.SOUTH, libraryField, -300, SpringLayout.SOUTH, this);
-		add(libraryField);
-		graphicFields[0] = libraryField;
-
-		GraphicField administrativeField = new GraphicField(FieldProperties.ADMINISTRATIVE_QUARTER);
-		springLayout.putConstraint(SpringLayout.NORTH, administrativeField, 200, SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, administrativeField, -300, SpringLayout.EAST, this);
-		add(administrativeField);
-		graphicFields[2] = administrativeField;
-
-		GraphicField industrialField = new GraphicField(FieldProperties.INDUSTRIAL_HALLS);
-		springLayout.putConstraint(SpringLayout.SOUTH, industrialField, -150, SpringLayout.SOUTH, this);
-		springLayout.putConstraint(SpringLayout.EAST, industrialField, -200, SpringLayout.EAST, this);
-		add(industrialField);
-		graphicFields[3] = industrialField;
-
-		setupFields();
+		setupFields(springLayout);
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -120,12 +84,36 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 	/**
 	 * Sets fields.
 	 */
-	public void setupFields() {
+	public void setupFields(SpringLayout springLayout) {
 		Field[] fields = GameController.getFields();
-		for (int i = 0; i < graphicFields.length; i++) {
-			GraphicField graphicField = graphicFields[i];
+		for (Field field : fields) {
+			GraphicField graphicField = new GraphicField(field);
+			add(graphicField);
 
-			Player controller = fields[i].getController();
+			switch (field.fieldProperties) {
+				case LIBRARY -> {
+					springLayout.putConstraint(SpringLayout.WEST, graphicField, 600, SpringLayout.WEST, this);
+					springLayout.putConstraint(SpringLayout.SOUTH, graphicField, -300, SpringLayout.SOUTH, this);
+				}
+				case BDE -> {
+					springLayout.putConstraint(SpringLayout.NORTH, graphicField, 250, SpringLayout.NORTH, this);
+					springLayout.putConstraint(SpringLayout.WEST, graphicField, 450, SpringLayout.WEST, this);
+				}
+				case ADMINISTRATIVE_QUARTER -> {
+					springLayout.putConstraint(SpringLayout.NORTH, graphicField, 200, SpringLayout.NORTH, this);
+					springLayout.putConstraint(SpringLayout.EAST, graphicField, -300, SpringLayout.EAST, this);
+				}
+				case INDUSTRIAL_HALLS -> {
+					springLayout.putConstraint(SpringLayout.SOUTH, graphicField, -150, SpringLayout.SOUTH, this);
+					springLayout.putConstraint(SpringLayout.EAST, graphicField, -200, SpringLayout.EAST, this);
+				}
+				case SPORTS_HALL -> {
+					springLayout.putConstraint(SpringLayout.NORTH, graphicField, 58, SpringLayout.NORTH, this);
+					springLayout.putConstraint(SpringLayout.WEST, graphicField, 150, SpringLayout.WEST, this);
+				}
+			}
+
+			Player controller = field.getController();
 			if (controller == null) graphicField.setBottomLabelText("Bataille en cours...");
 			else graphicField.setBottomLabelText("Contrôlé par " + controller.getName());
 
@@ -137,10 +125,10 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 				}
 			});
 
-			fields[i].addObserver(graphicField);
+			field.addObserver(graphicField);
 			graphicField.addObserver("battleState", this);
-			FieldPanel associatedPanel = new FieldPanel(fields[i]);
-			MainView.addPanel(associatedPanel, fields[i].fieldProperties);
+			FieldPanel associatedPanel = new FieldPanel(field);
+			MainView.addPanel(associatedPanel, field.fieldProperties);
 		}
 	}
 

@@ -1,6 +1,5 @@
 package com.model;
 
-import com.view.component.FieldProperties;
 import controller.GameController;
 
 import java.beans.PropertyChangeListener;
@@ -53,7 +52,7 @@ public class Soldier {
 	/**
 	 * The Assigned field.
 	 */
-	public FieldProperties assignedField;
+	public Field assignedField;
 
 	/**
 	 * Whether the soldier was recently deployed or not.
@@ -298,7 +297,7 @@ public class Soldier {
 	 *
 	 * @param field the field
 	 */
-	public void sendToField(FieldProperties field) {
+	public void sendToField(Field field) {
 		assignedField = field;
 		recentlyDeployed = true;
 	}
@@ -308,7 +307,7 @@ public class Soldier {
 	 *
 	 * @return the assigned field
 	 */
-	public FieldProperties getAssignedField() {
+	public Field getAssignedField() {
 		return assignedField;
 	}
 
@@ -326,14 +325,13 @@ public class Soldier {
 	public boolean canBeMoved() {
 		if (assignedField == null || GameController.getStep() < 3) return true;
 
-		Field field = GameController.findFieldByProperties(assignedField);
 		if (!isAlive()) return false;
 
-		Player fieldController = field.getController();
+		Player fieldController = assignedField.getController();
 		if (fieldController == null) { //If no controller, the battle is still going so the soldier cannot be moved
 			return recentlyDeployed;
 		} else { //If there is a controller, the soldier can move if it belongs to the controller and there is more than one (and he is still alive)
-			HashSet<Soldier> controllerSoldiers = field.getPlayerSoldiers(fieldController);
+			HashSet<Soldier> controllerSoldiers = assignedField.getPlayerSoldiers(fieldController);
 			return controllerSoldiers.contains(this) && controllerSoldiers.stream().filter(Soldier::isAlive).toList().size() > 1;
 		}
 	}

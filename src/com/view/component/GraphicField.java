@@ -1,6 +1,7 @@
 package com.view.component;
 
 import com.model.Field;
+import com.model.FieldProperties;
 import com.view.ColorPalette;
 import com.view.MainView;
 import controller.GameController;
@@ -30,9 +31,9 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
 	/**
-	 * The Field properties.
+	 * The corresponding field.
 	 */
-	private final FieldProperties fieldProperties;
+	private final Field field;
 
 	/**
 	 * The Upper label.
@@ -56,10 +57,10 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	/**
 	 * Create the panel.
 	 *
-	 * @param fieldProperties the field properties
+	 * @param field the corresponding field
 	 */
-	public GraphicField(FieldProperties fieldProperties) {
-		this.fieldProperties = fieldProperties;
+	public GraphicField(Field field) {
+		this.field = field;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setOpaque(false);
 
@@ -69,12 +70,12 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		upperLabel.setVisible(false);
 		add(upperLabel);
 
-		JLabel iconLabel = new JLabel(new ImageIcon(Objects.requireNonNull(fieldProperties.url)));
+		JLabel iconLabel = new JLabel(new ImageIcon(Objects.requireNonNull(field.fieldProperties.url)));
 		iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(iconLabel);
 
-		bottomLabel = new JLabel(fieldProperties.toString());
+		bottomLabel = new JLabel(field.fieldProperties.toString());
 		bottomLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		bottomLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(bottomLabel);
@@ -108,7 +109,7 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	 * @return the field properties
 	 */
 	public FieldProperties getFieldProperties() {
-		return fieldProperties;
+		return field.fieldProperties;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -150,7 +151,6 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		super.paint(g);
 
 		if (MainView.noEvent()) {
-			Field field = GameController.findFieldByProperties(fieldProperties);
 			Image displayImage = null;
 			if (field.getController() != null) {
 				displayImage = whiteFlag;

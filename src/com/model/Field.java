@@ -1,6 +1,5 @@
 package com.model;
 
-import com.view.component.FieldProperties;
 import controller.GameController;
 
 import java.beans.PropertyChangeEvent;
@@ -75,7 +74,7 @@ public class Field implements PropertyChangeListener {
 	 */
 	public void addSoldier(Soldier soldier) {
 		soldier.addObserver("dead", this);
-		soldier.sendToField(fieldProperties);
+		soldier.sendToField(this);
 		if (Arrays.stream(GameController.getPlayers()[0].getSoldiers()).anyMatch(soldier1 -> soldier1 == soldier)) {
 			leftSide.add(soldier);
 			changeSupport.firePropertyChange("soldierP1Added", null, soldier);

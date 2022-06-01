@@ -1,7 +1,7 @@
 package com.view;
 
-import com.model.*;
-import com.view.component.FieldProperties;
+import com.model.FieldProperties;
+import com.model.Player;
 import com.view.component.PlayerIndicator;
 import com.view.panel.EventPanel;
 import com.view.panel.FieldAttributionPanel;
@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Random;
 
 /**
  * Main View containing all panels.
@@ -86,32 +85,7 @@ public class MainView {
 
 		if (debug) {
 			mainPanel.add(new FieldAttributionPanel(), PanelIdentifier.FIELD_ATTRIBUTION_PANEL.toString());
-
-			GameController.passTutorial();
-			GameController.nextStep();
-			Player[] players = GameController.getPlayers();
-			for (int i = 0; i < players.length; i++) {
-				players[i] = new Player("J" + (i + 1), "Debug");
-				for (int j = 0; j < players[i].getSoldiers().length; j++) {
-					if (j < 15) {
-						players[i].getSoldiers()[j] = new Soldier();
-					} else if (j < 19) {
-						players[i].getSoldiers()[j] = new EliteSoldier();
-					} else {
-						players[i].getSoldiers()[j] = new WarMaster();
-					}
-
-					players[i].getSoldiers()[j].setAi(switch(new Random().nextInt(3)) {
-						case 0 -> new OffensiveAI();
-						case 1 -> new DefensiveAI();
-						default -> new RandomAI();
-					});
-
-					if (j < 5) players[i].getSoldiers()[j].setReservist(true);
-					else GameController.moveSoldierToField(players[i].getSoldiers()[j], GameController.findFieldByProperties(FieldProperties.values()[new Random().nextInt(FieldProperties.values().length)]));
-				}
-			}
-
+			GameController.startDebugMode();
 			switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
 		}
 	}

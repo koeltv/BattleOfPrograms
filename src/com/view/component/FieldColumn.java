@@ -1,5 +1,7 @@
 package com.view.component;
 
+import com.model.Field;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serial;
@@ -16,10 +18,7 @@ public class FieldColumn extends JScrollPane {
 	@Serial
 	private static final long serialVersionUID = 1762692385236278793L;
 
-	/**
-	 * The Field properties.
-	 */
-	public final FieldProperties fieldProperties;
+	private final Field field;
 
 	/**
 	 * The Panel.
@@ -29,16 +28,16 @@ public class FieldColumn extends JScrollPane {
 	/**
 	 * Instantiates a new Field column.
 	 *
-	 * @param panel           the content panel
-	 * @param fieldProperties the field properties
+	 * @param panel the content panel
+	 * @param field the corresponding field
 	 */
-	public FieldColumn(JPanel panel, FieldProperties fieldProperties) {
+	private FieldColumn(JPanel panel, Field field) {
 		super(panel);
 		this.panel = panel;
-		this.fieldProperties = fieldProperties;
+		this.field = field;
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-		add(new GraphicField(fieldProperties));
+		add(new GraphicField(field));
 
 		setPreferredSize(new Dimension(10, 10));
 		setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -47,6 +46,10 @@ public class FieldColumn extends JScrollPane {
 		setOpaque(false);
 		getViewport().setOpaque(false);
 		panel.setOpaque(false);
+	}
+
+	public static FieldColumn createColumn(Field field) {
+		return new FieldColumn(new JPanel(), field);
 	}
 
 	@Override
@@ -63,5 +66,9 @@ public class FieldColumn extends JScrollPane {
 	@Override
 	public Component[] getComponents() {
 		return panel.getComponents();
+	}
+
+	public Field getField() {
+		return field;
 	}
 }

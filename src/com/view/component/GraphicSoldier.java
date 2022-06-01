@@ -1,9 +1,6 @@
 package com.view.component;
 
-import com.model.AI;
-import com.model.EliteSoldier;
-import com.model.Soldier;
-import com.model.WarMaster;
+import com.model.*;
 import com.view.ColorPalette;
 
 import javax.swing.*;
@@ -361,7 +358,7 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 	 *
 	 * @return the assigned field
 	 */
-	public FieldProperties getAssignedField() {
+	public Field getAssignedField() {
 		return soldier.getAssignedField();
 	}
 

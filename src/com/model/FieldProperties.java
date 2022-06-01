@@ -1,4 +1,4 @@
-package com.view.component;
+package com.model;
 
 import java.net.URL;
 

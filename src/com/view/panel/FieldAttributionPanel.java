@@ -1,11 +1,11 @@
 package com.view.panel;
 
+import com.model.Field;
 import com.model.Soldier;
 import com.view.ColorPalette;
 import com.view.MainView;
 import com.view.component.DragAndDrop;
 import com.view.component.FieldColumn;
-import com.view.component.FieldProperties;
 import com.view.component.GraphicSoldier;
 import controller.GameController;
 
@@ -67,25 +67,11 @@ public class FieldAttributionPanel extends JPanel {
 		statPanel.setBackground(ColorPalette.BLUE_BACKGROUND.color);
 		add(statPanel);
 
-		FieldColumn fieldColumn1 = new FieldColumn(new JPanel(), FieldProperties.LIBRARY);
-		statPanel.add(fieldColumn1);
-		fieldColumns.add(fieldColumn1);
-
-		FieldColumn fieldColumn2 = new FieldColumn(new JPanel(), FieldProperties.BDE);
-		statPanel.add(fieldColumn2);
-		fieldColumns.add(fieldColumn2);
-
-		FieldColumn fieldColumn3 = new FieldColumn(new JPanel(), FieldProperties.ADMINISTRATIVE_QUARTER);
-		statPanel.add(fieldColumn3);
-		fieldColumns.add(fieldColumn3);
-
-		FieldColumn fieldColumn4 = new FieldColumn(new JPanel(), FieldProperties.INDUSTRIAL_HALLS);
-		statPanel.add(fieldColumn4);
-		fieldColumns.add(fieldColumn4);
-
-		FieldColumn fieldColumn5 = new FieldColumn(new JPanel(), FieldProperties.SPORTS_HALL);
-		statPanel.add(fieldColumn5);
-		fieldColumns.add(fieldColumn5);
+		for (Field field : GameController.getFields()) {
+			FieldColumn fieldColumn = FieldColumn.createColumn(field);
+			statPanel.add(fieldColumn);
+			fieldColumns.add(fieldColumn);
+		}
 
 		setupDragAndDrop();
 
@@ -188,9 +174,9 @@ public class FieldAttributionPanel extends JPanel {
 					if (intersects(getAbsoluteBounds(graphicSoldier), getAbsoluteBounds(column))) {
 						intersectionFound = true;
 						column.setOpaque(false);
-						if (GameController.findFieldByProperties(column.fieldProperties).isAssignable(graphicSoldier.getSoldier())) {
+						if (column.getField().isAssignable(graphicSoldier.getSoldier())) {
 							graphicSoldier.getParent().remove(graphicSoldier);
-							GameController.moveSoldierToField(graphicSoldier.getSoldier(), GameController.findFieldByProperties(column.fieldProperties));
+							GameController.moveSoldierToField(graphicSoldier.getSoldier(), column.getField());
 							column.add(graphicSoldier);
 						}
 						break;
@@ -243,12 +229,12 @@ public class FieldAttributionPanel extends JPanel {
 	/**
 	 * Get the column corresponding to a field.
 	 *
-	 * @param fieldProperties the properties of the field
+	 * @param field the field
 	 * @return the corresponding column
 	 */
-	private FieldColumn getColumn(FieldProperties fieldProperties) {
+	private FieldColumn getColumn(Field field) {
 		for (FieldColumn column : fieldColumns) {
-			if (column.fieldProperties == fieldProperties) return column;
+			if (column.getField() == field) return column;
 		}
 		return null;
 	}
