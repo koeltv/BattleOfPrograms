@@ -1,10 +1,11 @@
 package com.view.component;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static com.view.utils.GeometryUtils.getAbsoluteBounds;
 
 /**
  * This class contains everything to create drag and drop functionalities and assign them to components.
@@ -38,7 +39,7 @@ public class DragAndDrop {
 			y += e.getY() - component.getHeight() / 2;
 			component.setBounds(x, y, component.getWidth(), component.getHeight());
 
-			Rectangle componentAbsoluteBounds = SwingUtilities.convertRectangle(component.getParent(), component.getBounds(), SwingUtilities.getRoot(component));
+			Rectangle componentAbsoluteBounds = getAbsoluteBounds(component);
 			onDrag.accept(componentAbsoluteBounds);
 		}
 	};
