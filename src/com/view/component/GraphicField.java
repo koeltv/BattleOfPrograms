@@ -46,12 +46,12 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	/**
 	 * The White flag animated image.
 	 */
-	private final Image whiteFlag = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/white_flag.gif"))).getImage();
+	private static final Image whiteFlag = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/white_flag.gif"))).getImage();
 
 	/**
 	 * The Dust cloud animated image.
 	 */
-	private final Image dustCloud = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/dust_cloud.gif"))).getImage();
+	private static final Image dustCloud = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/dust_cloud.gif"))).getImage();
 
 	/**
 	 * Create the panel.
@@ -152,12 +152,10 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		if (MainView.noEvent()) {
 			Field field = GameController.findFieldByProperties(fieldProperties);
 			Image displayImage = null;
-			if (field != null) {
-				if (field.getController() != null) {
-					displayImage = whiteFlag;
-				} else if (GameController.getStep() > 2) {
-					displayImage = dustCloud;
-				}
+			if (field.getController() != null) {
+				displayImage = whiteFlag;
+			} else if (GameController.getStep() > 2) {
+				displayImage = dustCloud;
 			}
 
 			g.drawImage(displayImage, 0, 0, getWidth(), getHeight(), this);

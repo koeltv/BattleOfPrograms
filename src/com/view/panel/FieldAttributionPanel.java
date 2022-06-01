@@ -3,6 +3,7 @@ package com.view.panel;
 import com.model.Soldier;
 import com.view.ColorPalette;
 import com.view.MainView;
+import com.view.component.DragAndDrop;
 import com.view.component.FieldColumn;
 import com.view.component.FieldProperties;
 import com.view.component.GraphicSoldier;
@@ -14,7 +15,9 @@ import java.awt.event.*;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
+import static com.view.utils.GeometryUtils.getAbsoluteBounds;
+import static com.view.utils.GeometryUtils.intersects;
 
 /**
  * Panel used to attribute the soldiers to a field.
@@ -41,6 +44,8 @@ public class FieldAttributionPanel extends JPanel {
 	 * The Current player index.
 	 */
 	private int currentPlayerIndex = 0;
+
+	private final DragAndDrop dragAndDrop = new DragAndDrop();
 
 	/**
 	 * Create the panel.
@@ -78,6 +83,8 @@ public class FieldAttributionPanel extends JPanel {
 		FieldColumn fieldColumn5 = new FieldColumn(new JPanel(), FieldProperties.SPORTS_HALL);
 		statPanel.add(fieldColumn5);
 		fieldColumns.add(fieldColumn5);
+
+		setupDragAndDrop();
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
@@ -139,7 +146,7 @@ public class FieldAttributionPanel extends JPanel {
 				FieldColumn column = getColumn(soldier.getAssignedField());
 				if (column == null) soldierPanel.add(graphicSoldier);
 				else column.add(graphicSoldier);
-				addSoldierListeners(graphicSoldier);
+				addDragAndDrop(graphicSoldier);
 			}
 		}
 
@@ -147,63 +154,47 @@ public class FieldAttributionPanel extends JPanel {
 		revalidate();
 	}
 
-	/**
-	 * Add the listeners for the drag and drop.
-	 *
-	 * @param graphicSoldier the component to add listeners on
-	 */
-	private void addSoldierListeners(GraphicSoldier graphicSoldier) {
-		MouseAdapter dragSoldier = new MouseAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				int x = e.getComponent().getX(), y = e.getComponent().getY();
-
-				x += e.getX() - e.getComponent().getWidth() / 2;
-				y += e.getY() - e.getComponent().getHeight() / 2;
-				e.getComponent().setBounds(x, y, e.getComponent().getWidth(), e.getComponent().getHeight());
-
-				Rectangle soldierAbsoluteBounds = SwingUtilities.convertRectangle(e.getComponent().getParent(), e.getComponent().getBounds(), SwingUtilities.getRoot(e.getComponent()));
-
-				boolean fieldFound = false;
-				for (FieldColumn column : fieldColumns) {
-					Rectangle fieldBounds = SwingUtilities.convertRectangle(column.getParent(), column.getBounds(), SwingUtilities.getRoot(column));
-					if (!fieldFound && intersects(soldierAbsoluteBounds, fieldBounds)) {
-						column.setOpaque(true);
-						fieldFound = true;
-					} else {
-						column.setOpaque(false);
-					}
-					column.repaint();
+	private void setupDragAndDrop() {
+		/*
+		  Change the opacity of the columns.
+		  The first column that intersects with the component is the one that will be opaque, the others are transparent.
+		 */
+		dragAndDrop.setOnDrag((componentBounds) -> {
+			boolean intersectingFieldFound = false;
+			for (FieldColumn column : fieldColumns) {
+				if (!intersectingFieldFound && intersects(componentBounds, getAbsoluteBounds(column))) {
+					intersectingFieldFound = true;
+					column.setOpaque(true);
+				} else {
+					column.setOpaque(false);
 				}
+				column.repaint();
 			}
-		};
+		});
 
-		MouseAdapter dropSoldier = new MouseAdapter() {
+		dragAndDrop.setOnDrop(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				Rectangle soldierAbsoluteBounds = SwingUtilities.convertRectangle(e.getComponent().getParent(), e.getComponent().getBounds(), SwingUtilities.getRoot(e.getComponent()));
+				GraphicSoldier graphicSoldier = (GraphicSoldier) e.getComponent();
 				boolean intersectionFound = false;
 
 				for (FieldColumn column : fieldColumns) {
-					Rectangle fieldBounds = SwingUtilities.convertRectangle(column.getParent(), column.getBounds(), SwingUtilities.getRoot(column));
-
-					if (intersects(soldierAbsoluteBounds, fieldBounds)) {
+					if (intersects(getAbsoluteBounds(graphicSoldier), getAbsoluteBounds(column))) {
 						intersectionFound = true;
 						column.setOpaque(false);
-						if (Objects.requireNonNull(GameController.findFieldByProperties(column.fieldProperties)).isAssignable(((GraphicSoldier) e.getComponent()).getSoldier())) {
-							e.getComponent().getParent().remove(e.getComponent());
-
-							GameController.moveSoldierToField(((GraphicSoldier) e.getComponent()).getSoldier(), GameController.findFieldByProperties(column.fieldProperties));
-							column.add(e.getComponent());
+						if (GameController.findFieldByProperties(column.fieldProperties).isAssignable(graphicSoldier.getSoldier())) {
+							graphicSoldier.getParent().remove(graphicSoldier);
+							GameController.moveSoldierToField(graphicSoldier.getSoldier(), GameController.findFieldByProperties(column.fieldProperties));
+							column.add(graphicSoldier);
 						}
 						break;
 					}
 				}
 
-				if (!intersectionFound && GameController.getStep() < 3) {
-					GameController.moveSoldierToField(((GraphicSoldier) e.getComponent()).getSoldier(), null);
-					e.getComponent().getParent().remove(e.getComponent());
-					soldierPanel.add(e.getComponent());
+				if (!intersectionFound && GameController.getStep() < 3) { //Move soldier back to left panel
+					GameController.moveSoldierToField(graphicSoldier.getSoldier(), null);
+					graphicSoldier.getParent().remove(graphicSoldier);
+					soldierPanel.add(graphicSoldier);
 				}
 
 				MainView.confirmButton.setEnabled(GameController.checkAttribution(currentPlayerIndex));
@@ -211,55 +202,36 @@ public class FieldAttributionPanel extends JPanel {
 				repaint();
 				revalidate();
 			}
-		};
+		});
 
-		if (graphicSoldier.canBeMoved()) {
-			graphicSoldier.setSelected(true);
-			graphicSoldier.addMouseMotionListener(dragSoldier);
-			graphicSoldier.addMouseListener(dropSoldier);
-		}
-
-		graphicSoldier.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				FieldColumn fieldColumn = getColumn(((GraphicSoldier) e.getComponent()).getAssignedField());
-				if (fieldColumn == null) {
-					addListeners((GraphicSoldier) e.getComponent());
-				} else {
-					for (FieldColumn column : fieldColumns) {
-						for (Component component : column.getComponents()) {
-							if (!component.equals(e.getComponent()) && component instanceof GraphicSoldier columnSoldier) {
-								if (columnSoldier.canBeMoved()) addListeners(columnSoldier);
-								else removeListeners(columnSoldier);
-							}
+		dragAndDrop.setDragAndDropConditions((soldierComponent) -> {
+			GraphicSoldier graphicSoldier = (GraphicSoldier) soldierComponent;
+			if (getColumn(graphicSoldier.getAssignedField()) == null) {
+				return true;
+			} else {
+				for (FieldColumn column : fieldColumns) {
+					for (Component component : column.getComponents()) {
+						if (!component.equals(graphicSoldier) && component instanceof GraphicSoldier columnSoldier) {
+							dragAndDrop.allowDragAndDrop(columnSoldier, columnSoldier.canBeMoved());
+							columnSoldier.setSelected(columnSoldier.canBeMoved());
 						}
 					}
 				}
-
-				if (!((GraphicSoldier) e.getComponent()).canBeMoved()) {
-					removeListeners((GraphicSoldier) e.getComponent());
-				}
-
-				repaint();
-				revalidate();
 			}
 
-			public void addListeners(GraphicSoldier soldier) {
-				soldier.setSelected(true);
-				for (MouseListener listener : soldier.getMouseListeners()) soldier.removeMouseListener(listener);
-				for (MouseMotionListener listener : soldier.getMouseMotionListeners()) soldier.removeMouseMotionListener(listener);
-				soldier.addMouseMotionListener(dragSoldier);
-				soldier.addMouseListener(dropSoldier);
-				soldier.addMouseListener(this);
-			}
-
-			public void removeListeners(GraphicSoldier soldier) {
-				soldier.setSelected(false);
-				for (MouseListener listener : soldier.getMouseListeners()) soldier.removeMouseListener(listener);
-				for (MouseMotionListener listener : soldier.getMouseMotionListeners()) soldier.removeMouseMotionListener(listener);
-				soldier.addMouseListener(this);
-			}
+			graphicSoldier.setSelected(graphicSoldier.getSoldier().canBeMoved());
+			return graphicSoldier.canBeMoved();
 		});
+	}
+
+	/**
+	 * Add the listeners for the drag and drop.
+	 *
+	 * @param graphicSoldier the component to add drag and drop to
+	 */
+	private void addDragAndDrop(GraphicSoldier graphicSoldier) {
+		if (graphicSoldier.canBeMoved()) graphicSoldier.setSelected(true);
+		dragAndDrop.addDragAndDrop(graphicSoldier);
 	}
 
 	/**
@@ -273,22 +245,5 @@ public class FieldAttributionPanel extends JPanel {
 			if (column.fieldProperties == fieldProperties) return column;
 		}
 		return null;
-	}
-
-	/**
-	 * Check for intersection of 2 rectangles
-	 * Strongly inspired by <a href="https://stackoverflow.com/a/39319801">https://stackoverflow.com/a/39319801</a>.
-	 *
-	 * @param r1 - first rectangle
-	 * @param r2 - second rectangle
-	 * @return true if the intersection exist, false otherwise
-	 */
-	private boolean intersects(Rectangle r1, Rectangle r2) {
-		int leftX = Math.max(r1.x, r2.x);
-		int rightX = (int) Math.min(r1.getMaxX(), r2.getMaxX());
-		int topY = Math.max(r1.y,r2.y);
-		int botY =  (int) Math.min(r1.getMaxY(), r2.getMaxY());
-
-		return (rightX > leftX) && (botY > topY);
 	}
 }

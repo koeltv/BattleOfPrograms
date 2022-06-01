@@ -43,7 +43,7 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener {
 	/**
 	 * The VS image.
 	 */
-	private final Image vsImage = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/vs.gif"))).getImage();
+	private static final Image vsImage = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/vs.gif"))).getImage();
 
 	/**
 	 * Create the panel.

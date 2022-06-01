@@ -327,7 +327,7 @@ public class Soldier {
 		if (assignedField == null || GameController.getStep() < 3) return true;
 
 		Field field = GameController.findFieldByProperties(assignedField);
-		if (field == null || !isAlive()) return false;
+		if (!isAlive()) return false;
 
 		Player fieldController = field.getController();
 		if (fieldController == null) { //If no controller, the battle is still going so the soldier cannot be moved

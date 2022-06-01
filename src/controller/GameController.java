@@ -80,10 +80,10 @@ public class GameController implements Runnable {
 	}
 
 	/**
-	 * Gets the current step.
-	 * - Player information collecting and attribute repartition is step 1
-	 * - Field attribution is step 2
-	 * - The 1st battle is step 3
+	 * Gets the current step.<br>
+	 * - Player information collecting and attribute repartition is step 1<br>
+	 * - Field attribution is step 2<br>
+	 * - The 1st battle is step 3<br>
 	 * - The next attribution will be step 4, next battle step 5, etc
 	 *
 	 * @return the step
@@ -134,6 +134,7 @@ public class GameController implements Runnable {
 		}
 		nextStep();
 		checkForWinner();
+		waitingTime = 200;
 	}
 
 	/**
@@ -157,7 +158,6 @@ public class GameController implements Runnable {
 					true
 			);
 		}
-		waitingTime = 200;
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class GameController implements Runnable {
 		for (Field field : instance.fields) {
 			if (field.fieldProperties == fieldProperties) return field;
 		}
-		return null;
+		throw new RuntimeException("Field not found");
 	}
 
 	/**
