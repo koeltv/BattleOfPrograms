@@ -18,6 +18,9 @@ public class FieldColumn extends JScrollPane {
 	@Serial
 	private static final long serialVersionUID = 1762692385236278793L;
 
+	/**
+	 * The Field.
+	 */
 	private final Field field;
 
 	/**
@@ -48,8 +51,23 @@ public class FieldColumn extends JScrollPane {
 		panel.setOpaque(false);
 	}
 
+	/**
+	 * Create a field column.
+	 *
+	 * @param field the corresponding field
+	 * @return the field column
+	 */
 	public static FieldColumn createColumn(Field field) {
 		return new FieldColumn(new JPanel(), field);
+	}
+
+	/**
+	 * Gets field.
+	 *
+	 * @return the field
+	 */
+	public Field getField() {
+		return field;
 	}
 
 	@Override
@@ -66,9 +84,5 @@ public class FieldColumn extends JScrollPane {
 	@Override
 	public Component[] getComponents() {
 		return panel.getComponents();
-	}
-
-	public Field getField() {
-		return field;
 	}
 }

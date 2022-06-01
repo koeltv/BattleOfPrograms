@@ -83,6 +83,8 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 
 	/**
 	 * Sets fields.
+	 *
+	 * @param springLayout the layout of this panel
 	 */
 	public void setupFields(SpringLayout springLayout) {
 		Field[] fields = GameController.getFields();
