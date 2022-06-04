@@ -177,7 +177,7 @@ public class MainView {
 	 */
 	public static void displayDialog(String text, boolean buttonsEnabled) {
 		Point locationOnScreen = instance.frame.getLocationOnScreen();
-		Dialog.initialize(new Point(locationOnScreen.x + instance.frame.getWidth() / 2, locationOnScreen.y + instance.frame.getHeight() / 2));
+		Dialog.reposition(new Point(locationOnScreen.x + instance.frame.getWidth() / 2, locationOnScreen.y + instance.frame.getHeight() / 2));
 
 		Dialog.enableButtons(buttonsEnabled);
 		Dialog.setText(text);

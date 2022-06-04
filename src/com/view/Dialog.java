@@ -19,6 +19,9 @@ public class Dialog extends JDialog {
 	@Serial
 	private static final long serialVersionUID = -5301893305124026332L;
 
+	/**
+	 * The single instance of Dialog (singleton).
+	 */
 	private static final Dialog instance = new Dialog();
 
 	/**
@@ -86,13 +89,20 @@ public class Dialog extends JDialog {
 		}
 	}
 
-	public static void initialize(Point center) {
+	/**
+	 * Reposition the instance.
+	 *
+	 * @param center the center point of where the dialog should be displayed
+	 */
+	public static void reposition(Point center) {
 		int width = 800, height = 400;
 		instance.setBounds(center.x - width / 2, center.y - height / 2, width, height);
 	}
 
 	/**
 	 * Disable the buttons and replace them by a dialog-wide click event.
+	 *
+	 * @param enable whether to enable buttons or not
 	 */
 	public static void enableButtons(boolean enable) {
 		instance.buttonPane.setVisible(enable);
@@ -110,6 +120,11 @@ public class Dialog extends JDialog {
 		}
 	}
 
+	/**
+	 * Sets text.
+	 *
+	 * @param text the text
+	 */
 	public static void setText(String text) {
 		if (!instance.textPane.getText().equals(text)) {
 			//fontSize = (1 / textLength^0.25) * 90, used to scale text to fill dialog
@@ -119,6 +134,11 @@ public class Dialog extends JDialog {
 		}
 	}
 
+	/**
+	 * Display the dialog.
+	 *
+	 * @param display whether to display or to hide the dialog
+	 */
 	public static void display(boolean display) {
 		instance.setVisible(display);
 	}
