@@ -62,14 +62,14 @@ public class FieldAttributionPanel extends JPanel {
 		add(soldierPanel);
 		soldierPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JPanel statPanel = new JPanel();
-		statPanel.setLayout(new GridLayout(1, 5));
-		statPanel.setBackground(ColorPalette.BLUE_BACKGROUND.color);
-		add(statPanel);
+		JPanel fieldsPanel = new JPanel();
+		fieldsPanel.setLayout(new GridLayout(1, 5));
+		fieldsPanel.setBackground(ColorPalette.BLUE_BACKGROUND.color);
+		add(fieldsPanel);
 
 		for (Field field : GameController.getFields()) {
 			FieldColumn fieldColumn = FieldColumn.createColumn(field);
-			statPanel.add(fieldColumn);
+			fieldsPanel.add(fieldColumn);
 			fieldColumns.add(fieldColumn);
 		}
 
