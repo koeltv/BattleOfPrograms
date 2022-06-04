@@ -1,11 +1,10 @@
 package com.view.panel;
 
-import javax.imageio.ImageIO;
+import com.view.Resource;
+
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.io.Serial;
-import java.net.URL;
 
 /**
  * Basic panel with the possibility to set a background.
@@ -26,39 +25,22 @@ public class BasePanel extends JPanel {
 	/**
 	 * The Background image.
 	 */
-	private Image background;
+	private final Image background;
 
 	/**
-	 * Create the panel.
+	 * Create the panel with default background.
 	 */
 	public BasePanel() {
-		URL backgroundUrl = BasePanel.class.getResource("/images/background_map.jpeg");
-		if (backgroundUrl != null) {
-			try {
-				background = ImageIO.read(backgroundUrl);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		} else {
-			background = null;
-		}
+		background = Resource.BACKGROUND.image.getImage();
 	}
 
 	/**
-	 * Change background image.
+	 * Create the panel with custom background.
 	 *
-	 * @param url the url of the image
+	 * @param background the background
 	 */
-	public void changeBackground(URL url) {
-		if (url != null) {
-			try {
-				background = ImageIO.read(url);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		} else {
-			background = null;
-		}
+	public BasePanel(Image background) {
+		this.background = background;
 	}
 
 	/**

@@ -4,6 +4,7 @@ import com.model.Field;
 import com.model.FieldProperties;
 import com.view.ColorPalette;
 import com.view.MainView;
+import com.view.Resource;
 import controller.GameController;
 
 import javax.swing.*;
@@ -12,7 +13,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serial;
-import java.util.Objects;
 
 /**
  * The type Graphic field.
@@ -45,16 +45,6 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	bottomLabel;
 
 	/**
-	 * The White flag animated image.
-	 */
-	private static final Image whiteFlag = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/white_flag.gif"))).getImage();
-
-	/**
-	 * The Dust cloud animated image.
-	 */
-	private static final Image dustCloud = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/dust_cloud.gif"))).getImage();
-
-	/**
 	 * Create the panel.
 	 *
 	 * @param field the corresponding field
@@ -70,7 +60,7 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		upperLabel.setVisible(false);
 		add(upperLabel);
 
-		JLabel iconLabel = new JLabel(new ImageIcon(Objects.requireNonNull(field.fieldProperties.url)));
+		JLabel iconLabel = new JLabel(field.fieldProperties.resource.image);
 		iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(iconLabel);
@@ -153,9 +143,9 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		if (MainView.noEvent()) {
 			Image displayImage = null;
 			if (field.getController() != null) {
-				displayImage = whiteFlag;
+				displayImage = Resource.WHITE_FLAG.image.getImage();
 			} else if (GameController.getStep() > 2) {
-				displayImage = dustCloud;
+				displayImage = Resource.DUST_CLOUD.image.getImage();
 			}
 
 			g.drawImage(displayImage, 0, 0, getWidth(), getHeight(), this);

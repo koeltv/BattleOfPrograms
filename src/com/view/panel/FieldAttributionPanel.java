@@ -4,6 +4,7 @@ import com.model.Field;
 import com.model.Soldier;
 import com.view.ColorPalette;
 import com.view.MainView;
+import com.view.Resource;
 import com.view.component.DragAndDrop;
 import com.view.component.FieldColumn;
 import com.view.component.GraphicSoldier;
@@ -57,8 +58,7 @@ public class FieldAttributionPanel extends JPanel {
 		GridLayout gridLayout = new GridLayout(1, 2);
 		setLayout(gridLayout);
 
-		soldierPanel = new BasePanel();
-		soldierPanel.changeBackground(BasePanel.class.getResource("/images/camo.jpg"));
+		soldierPanel = new BasePanel(Resource.CAMOUFLAGE.image.getImage());
 		add(soldierPanel);
 		soldierPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 

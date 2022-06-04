@@ -1,6 +1,6 @@
 package com.model;
 
-import java.net.URL;
+import com.view.Resource;
 
 /**
  * This enumeration contains properties linked to a field and makes it easier to identify them.
@@ -10,23 +10,23 @@ public enum FieldProperties {
 	/**
 	 * Library field properties.
 	 */
-	LIBRARY ("Biblioth\u00E8que", FieldProperties.class.getResource("/images/library.png")),
+	LIBRARY ("Biblioth\u00E8que", Resource.LIBRARY),
 	/**
 	 * BDE field properties.
 	 */
-	BDE ("BDE", FieldProperties.class.getResource("/images/bde.png")),
+	BDE ("BDE", Resource.BDE),
 	/**
 	 * The Administrative quarter field properties.
 	 */
-	ADMINISTRATIVE_QUARTER ("Quartier administratif", FieldProperties.class.getResource("/images/administrative_quarter.png")),
+	ADMINISTRATIVE_QUARTER ("Quartier administratif", Resource.ADMINISTRATIVE_QUARTER),
 	/**
 	 * The Industrial halls' field properties.
 	 */
-	INDUSTRIAL_HALLS ("Halles industrielles", FieldProperties.class.getResource("/images/industrial_halls.png")),
+	INDUSTRIAL_HALLS ("Halles industrielles", Resource.INDUSTRIAL_HALLS),
 	/**
 	 * The Sports hall field properties.
 	 */
-	SPORTS_HALL ("Halle Sportive", FieldProperties.class.getResource("/images/sports_hall.png"));
+	SPORTS_HALL ("Halle Sportive", Resource.SPORTS_HALL);
 
 	/**
 	 * The Name.
@@ -35,17 +35,17 @@ public enum FieldProperties {
 	/**
 	 * The Url.
 	 */
-	public final URL url;
+	public final Resource resource;
 
 	/**
 	 * Instantiates a new Field properties.
 	 *
-	 * @param name the name
-	 * @param url  the url
+	 * @param name the name of the field
+	 * @param resource  the resource that represents the field
 	 */
-	FieldProperties(String name, URL url) {
+	FieldProperties(String name, Resource resource) {
 		this.name = name;
-		this.url = url;
+		this.resource = resource;
 	}
 
 	@Override

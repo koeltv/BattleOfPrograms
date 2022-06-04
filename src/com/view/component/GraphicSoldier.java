@@ -2,13 +2,13 @@ package com.view.component;
 
 import com.model.*;
 import com.view.ColorPalette;
+import com.view.Resource;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serial;
-import java.util.Objects;
 
 /**
  * The type Graphic soldier.
@@ -20,31 +20,6 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 	 */
 	@Serial
 	private static final long serialVersionUID = -5370972161337730381L;
-
-	/**
-	 * The constant soldierImage.
-	 */
-	private static final ImageIcon soldierImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/soldier.png")));
-	/**
-	 * The constant transparentSoldierImage.
-	 */
-	private static final ImageIcon transparentSoldierImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/soldier-t.png")));
-	/**
-	 * The constant eliteSoldierImage.
-	 */
-	private static final ImageIcon eliteSoldierImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/elite_soldier.png")));
-	/**
-	 * The constant transparentEliteSoldierImage.
-	 */
-	private static final ImageIcon transparentEliteSoldierImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/elite_soldier-t.png")));
-	/**
-	 * The constant warMasterImage.
-	 */
-	private static final ImageIcon warMasterImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/commander.png")));
-	/**
-	 * The constant transparentWarMasterImage.
-	 */
-	private static final ImageIcon transparentWarMasterImage = new ImageIcon(Objects.requireNonNull(GraphicSoldier.class.getResource("/images/commander-t.png")));
 
 	/**
 	 * The linked Soldier.
@@ -77,7 +52,7 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		this.soldier = soldier;
 
 		add(lifeBar);
-		soldierDisplay = new JLabel(transparentWarMasterImage);
+		soldierDisplay = new JLabel(Resource.TRANSPARENT_WAR_MASTER.image);
 	}
 
 	/**
@@ -91,7 +66,7 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		this.soldier = soldier;
 
 		add(lifeBar);
-		soldierDisplay = new JLabel(transparentEliteSoldierImage);
+		soldierDisplay = new JLabel(Resource.TRANSPARENT_ELITE_SOLDIER.image);
 	}
 
 	/**
@@ -105,7 +80,7 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		this.soldier = soldier;
 
 		add(lifeBar);
-		soldierDisplay = new JLabel(transparentSoldierImage);
+		soldierDisplay = new JLabel(Resource.TRANSPARENT_SOLDIER.image);
 	}
 
 	/**
@@ -143,9 +118,9 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 	 */
 	public void setSelected(boolean selected) {
 		ImageIcon image;
-		if (soldier instanceof WarMaster) image = selected ? warMasterImage : transparentWarMasterImage;
-		else if (soldier instanceof EliteSoldier) image = selected ? eliteSoldierImage : transparentEliteSoldierImage;
-		else image = selected ? soldierImage : transparentSoldierImage;
+		if (soldier instanceof WarMaster) image = (selected ? Resource.WAR_MASTER : Resource.TRANSPARENT_WAR_MASTER).image;
+		else if (soldier instanceof EliteSoldier) image = (selected ? Resource.ELITE_SOLDIER : Resource.TRANSPARENT_ELITE_SOLDIER).image;
+		else image = (selected ? Resource.SOLDIER : Resource.TRANSPARENT_SOLDIER).image;
 
 		soldierDisplay.setIcon(image);
 		repaint();

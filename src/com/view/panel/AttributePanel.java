@@ -3,6 +3,7 @@ package com.view.panel;
 import com.model.*;
 import com.view.ColorPalette;
 import com.view.MainView;
+import com.view.Resource;
 import com.view.component.GraphicSoldier;
 import controller.GameController;
 
@@ -87,8 +88,7 @@ public class AttributePanel extends JPanel {
 		GridLayout gridLayout = new GridLayout(1, 2);
 		setLayout(gridLayout);
 
-		soldierPanel = new BasePanel();
-		soldierPanel.changeBackground(BasePanel.class.getResource("/images/camo.jpg"));
+		soldierPanel = new BasePanel(Resource.CAMOUFLAGE.image.getImage());
 		add(soldierPanel);
 		soldierPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 

@@ -3,6 +3,7 @@ package com.view.panel;
 import com.model.Field;
 import com.model.Soldier;
 import com.view.MainView;
+import com.view.Resource;
 import com.view.component.GraphicSoldier;
 
 import javax.swing.*;
@@ -14,7 +15,6 @@ import java.awt.event.ComponentEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serial;
-import java.util.Objects;
 
 /**
  * Panel used to display one specific battlefield.
@@ -43,7 +43,7 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener {
 	/**
 	 * The VS image.
 	 */
-	private static final Image vsImage = new ImageIcon(Objects.requireNonNull(MainView.class.getResource("/images/vs.gif"))).getImage();
+	private static final Image vsImage = Resource.VS_ANIMATED.image.getImage();
 
 	/**
 	 * Create the panel.

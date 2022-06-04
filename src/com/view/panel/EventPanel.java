@@ -30,6 +30,11 @@ public class EventPanel extends JPanel {
 	private Thread thread;
 
 	/**
+	 * The 2D Graphics.
+	 */
+	private Graphics2D graphics2D;
+
+	/**
 	 * Set next action to display.
 	 *
 	 * @param text the action
@@ -77,35 +82,31 @@ public class EventPanel extends JPanel {
 	/**
 	 * Draw x centered string within [x; x + width].
 	 *
-	 * @param g2D    the 2d Graphics
-	 * @param string the string
-	 * @param x      the x coordinate used as center
-	 * @param y      the y coordinate
-	 * @param width  the width in which to fit the string
+	 * @param string      the string
+	 * @param upperCenter the upper center of the drawn string
+	 * @param width       the width in which to fit the string
 	 */
-	private void drawXCenteredString(Graphics2D g2D, String string, int x, int y, int width) {
-		g2D.drawString(string, x + (width - getFontMetrics(g2D.getFont()).stringWidth(string)) / 2, y);
+	private void drawXCenteredString(String string, Point upperCenter, int width) {
+		graphics2D.drawString(string, upperCenter.x + (width - getFontMetrics(graphics2D.getFont()).stringWidth(string)) / 2, upperCenter.y);
 	}
 
 	/**
 	 * Display the current action if there is one.
 	 *
-	 * @param g2D             the 2d Graphics
-	 * @param fullScreenEvent the full screen event
 	 * @see Event
 	 */
-	private void drawAction(Graphics2D g2D, boolean fullScreenEvent) {
+	private void drawAction() {
 		if (event.displayTime > 0 || fullScreenEvent) {
 			int padding = getWidth() / 20;
 
 			//We adapt the size to the current screen size
 			Font font = getFont().deriveFont((float) padding);
-			g2D.setFont(font);
-			int width = g2D.getFontMetrics().stringWidth(event.text);
-			int height = g2D.getFontMetrics().getAscent();
+			graphics2D.setFont(font);
+			int width = graphics2D.getFontMetrics().stringWidth(event.text);
+			int height = graphics2D.getFontMetrics().getAscent();
 
 			//We do a background on which we put the text
-			Graphics2D tempGraph = (Graphics2D) g2D.create();
+			Graphics2D tempGraph = (Graphics2D) graphics2D.create();
 			tempGraph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fullScreenEvent ? 0.99f : 0.75f));
 			tempGraph.setColor(ColorPalette.BLUE_BACKGROUND.color);
 
@@ -115,15 +116,16 @@ public class EventPanel extends JPanel {
 			tempGraph.dispose();
 
 			//We add the text
-			g2D.setColor(Color.WHITE);
-			drawXCenteredString(g2D, event.text, getWidth() / 2 - width / 2, getHeight() / 2 - height / 2 + (int) (height * 0.875), width);
+			graphics2D.setColor(Color.WHITE);
+			drawXCenteredString(event.text, new Point(getWidth() / 2 - width / 2, getHeight() / 2 - height / 2 + (int) (height * 0.875)), width);
 		}
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-		drawAction((Graphics2D) g, fullScreenEvent);
+		graphics2D = (Graphics2D) g;
+		drawAction();
 	}
 
 	/**

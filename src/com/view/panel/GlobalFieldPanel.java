@@ -3,6 +3,7 @@ package com.view.panel;
 import com.model.Field;
 import com.model.Player;
 import com.view.MainView;
+import com.view.Resource;
 import com.view.component.GraphicField;
 import controller.GameController;
 
@@ -37,9 +38,9 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 	 * Create the panel.
 	 */
 	public GlobalFieldPanel() { //TODO Positioning is temporary, it needs to be redone
+		super(Resource.REALISTIC_MAP.image.getImage());
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
-		changeBackground(FieldPanel.class.getResource("/images/interactive_map.PNG"));
 		setAlpha(0.2f);
 		MainView.showPlayerIndicator(false);
 
