@@ -38,8 +38,7 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	/**
 	 * The Upper label.
 	 */
-	private final JLabel upperLabel,
-	/**
+	private final JLabel upperLabel, /**
 	 * The Bottom label.
 	 */
 	bottomLabel;
@@ -72,28 +71,6 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
-	 * Sets the upper label text.
-	 *
-	 * @param text the text
-	 */
-	public void setUpperLabelText(String text) {
-		upperLabel.setText(text);
-		upperLabel.setForeground(ColorPalette.ORANGE.color);
-		upperLabel.setVisible(true);
-	}
-
-	/**
-	 * Sets the bottom label text.
-	 *
-	 * @param text the text
-	 */
-	public void setBottomLabelText(String text) {
-		bottomLabel.setText(text);
-		bottomLabel.setForeground(ColorPalette.TEXT_BLUE.color);
-		bottomLabel.setVisible(true);
-	}
-
-	/**
 	 * Gets field properties.
 	 *
 	 * @return the field properties
@@ -101,10 +78,6 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 	public FieldProperties getFieldProperties() {
 		return field.fieldProperties;
 	}
-
-	///////////////////////////////////////////////////////////////////////////
-	// PropertyChange methods
-	///////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Add an observer.
@@ -126,7 +99,8 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 					changeSupport.firePropertyChange(evt);
 				}
 			}
-			case "soldierAmount" -> setUpperLabelText(evt.getNewValue() + "/" + evt.getOldValue() + " soldats survivants");
+			case "soldierAmount" ->
+					setUpperLabelText(evt.getNewValue() + "/" + evt.getOldValue() + " soldats survivants");
 			case "initialSoldierAmount" -> {
 				int highBound = (int) ((int) evt.getOldValue() == -1 ? evt.getNewValue() : evt.getOldValue());
 				setUpperLabelText(evt.getNewValue() + "/" + highBound + " soldats survivants");
@@ -134,6 +108,28 @@ public class GraphicField extends JPanel implements PropertyChangeListener {
 		}
 		repaint();
 		revalidate();
+	}
+
+	/**
+	 * Sets the bottom label text.
+	 *
+	 * @param text the text
+	 */
+	public void setBottomLabelText(String text) {
+		bottomLabel.setText(text);
+		bottomLabel.setForeground(ColorPalette.TEXT_BLUE.color);
+		bottomLabel.setVisible(true);
+	}
+
+	/**
+	 * Sets the upper label text.
+	 *
+	 * @param text the text
+	 */
+	public void setUpperLabelText(String text) {
+		upperLabel.setText(text);
+		upperLabel.setForeground(ColorPalette.ORANGE.color);
+		upperLabel.setVisible(true);
 	}
 
 	@Override

@@ -17,21 +17,18 @@ public class PlayerIndicator extends JPanel {
 	 */
 	@Serial
 	private static final long serialVersionUID = 5731537562132378545L;
-
-	/**
-	 * The Color.
-	 */
-	private Color color;
 	/**
 	 * The Player circle.
 	 */
 	private final JPanel colorCircle;
-
 	/**
 	 * The Player label.
 	 */
 	private final JLabel playerLabel;
-
+	/**
+	 * The Color.
+	 */
+	private Color color;
 	/**
 	 * The Player.
 	 */
@@ -58,6 +55,15 @@ public class PlayerIndicator extends JPanel {
 	}
 
 	/**
+	 * Gets player.
+	 *
+	 * @return the player
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+
+	/**
 	 * Sets the player to display.
 	 *
 	 * @param player the player
@@ -72,15 +78,6 @@ public class PlayerIndicator extends JPanel {
 			playerLabel.setForeground(color);
 			repaint();
 		}
-	}
-
-	/**
-	 * Gets player.
-	 *
-	 * @return the player
-	 */
-	public Player getPlayer() {
-		return player;
 	}
 
 	@Override

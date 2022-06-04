@@ -12,12 +12,6 @@ import java.io.Serial;
 public class BasePanel extends JPanel {
 
 	/**
-	 * Transparency of the background image. Lower value means more transparency.
-	 * For exemple an alpha of 0.1 correspond to the image being 90% transparent.
-	 */
-	private float alpha = 0.6f;
-
-	/**
 	 * The constant serialVersionUID.
 	 */
 	@Serial
@@ -26,6 +20,11 @@ public class BasePanel extends JPanel {
 	 * The Background image.
 	 */
 	private final Image background;
+	/**
+	 * Transparency of the background image. Lower value means more transparency.
+	 * For exemple an alpha of 0.1 correspond to the image being 90% transparent.
+	 */
+	private float alpha = 0.6f;
 
 	/**
 	 * Create the panel with default background.

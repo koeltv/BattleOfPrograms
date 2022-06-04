@@ -10,38 +10,38 @@ public enum FieldProperties {
 	/**
 	 * Library field properties.
 	 */
-	LIBRARY ("Biblioth\u00E8que", Resource.LIBRARY),
+	LIBRARY("Biblioth\u00E8que", Resource.LIBRARY),
 	/**
 	 * BDE field properties.
 	 */
-	BDE ("BDE", Resource.BDE),
+	BDE("BDE", Resource.BDE),
 	/**
 	 * The Administrative quarter field properties.
 	 */
-	ADMINISTRATIVE_QUARTER ("Quartier administratif", Resource.ADMINISTRATIVE_QUARTER),
+	ADMINISTRATIVE_QUARTER("Quartier administratif", Resource.ADMINISTRATIVE_QUARTER),
 	/**
 	 * The Industrial halls' field properties.
 	 */
-	INDUSTRIAL_HALLS ("Halles industrielles", Resource.INDUSTRIAL_HALLS),
+	INDUSTRIAL_HALLS("Halles industrielles", Resource.INDUSTRIAL_HALLS),
 	/**
 	 * The Sports hall field properties.
 	 */
-	SPORTS_HALL ("Halle Sportive", Resource.SPORTS_HALL);
+	SPORTS_HALL("Halle Sportive", Resource.SPORTS_HALL);
 
-	/**
-	 * The Name.
-	 */
-	private final String name;
 	/**
 	 * The Url.
 	 */
 	public final Resource resource;
+	/**
+	 * The Name.
+	 */
+	private final String name;
 
 	/**
 	 * Instantiates a new Field properties.
 	 *
-	 * @param name the name of the field
-	 * @param resource  the resource that represents the field
+	 * @param name     the name of the field
+	 * @param resource the resource that represents the field
 	 */
 	FieldProperties(String name, Resource resource) {
 		this.name = name;

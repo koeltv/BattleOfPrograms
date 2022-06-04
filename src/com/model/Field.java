@@ -13,36 +13,30 @@ import java.util.stream.Collectors;
  */
 public class Field implements PropertyChangeListener {
 	/**
-	 * The Change support.
-	 */
-	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-
-	/**
 	 * The Field properties.
 	 */
 	public final FieldProperties fieldProperties;
-
 	/**
 	 * The Left side corresponding to player 1.
 	 */
 	public final HashSet<Soldier> leftSide = new HashSet<>();
-
 	/**
 	 * The Right side corresponding to player 2.
 	 */
 	public final HashSet<Soldier> rightSide = new HashSet<>();
-
+	/**
+	 * The Change support.
+	 */
+	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+	/**
+	 * The soldiers that were in this field before its capture.
+	 */
+	private final HashSet<Soldier> previousSoldiers = new HashSet<>();
 	/**
 	 * The Attack order.
 	 * Used to make the soldiers attack in decreasing order of initiative.
 	 */
 	private LinkedList<Soldier> attackOrder = new LinkedList<>();
-
-	/**
-	 * The soldiers that were in this field before its capture.
-	 */
-	private final HashSet<Soldier> previousSoldiers = new HashSet<>();
-
 	/**
 	 * Whether the field is controlled or not.
 	 */
@@ -147,6 +141,19 @@ public class Field implements PropertyChangeListener {
 	}
 
 	/**
+	 * Gets the current player controlling the field.
+	 *
+	 * @return the controller of the field or null if there isn't any
+	 */
+	public Player getController() {
+		if (leftSide.stream().noneMatch(Soldier::isAlive) && GameController.getStep() > 2)
+			return GameController.getPlayers()[1];
+		else if (rightSide.stream().noneMatch(Soldier::isAlive) && GameController.getStep() > 2)
+			return GameController.getPlayers()[0];
+		else return null;
+	}
+
+	/**
 	 * The soldiers will heal a bit if the zone is controlled, and they weren't moved since the previous battle (rest).
 	 */
 	public void rest() {
@@ -155,17 +162,6 @@ public class Field implements PropertyChangeListener {
 		} else if (getController() == GameController.getPlayers()[1]) {
 			rightSide.stream().filter(soldier -> attackOrder.contains(soldier)).forEach(Soldier::rest);
 		}
-	}
-
-	/**
-	 * Gets the current player controlling the field.
-	 *
-	 * @return the controller of the field or null if there isn't any
-	 */
-	public Player getController() {
-		if (leftSide.stream().noneMatch(Soldier::isAlive) && GameController.getStep() > 2) return GameController.getPlayers()[1];
-		else if (rightSide.stream().noneMatch(Soldier::isAlive) && GameController.getStep() > 2) return GameController.getPlayers()[0];
-		else return null;
 	}
 
 	/**

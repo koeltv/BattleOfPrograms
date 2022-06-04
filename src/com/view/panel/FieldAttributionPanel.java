@@ -40,16 +40,14 @@ public class FieldAttributionPanel extends JPanel {
 	 * The Field columns.
 	 */
 	private final List<FieldColumn> fieldColumns = new ArrayList<>(5);
-
-	/**
-	 * The Current player index.
-	 */
-	private int currentPlayerIndex = 0;
-
 	/**
 	 * The drag and drop functionalities used for moving soldiers.
 	 */
 	private final DragAndDrop dragAndDrop = new DragAndDrop();
+	/**
+	 * The Current player index.
+	 */
+	private int currentPlayerIndex = 0;
 
 	/**
 	 * Create the panel.
@@ -113,34 +111,6 @@ public class FieldAttributionPanel extends JPanel {
 				}
 			}
 		});
-	}
-
-	/**
-	 * Add all the soldiers that needs to be attributed to the left side.
-	 * If a soldier is a reservist he won't be displayed on the first round.
-	 */
-	private void setupSoldiers() {
-		soldierPanel.removeAll();
-		for (FieldColumn column : fieldColumns) {
-			for (Component component : column.getComponents()) {
-				if (component instanceof GraphicSoldier) column.remove(component);
-			}
-		}
-
-		for (Soldier soldier : GameController.getPlayers()[currentPlayerIndex].getSoldiers()) {
-			if (!soldier.isReservist() || GameController.getStep() > 3) {
-				GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
-				graphicSoldier.enableInfos();
-
-				FieldColumn column = getColumn(soldier.getAssignedField());
-				if (column == null) soldierPanel.add(graphicSoldier);
-				else column.add(graphicSoldier);
-				addDragAndDrop(graphicSoldier);
-			}
-		}
-
-		repaint();
-		revalidate();
 	}
 
 	/**
@@ -217,13 +187,31 @@ public class FieldAttributionPanel extends JPanel {
 	}
 
 	/**
-	 * Add the listeners for the drag and drop.
-	 *
-	 * @param graphicSoldier the component to add drag and drop to
+	 * Add all the soldiers that needs to be attributed to the left side.
+	 * If a soldier is a reservist he won't be displayed on the first round.
 	 */
-	private void addDragAndDrop(GraphicSoldier graphicSoldier) {
-		if (graphicSoldier.canBeMoved()) graphicSoldier.setSelected(true);
-		dragAndDrop.addDragAndDrop(graphicSoldier);
+	private void setupSoldiers() {
+		soldierPanel.removeAll();
+		for (FieldColumn column : fieldColumns) {
+			for (Component component : column.getComponents()) {
+				if (component instanceof GraphicSoldier) column.remove(component);
+			}
+		}
+
+		for (Soldier soldier : GameController.getPlayers()[currentPlayerIndex].getSoldiers()) {
+			if (!soldier.isReservist() || GameController.getStep() > 3) {
+				GraphicSoldier graphicSoldier = GraphicSoldier.createGraphics(soldier);
+				graphicSoldier.enableInfos();
+
+				FieldColumn column = getColumn(soldier.getAssignedField());
+				if (column == null) soldierPanel.add(graphicSoldier);
+				else column.add(graphicSoldier);
+				addDragAndDrop(graphicSoldier);
+			}
+		}
+
+		repaint();
+		revalidate();
 	}
 
 	/**
@@ -237,5 +225,15 @@ public class FieldAttributionPanel extends JPanel {
 			if (column.getField() == field) return column;
 		}
 		return null;
+	}
+
+	/**
+	 * Add the listeners for the drag and drop.
+	 *
+	 * @param graphicSoldier the component to add drag and drop to
+	 */
+	private void addDragAndDrop(GraphicSoldier graphicSoldier) {
+		if (graphicSoldier.canBeMoved()) graphicSoldier.setSelected(true);
+		dragAndDrop.addDragAndDrop(graphicSoldier);
 	}
 }

@@ -27,6 +27,10 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener {
 	@Serial
 	private static final long serialVersionUID = -6721489079020570444L;
 	/**
+	 * The VS image.
+	 */
+	private static final Image vsImage = Resource.VS_ANIMATED.image.getImage();
+	/**
 	 * The First player panel.
 	 */
 	private final JPanel firstPlayerPanel;
@@ -34,16 +38,10 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener {
 	 * The Second player panel.
 	 */
 	private final JPanel secondPlayerPanel;
-
 	/**
 	 * The linked Field.
 	 */
 	private final Field field;
-
-	/**
-	 * The VS image.
-	 */
-	private static final Image vsImage = Resource.VS_ANIMATED.image.getImage();
 
 	/**
 	 * Create the panel.
@@ -147,7 +145,7 @@ public class FieldPanel extends BasePanel implements PropertyChangeListener {
 
 		if (MainView.noEvent() && field.getController() == null) {
 			int marginHorizontal = (int) (getWidth() / 2.5), marginVertical = (int) (getHeight() / 2.5);
-			g.drawImage(vsImage, marginHorizontal, marginVertical , getWidth() - 2*marginHorizontal, getHeight() - 2*marginVertical, this);
+			g.drawImage(vsImage, marginHorizontal, marginVertical, getWidth() - 2 * marginHorizontal, getHeight() - 2 * marginVertical, this);
 		}
 	}
 }

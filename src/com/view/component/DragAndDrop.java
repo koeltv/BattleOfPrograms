@@ -15,17 +15,6 @@ public class DragAndDrop {
 	 * The action called when the component is dragged.
 	 */
 	private Consumer<Rectangle> onDrag;
-
-	/**
-	 * The action called when the component is dropped.
-	 */
-	private MouseAdapter drop;
-
-	/**
-	 * The condition to allow the component to be dragged and dropped.
-	 */
-	private Predicate<Component> allowDragAndDrop;
-
 	/**
 	 * The movements done while dragging the component.
 	 */
@@ -43,20 +32,14 @@ public class DragAndDrop {
 			onDrag.accept(componentAbsoluteBounds);
 		}
 	};
-
 	/**
-	 * The Drag and drop controller.
+	 * The action called when the component is dropped.
 	 */
-	private final MouseAdapter dragAndDropController = new MouseAdapter() {
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			Component component = e.getComponent();
-			addDragAndDrop(component);
-
-			component.getParent().repaint();
-			component.getParent().revalidate();
-		}
-	};
+	private MouseAdapter drop;
+	/**
+	 * The condition to allow the component to be dragged and dropped.
+	 */
+	private Predicate<Component> allowDragAndDrop;
 
 	/**
 	 * Sets on drag.
@@ -86,26 +69,6 @@ public class DragAndDrop {
 	}
 
 	/**
-	 * Add the listeners to the component.
-	 *
-	 * @param component the component
-	 */
-	private void addListeners(Component component) {
-		component.addMouseMotionListener(move);
-		component.addMouseListener(drop);
-	}
-
-	/**
-	 * Remove the listeners from the component.
-	 *
-	 * @param component the component
-	 */
-	private void removeListeners(Component component) {
-		for (MouseListener listener : component.getMouseListeners()) component.removeMouseListener(listener);
-		for (MouseMotionListener listener : component.getMouseMotionListeners()) component.removeMouseMotionListener(listener);
-	}
-
-	/**
 	 * Add the drag and drop functionalities to the component.
 	 *
 	 * @param component the component
@@ -119,6 +82,42 @@ public class DragAndDrop {
 	}
 
 	/**
+	 * Remove the listeners from the component.
+	 *
+	 * @param component the component
+	 */
+	private void removeListeners(Component component) {
+		for (MouseListener listener : component.getMouseListeners()) component.removeMouseListener(listener);
+		for (MouseMotionListener listener : component.getMouseMotionListeners())
+			component.removeMouseMotionListener(listener);
+	}
+
+	/**
+	 * Add the listeners to the component.
+	 *
+	 * @param component the component
+	 */
+	private void addListeners(Component component) {
+		component.addMouseMotionListener(move);
+		component.addMouseListener(drop);
+	}
+
+	/**
+	 * The Drag and drop controller.
+	 */
+	private final MouseAdapter dragAndDropController = new MouseAdapter() {
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			Component component = e.getComponent();
+			addDragAndDrop(component);
+
+			component.getParent().repaint();
+			component.getParent().revalidate();
+		}
+	};
+
+
+	/**
 	 * Allow drag and drop.
 	 *
 	 * @param component the component
@@ -129,4 +128,5 @@ public class DragAndDrop {
 		if (allow) addListeners(component);
 		component.addMouseListener(dragAndDropController);
 	}
+
 }

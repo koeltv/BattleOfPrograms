@@ -51,6 +51,17 @@ public class FieldColumn extends JScrollPane {
 		panel.setOpaque(false);
 	}
 
+	@Override
+	public Component add(Component comp) {
+		((JComponent) comp).setAlignmentX(Component.CENTER_ALIGNMENT);
+		return panel.add(comp);
+	}
+
+	@Override
+	public void remove(Component comp) {
+		panel.remove(comp);
+	}
+
 	/**
 	 * Create a field column.
 	 *
@@ -68,17 +79,6 @@ public class FieldColumn extends JScrollPane {
 	 */
 	public Field getField() {
 		return field;
-	}
-
-	@Override
-	public Component add(Component comp) {
-		((JComponent) comp).setAlignmentX(Component.CENTER_ALIGNMENT);
-		return panel.add(comp);
-	}
-
-	@Override
-	public void remove(Component comp) {
-		panel.remove(comp);
 	}
 
 	@Override

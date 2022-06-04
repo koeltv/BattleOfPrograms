@@ -12,18 +12,21 @@ import java.util.List;
  */
 public class Soldier {
 	/**
+	 * The maximum amount of life points.
+	 */
+	protected final int maxLifePoints = 30;
+	/**
 	 * The Change support.
 	 */
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-
+	/**
+	 * The Assigned field.
+	 */
+	public Field assignedField;
 	/**
 	 * Whether the soldier is a reservist or not.
 	 */
 	protected boolean reservist = false;
-	/**
-	 * The maximum amount of life points.
-	 */
-	protected final int maxLifePoints = 30;
 	/**
 	 * The current life points.
 	 */
@@ -48,12 +51,6 @@ public class Soldier {
 	 * The Initiative.
 	 */
 	protected int initiative;
-
-	/**
-	 * The Assigned field.
-	 */
-	public Field assignedField;
-
 	/**
 	 * Whether the soldier was recently deployed or not.
 	 */
@@ -69,7 +66,7 @@ public class Soldier {
 	 *
 	 * A soldier can attack, heal another and rest between rounds.
 	 */
-	public Soldier () {
+	public Soldier() {
 
 	}
 
@@ -258,7 +255,7 @@ public class Soldier {
 		attackValue += attackValue * ((double) strength / 10);
 
 		float hitChance = 1;
-		hitChance += (dexterity * ((double) 3/100)) * hitChance;
+		hitChance += (dexterity * ((double) 3 / 100)) * hitChance;
 
 		ai.selectTarget(soldiers).takeHit(new Hit(attackValue, hitChance));
 	}
@@ -271,25 +268,16 @@ public class Soldier {
 	public void takeHit(Hit hit) {
 		recentlyDeployed = false;
 		float hitChance = hit.hitChance();
-		hitChance -= (dexterity * ((double) 3/100)) * hitChance;
+		hitChance -= (dexterity * ((double) 3 / 100)) * hitChance;
 
 		float damageValue = hit.attackValue();
 		double random = Math.random();
-		if(random <= hitChance) { //In that case he takes the hit
-			damageValue -= (resistance * ((double) 5/100)) * damageValue;
+		if (random <= hitChance) { //In that case he takes the hit
+			damageValue -= (resistance * ((double) 5 / 100)) * damageValue;
 			lifePoints -= damageValue;
 
 			changeSupport.firePropertyChange(lifePoints > 0 ? "damage" : "dead", lifePoints + damageValue, lifePoints);
 		}
-	}
-
-	/**
-	 * Is alive boolean.
-	 *
-	 * @return the boolean
-	 */
-	public boolean isAlive() {
-		return lifePoints > 0;
 	}
 
 	/**
@@ -312,12 +300,12 @@ public class Soldier {
 	}
 
 	/**
-	 * Check if a soldier can be moved.
-	 * A soldier can be moved if :
-	 * - he hasn't been assigned yet
-	 * - he belongs to the controller of a field and the field has at least 2 soldiers of the controller
-	 * He cannot be moved if :
-	 * - He died
+	 * Check if a soldier can be moved.<br>
+	 * A soldier can be moved if :<br>
+	 * - he hasn't been assigned yet<br>
+	 * - he belongs to the controller of a field and the field has at least 2 soldiers of the controller<br>
+	 * He cannot be moved if :<br>
+	 * - He died<br>
 	 * - The battle in the field he is in is still going
 	 *
 	 * @return true if he can change field, false otherwise
@@ -334,6 +322,15 @@ public class Soldier {
 			HashSet<Soldier> controllerSoldiers = assignedField.getPlayerSoldiers(fieldController);
 			return controllerSoldiers.contains(this) && controllerSoldiers.stream().filter(Soldier::isAlive).toList().size() > 1;
 		}
+	}
+
+	/**
+	 * Is alive boolean.
+	 *
+	 * @return the boolean
+	 */
+	public boolean isAlive() {
+		return lifePoints > 0;
 	}
 
 	///////////////////////////////////////////////////////////////////////////

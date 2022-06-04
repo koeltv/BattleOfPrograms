@@ -118,21 +118,15 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 	 */
 	public void setSelected(boolean selected) {
 		ImageIcon image;
-		if (soldier instanceof WarMaster) image = (selected ? Resource.WAR_MASTER : Resource.TRANSPARENT_WAR_MASTER).image;
-		else if (soldier instanceof EliteSoldier) image = (selected ? Resource.ELITE_SOLDIER : Resource.TRANSPARENT_ELITE_SOLDIER).image;
-		else image = (selected ? Resource.SOLDIER : Resource.TRANSPARENT_SOLDIER).image;
+		if (soldier instanceof WarMaster)
+			image = (selected ? Resource.WAR_MASTER : Resource.TRANSPARENT_WAR_MASTER).image;
+		else if (soldier instanceof EliteSoldier)
+			image = (selected ? Resource.ELITE_SOLDIER : Resource.TRANSPARENT_ELITE_SOLDIER).image;
+		else
+			image = (selected ? Resource.SOLDIER : Resource.TRANSPARENT_SOLDIER).image;
 
 		soldierDisplay.setIcon(image);
 		repaint();
-	}
-
-	/**
-	 * Stats to string.
-	 *
-	 * @return the string
-	 */
-	private String statsToString() {
-		return soldier.getStrength() + " " + soldier.getResistance() + " " + soldier.getInitiative() + " " + soldier.getConstitution() + " " + soldier.getDexterity();
 	}
 
 	/**
@@ -149,6 +143,15 @@ public class GraphicSoldier extends JPanel implements PropertyChangeListener {
 		statsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		statsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		statsLabel.setVisible(true);
+	}
+
+	/**
+	 * Stats to string.
+	 *
+	 * @return the string
+	 */
+	private String statsToString() {
+		return soldier.getStrength() + " " + soldier.getResistance() + " " + soldier.getInitiative() + " " + soldier.getConstitution() + " " + soldier.getDexterity();
 	}
 
 	/**

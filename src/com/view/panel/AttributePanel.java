@@ -28,22 +28,6 @@ public class AttributePanel extends JPanel {
 	 * The Soldier panel.
 	 */
 	private final BasePanel soldierPanel;
-
-	/**
-	 * The Assignable points.
-	 */
-	private int assignablePoints = 400;
-
-	/**
-	 * The Current graphic soldier.
-	 */
-	private GraphicSoldier currentGraphicSoldier;
-
-	/**
-	 * The Current player index.
-	 */
-	private int currentPlayerIndex = 0;
-
 	/**
 	 * The Reservist check box.
 	 */
@@ -80,6 +64,18 @@ public class AttributePanel extends JPanel {
 	 * The Random radio button.
 	 */
 	private final JRadioButton randomRadioButton;
+	/**
+	 * The Assignable points.
+	 */
+	private int assignablePoints = 400;
+	/**
+	 * The Current graphic soldier.
+	 */
+	private GraphicSoldier currentGraphicSoldier;
+	/**
+	 * The Current player index.
+	 */
+	private int currentPlayerIndex = 0;
 
 	/**
 	 * Create the panel.
@@ -119,7 +115,7 @@ public class AttributePanel extends JPanel {
 		reservistCheckBox.addActionListener(e -> {
 			currentGraphicSoldier.setReservist(reservistCheckBox.isSelected());
 			long numberOfReservist = Arrays.stream(GameController.getPlayers()[currentPlayerIndex].getSoldiers()).filter(Soldier::isReservist).count();
-			reservistCheckBox.setEnabled(numberOfReservist < 5  || reservistCheckBox.isSelected());
+			reservistCheckBox.setEnabled(numberOfReservist < 5 || reservistCheckBox.isSelected());
 			reservistCheckBox.setText(numberOfReservist + "/5");
 
 			MainView.confirmButton.setEnabled(numberOfReservist >= 5);
@@ -372,6 +368,7 @@ public class AttributePanel extends JPanel {
 							Pour choisir un soldat il suffit de cliquer dessus, tu pourras ensuite bouger les sliders pour changer les stats.
 														
 							Tu as un indicateur en haut de la fenêtre pour savoir le nombre de points qu'il te reste.
+														
 							Attention ! Il te faut sélectionner 5 réservistes pour continuer !
 							""", false);
 				}
@@ -409,14 +406,6 @@ public class AttributePanel extends JPanel {
 	 */
 	private void updatePoints(int difference) {
 		assignablePoints -= difference;
-		MainView.setPointsLeft(assignablePoints);
-	}
-
-	/**
-	 * Reset assignables points.
-	 */
-	private void resetPoints() {
-		assignablePoints = 400;
 		MainView.setPointsLeft(assignablePoints);
 	}
 
@@ -468,5 +457,13 @@ public class AttributePanel extends JPanel {
 				}
 			});
 		}
+	}
+
+	/**
+	 * Reset assignables points.
+	 */
+	private void resetPoints() {
+		assignablePoints = 400;
+		MainView.setPointsLeft(assignablePoints);
 	}
 }

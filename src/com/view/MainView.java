@@ -23,15 +23,13 @@ import java.awt.event.MouseEvent;
 public class MainView {
 
 	/**
+	 * The constant confirmButton.
+	 */
+	public static JButton confirmButton;
+	/**
 	 * The constant instance.
 	 */
 	private static MainView instance;
-
-	/**
-	 * The Frame.
-	 */
-	private JFrame frame;
-
 	/**
 	 * The constant mainPanel.
 	 */
@@ -46,32 +44,14 @@ public class MainView {
 	 * The constant playerIndicator.
 	 */
 	private static PlayerIndicator playerIndicator;
-
-	/**
-	 * The constant confirmButton.
-	 */
-	public static JButton confirmButton;
-
 	/**
 	 * The constant dialog.
 	 */
 	private static Dialog dialog;
-
 	/**
-	 * Launch the application.
-	 *
-	 * @param args the input arguments
+	 * The Frame.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(() -> {
-			try {
-				instance = new MainView(args.length > 0 && args[0].equalsIgnoreCase("debug"));
-				instance.frame.setVisible(true);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-	}
+	private JFrame frame;
 
 	/**
 	 * Create the application.
@@ -88,6 +68,22 @@ public class MainView {
 			GameController.startDebugMode();
 			switchToPanel(PanelIdentifier.FIELD_ATTRIBUTION_PANEL);
 		}
+	}
+
+	/**
+	 * Launch the application.
+	 *
+	 * @param args the input arguments
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(() -> {
+			try {
+				instance = new MainView(args.length > 0 && args[0].equalsIgnoreCase("debug"));
+				instance.frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	/**
@@ -109,6 +105,71 @@ public class MainView {
 	 */
 	public static <T extends Enum<T>> void switchToPanel(T identifier) {
 		((CardLayout) mainPanel.getLayout()).show(mainPanel, identifier.toString());
+	}
+
+	/**
+	 * Show point label.
+	 *
+	 * @param show whether to show the point label or not
+	 */
+	public static void showPointLabel(boolean show) {
+		pointLabel.setVisible(show);
+	}
+
+	/**
+	 * Sets points left.
+	 *
+	 * @param pointsLeft the points left
+	 */
+	public static void setPointsLeft(int pointsLeft) {
+		pointLabel.setText("Points \u00E0 assigner : " + pointsLeft + " pts");
+	}
+
+	/**
+	 * Sets current player.
+	 *
+	 * @param nextPlayer the player to set as current player
+	 */
+	public static void setPlayerIndicator(Player nextPlayer) {
+		Player player = playerIndicator.getPlayer();
+		if (player != null && nextPlayer != player) {
+			mainPanel.setFullWindowEvent("Please pass to player " + nextPlayer.getName() + " and click");
+		}
+		playerIndicator.setPlayer(nextPlayer);
+	}
+
+	/**
+	 * Show player indicator.
+	 *
+	 * @param show whether to show the player indicator or not
+	 */
+	public static void showPlayerIndicator(boolean show) {
+		playerIndicator.setVisible(show);
+	}
+
+	/**
+	 * Stops all events.
+	 */
+	public static void stopEvent() {
+		mainPanel.stopEvent();
+	}
+
+	/**
+	 * Sets event.
+	 *
+	 * @param text the text of the event
+	 */
+	public static void setEvent(String text) {
+		mainPanel.setEvent(text);
+	}
+
+	/**
+	 * Check if an event is displayed.
+	 *
+	 * @return false if an event is displayed, false otherwise
+	 */
+	public static boolean noEvent() {
+		return mainPanel.noEvent();
 	}
 
 	/**
@@ -158,18 +219,18 @@ public class MainView {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				displayDialog("""
-								En-dessous de chaque combattant, vous pourrez voir 5 chiffres, ceux-ci correspondent aux statistiques F.R.I.C.D. :
-        
-								Force : Les points affectés ici augmentent les dégâts du combattant de 10% par point affecté. Par ex, si un combattant à 2 points, il frappera avec 20% de force en plus. Il fera 20% de dégâts en plus.
-								        
-								Résistance : Les points affectés ici diminuent les dégâts reçus par le combattant de 5% par point affecté. Par ex, si un combattant à 2 points, il « absorbera » 10% des dégâts qu’il reçoit.
-								        
-								Initiative : Lors d’un affrontement, c’est celui qui a la plus forte initiative qui porte le premier coup, puis c’est le combattant qui a la seconde meilleure initiative etc...
-								        
-								Constitution : Elle permet d’augmenter la constitution du combattant en lui donnant des points de vie supplémentaires. Par ex, 10 points de constitution feront augmenter les points de vie initiaux à 40 (au lieu de 30).
-								        
-								Dextérité : Les points affecté ici augmentent les chances de « toucher » son ennemi lors d’une attaque, ou d’esquiver lorsqu’on est attaqué. 1 point correspond à 3% de chance supplémentaire d’atteindre sa cible ou d’esquiver une attaque.
-								""", false);
+						En-dessous de chaque combattant, vous pourrez voir 5 chiffres, ceux-ci correspondent aux statistiques F.R.I.C.D. :
+						        
+						Force : Les points affectés ici augmentent les dégâts du combattant de 10% par point affecté. Par ex, si un combattant à 2 points, il frappera avec 20% de force en plus. Il fera 20% de dégâts en plus.
+						        
+						Résistance : Les points affectés ici diminuent les dégâts reçus par le combattant de 5% par point affecté. Par ex, si un combattant à 2 points, il « absorbera » 10% des dégâts qu’il reçoit.
+						        
+						Initiative : Lors d’un affrontement, c’est celui qui a la plus forte initiative qui porte le premier coup, puis c’est le combattant qui a la seconde meilleure initiative etc...
+						        
+						Constitution : Elle permet d’augmenter la constitution du combattant en lui donnant des points de vie supplémentaires. Par ex, 10 points de constitution feront augmenter les points de vie initiaux à 40 (au lieu de 30).
+						        
+						Dextérité : Les points affecté ici augmentent les chances de « toucher » son ennemi lors d’une attaque, ou d’esquiver lorsqu’on est attaqué. 1 point correspond à 3% de chance supplémentaire d’atteindre sa cible ou d’esquiver une attaque.
+						""", false);
 			}
 		});
 
@@ -195,46 +256,6 @@ public class MainView {
 	}
 
 	/**
-	 * Show point label.
-	 *
-	 * @param show whether to show the point label or not
-	 */
-	public static void showPointLabel(boolean show) {
-		pointLabel.setVisible(show);
-	}
-
-	/**
-	 * Sets points left.
-	 *
-	 * @param pointsLeft the points left
-	 */
-	public static void setPointsLeft(int pointsLeft) {
-		pointLabel.setText("Points \u00E0 assigner : " + pointsLeft + " pts");
-	}
-
-	/**
-	 * Sets current player.
-	 *
-	 * @param nextPlayer the player to set as current player
-	 */
-	public static void setPlayerIndicator(Player nextPlayer) {
-		Player player = playerIndicator.getPlayer();
-		if (player != null && nextPlayer != player) {
-			mainPanel.setFullWindowEvent("Please pass to player " + nextPlayer.getName() + " and click");
-		}
-		playerIndicator.setPlayer(nextPlayer);
-	}
-
-	/**
-	 * Show player indicator.
-	 *
-	 * @param show whether to show the player indicator or not
-	 */
-	public static void showPlayerIndicator(boolean show) {
-		playerIndicator.setVisible(show);
-	}
-
-	/**
 	 * Display dialog.
 	 * Prepare a dialog and display it when possible.
 	 *
@@ -242,24 +263,10 @@ public class MainView {
 	 * @param buttonsEnabled whether buttons should be enabled or not
 	 */
 	public static void displayDialog(String text, boolean buttonsEnabled) {
-		dialog = new Dialog(new Point(instance.frame.getLocationOnScreen().x + instance.frame.getWidth()/2, instance.frame.getLocationOnScreen().y + instance.frame.getHeight()/2), text);
+		dialog = new Dialog(new Point(instance.frame.getLocationOnScreen().x + instance.frame.getWidth() / 2, instance.frame.getLocationOnScreen().y + instance.frame.getHeight() / 2), text);
 		if (!buttonsEnabled) dialog.disableButtons();
 
 		new Thread(MainView::showDialog).start();
-	}
-
-	/**
-	 * Show dialog.
-	 * Display the dialog when there is no event displayed.
-	 */
-	@SuppressWarnings("BusyWait")
-	public static void showDialog() {
-		try {
-			while (!mainPanel.noEvent()) Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		dialog.setVisible(true);
 	}
 
 	/**
@@ -278,10 +285,17 @@ public class MainView {
 	}
 
 	/**
-	 * Stops all events.
+	 * Show dialog.
+	 * Display the dialog when there is no event displayed.
 	 */
-	public static void stopEvent() {
-		mainPanel.stopEvent();
+	@SuppressWarnings("BusyWait")
+	public static void showDialog() {
+		try {
+			while (!mainPanel.noEvent()) Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		dialog.setVisible(true);
 	}
 
 	/**
@@ -289,23 +303,5 @@ public class MainView {
 	 */
 	public static void removeConfirmationListeners() {
 		for (ActionListener listener : confirmButton.getActionListeners()) confirmButton.removeActionListener(listener);
-	}
-
-	/**
-	 * Sets event.
-	 *
-	 * @param text the text of the event
-	 */
-	public static void setEvent(String text) {
-		mainPanel.setEvent(text);
-	}
-
-	/**
-	 * Check if an event is displayed.
-	 *
-	 * @return false if an event is displayed, false otherwise
-	 */
-	public static boolean noEvent() {
-		return mainPanel.noEvent();
 	}
 }

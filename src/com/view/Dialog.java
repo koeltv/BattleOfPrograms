@@ -39,7 +39,7 @@ public class Dialog extends JDialog {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setUndecorated(true);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setBounds(center.x - width/2, center.y - height/2, width, height);
+		setBounds(center.x - width / 2, center.y - height / 2, width, height);
 		getContentPane().setLayout(new BorderLayout());
 		JPanel contentPanel = new JPanel();
 

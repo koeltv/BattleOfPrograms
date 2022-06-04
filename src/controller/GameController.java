@@ -19,26 +19,22 @@ public class GameController implements Runnable {
 	 * Whether to display the tutorial or not.
 	 */
 	private static boolean displayTutorial = true;
-
-	/**
-	 * The Players.
-	 */
-	private final Player[] players = new Player[2];
-
-	/**
-	 * The Fields.
-	 */
-	private final Field[] fields = new Field[FieldProperties.values().length];
-
-	/**
-	 * The Step.
-	 */
-	private int step = 1;
-
 	/**
 	 * The constant waitingTime.
 	 */
 	private static int waitingTime = 200;
+	/**
+	 * The Players.
+	 */
+	private final Player[] players = new Player[2];
+	/**
+	 * The Fields.
+	 */
+	private final Field[] fields = new Field[FieldProperties.values().length];
+	/**
+	 * The Step.
+	 */
+	private int step = 1;
 
 	/**
 	 * Instantiates a new Game controller.
@@ -69,15 +65,6 @@ public class GameController implements Runnable {
 	}
 
 	/**
-	 * Get the player array.
-	 *
-	 * @return the players
-	 */
-	public static Player[] getPlayers() {
-		return instance.players;
-	}
-
-	/**
 	 * Gets the current step.<br>
 	 * - Player information collecting and attribute repartition is step 1<br>
 	 * - Field attribution is step 2<br>
@@ -91,13 +78,6 @@ public class GameController implements Runnable {
 	}
 
 	/**
-	 * Increase step count.
-	 */
-	public static void nextStep() {
-		instance.step++;
-	}
-
-	/**
 	 * Check if it is the first game.
 	 *
 	 * @return the boolean
@@ -107,10 +87,122 @@ public class GameController implements Runnable {
 	}
 
 	/**
+	 * Skip battle.
+	 * This is done by reducing time intervals between each attack.
+	 */
+	public static void skipBattle() {
+		waitingTime = 5;
+	}
+
+	/**
+	 * Check attribution.
+	 * - All soldiers that are not reservists should be attributed to a field.
+	 * - All fields should have at least one soldier.
+	 * - All recently moved soldier (redeployed) should not be in a captured field.
+	 *
+	 * @param playerIndex the player index
+	 * @return true if the player has assigned all his soldiers correctly, false otherwise
+	 */
+	public static boolean checkAttribution(int playerIndex) {
+		return Arrays.stream(getPlayers()[playerIndex].getSoldiers()).filter(soldier -> !soldier.isReservist()).noneMatch(soldier -> soldier.getAssignedField() == null) &&
+				Arrays.stream(instance.fields).noneMatch(field -> field.getPlayerSoldiers(getPlayers()[playerIndex]).size() < 1);
+	}
+
+	/**
+	 * Start the game in debug mode.
+	 * Start on the attribution screen with players and soldiers pre-made and attributed.
+	 */
+	public static void startDebugMode() {
+		passTutorial();
+		nextStep();
+		Player[] players = getPlayers();
+		for (int i = 0; i < players.length; i++) {
+			players[i] = new Player("J" + (i + 1), "Debug");
+			for (int j = 0; j < players[i].getSoldiers().length; j++) {
+				if (j < 15) {
+					players[i].getSoldiers()[j] = new Soldier();
+				} else if (j < 19) {
+					players[i].getSoldiers()[j] = new EliteSoldier();
+				} else {
+					players[i].getSoldiers()[j] = new WarMaster();
+				}
+
+				players[i].getSoldiers()[j].setAi(switch (new Random().nextInt(3)) {
+					case 0 -> new OffensiveAI();
+					case 1 -> new DefensiveAI();
+					default -> new RandomAI();
+				});
+
+				if (j < 5) players[i].getSoldiers()[j].setReservist(true);
+				else
+					moveSoldierToField(players[i].getSoldiers()[j], findFieldByProperties(FieldProperties.values()[new Random().nextInt(FieldProperties.values().length)]));
+			}
+		}
+	}
+
+	/**
+	 * Reset the {@link GameController}.
+	 */
+	public static void reset() {
+		Arrays.fill(getPlayers(), null);
+		FieldProperties[] values = FieldProperties.values();
+		for (int i = 0; i < values.length; i++) {
+			instance.fields[i] = new Field(values[i]);
+		}
+		instance.step = 1;
+	}
+
+	/**
 	 * Disable the tutorial dialogs.
 	 */
 	public static void passTutorial() {
 		GameController.displayTutorial = false;
+	}
+
+	/**
+	 * Increase step count.
+	 */
+	public static void nextStep() {
+		instance.step++;
+	}
+
+	/**
+	 * Get the player array.
+	 *
+	 * @return the players
+	 */
+	public static Player[] getPlayers() {
+		return instance.players;
+	}
+
+	/**
+	 * Move soldier to field.
+	 *
+	 * @param soldier          the soldier
+	 * @param destinationField the destination field
+	 */
+	public static void moveSoldierToField(Soldier soldier, Field destinationField) {
+		if (destinationField != null) {
+			for (Field field : instance.fields) {
+				if (field.contains(soldier)) field.removeSoldier(soldier);
+			}
+			destinationField.addSoldier(soldier);
+		} else {
+			soldier.sendToField(null);
+		}
+	}
+
+	/**
+	 * Find field by properties.
+	 *
+	 * @param fieldProperties the field properties
+	 * @return the field
+	 */
+	public static Field findFieldByProperties(FieldProperties fieldProperties) {
+		for (Field field : instance.fields) {
+			if (field.fieldProperties == fieldProperties) return field;
+		}
+		throw new RuntimeException("Field not found");
 	}
 
 	@Override
@@ -155,101 +247,6 @@ public class GameController implements Runnable {
 					"Félicitations " + getPlayers()[winningPlayerIndex].getName() + ", tu as gagné !\nTu peux être fière d'avoir représenté le programme " + getPlayers()[winningPlayerIndex].getProgram(),
 					true
 			);
-		}
-	}
-
-	/**
-	 * Skip battle.
-	 * This is done by reducing time intervals between each attack.
-	 */
-	public static void skipBattle() {
-		waitingTime = 5;
-	}
-
-	/**
-	 * Move soldier to field.
-	 *
-	 * @param soldier          the soldier
-	 * @param destinationField the destination field
-	 */
-	public static void moveSoldierToField(Soldier soldier, Field destinationField) {
-		if (destinationField != null) {
-			for (Field field : instance.fields) {
-				if (field.contains(soldier)) field.removeSoldier(soldier);
-			}
-			destinationField.addSoldier(soldier);
-		} else {
-			soldier.sendToField(null);
-		}
-	}
-
-	/**
-	 * Find field by properties.
-	 *
-	 * @param fieldProperties the field properties
-	 * @return the field
-	 */
-	public static Field findFieldByProperties(FieldProperties fieldProperties) {
-		for (Field field : instance.fields) {
-			if (field.fieldProperties == fieldProperties) return field;
-		}
-		throw new RuntimeException("Field not found");
-	}
-
-	/**
-	 * Check attribution.
-	 * - All soldiers that are not reservists should be attributed to a field.
-	 * - All fields should have at least one soldier.
-	 * - All recently moved soldier (redeployed) should not be in a captured field.
-	 *
-	 * @param playerIndex the player index
-	 * @return true if the player has assigned all his soldiers correctly, false otherwise
-	 */
-	public static boolean checkAttribution(int playerIndex) {
-		return Arrays.stream(getPlayers()[playerIndex].getSoldiers()).filter(soldier -> !soldier.isReservist()).noneMatch(soldier -> soldier.getAssignedField() == null) &&
-				Arrays.stream(instance.fields).noneMatch(field -> field.getPlayerSoldiers(getPlayers()[playerIndex]).size() < 1);
-	}
-
-	/**
-	 * Reset the {@link GameController}.
-	 */
-	public static void reset() {
-		Arrays.fill(getPlayers(), null);
-		FieldProperties[] values = FieldProperties.values();
-		for (int i = 0; i < values.length; i++) {
-			instance.fields[i] = new Field(values[i]);
-		}
-		instance.step = 1;
-	}
-
-	/**
-	 * Start the game in debug mode.
-	 * Start on the attribution screen with players and soldiers pre-made and attributed.
-	 */
-	public static void startDebugMode() {
-		passTutorial();
-		nextStep();
-		Player[] players = getPlayers();
-		for (int i = 0; i < players.length; i++) {
-			players[i] = new Player("J" + (i + 1), "Debug");
-			for (int j = 0; j < players[i].getSoldiers().length; j++) {
-				if (j < 15) {
-					players[i].getSoldiers()[j] = new Soldier();
-				} else if (j < 19) {
-					players[i].getSoldiers()[j] = new EliteSoldier();
-				} else {
-					players[i].getSoldiers()[j] = new WarMaster();
-				}
-
-				players[i].getSoldiers()[j].setAi(switch(new Random().nextInt(3)) {
-					case 0 -> new OffensiveAI();
-					case 1 -> new DefensiveAI();
-					default -> new RandomAI();
-				});
-
-				if (j < 5) players[i].getSoldiers()[j].setReservist(true);
-				else moveSoldierToField(players[i].getSoldiers()[j], findFieldByProperties(FieldProperties.values()[new Random().nextInt(FieldProperties.values().length)]));
-			}
 		}
 	}
 }

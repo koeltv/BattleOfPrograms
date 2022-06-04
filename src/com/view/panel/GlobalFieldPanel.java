@@ -23,16 +23,14 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 	 */
 	@Serial
 	private static final long serialVersionUID = -2611728061732290991L;
-
-	/**
-	 * The Current step.
-	 */
-	private int currentStep = -1;
-
 	/**
 	 * The Pass action.
 	 */
 	private final ActionListener passAction;
+	/**
+	 * The Current step.
+	 */
+	private int currentStep = -1;
 
 	/**
 	 * Create the panel.
@@ -63,14 +61,14 @@ public class GlobalFieldPanel extends BasePanel implements PropertyChangeListene
 				if (currentStep != GameController.getStep()) {
 					if (GameController.displayTutorial()) {
 						MainView.displayDialog("""
-							C'est ici que le combat se déroule. Tu peux cliquer sur les différents champs de bataille pour voir les batailles se dérouler.
-							
-							Une bataille se terminera par le contrôle d'un des champs par l'un des deux joueurs.
-							
-							Tu peux accélérer le déroulement de la bataille en cliquant sur le bouton "Passer".
-							
-							Le jeu sera terminé quand l'un des 2 joueurs aura le contrôle de la majorité des champs de bataille (3/5).
-							""", false);
+								C'est ici que le combat se déroule. Tu peux cliquer sur les différents champs de bataille pour voir les batailles se dérouler.
+															
+								Une bataille se terminera par le contrôle d'un des champs par l'un des deux joueurs.
+															
+								Tu peux accélérer le déroulement de la bataille en cliquant sur le bouton "Passer".
+															
+								Le jeu sera terminé quand l'un des 2 joueurs aura le contrôle de la majorité des champs de bataille (3/5).
+								""", false);
 						GameController.passTutorial();
 					}
 

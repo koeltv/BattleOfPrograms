@@ -114,8 +114,8 @@ public class PlayerInfoPanel extends BasePanel {
 	public void checkInformations() {
 		MainView.confirmButton.setEnabled(
 				programLists[0].getSelectedValue() != null &&
-				programLists[1].getSelectedValue() != null &&
-				!programLists[0].getSelectedValue().equals(programLists[1].getSelectedValue())
+						programLists[1].getSelectedValue() != null &&
+						!programLists[0].getSelectedValue().equals(programLists[1].getSelectedValue())
 		);
 	}
 

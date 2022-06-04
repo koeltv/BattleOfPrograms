@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 /**
  * Panel used as main panel to display actions.
  */
-public class EventPanel extends JPanel {
+public class EventPanel extends JPanel implements Runnable {
 	/**
 	 * The next action to display.
 	 *
@@ -47,11 +47,31 @@ public class EventPanel extends JPanel {
 				synchronized (event) {
 					event.wait(500);
 				}
-			} catch (InterruptedException ignored) {}
+			} catch (InterruptedException ignored) {
+			}
 		}
 		event.setText(text);
-		thread = new Thread(this::run);
+		thread = new Thread(this);
 		thread.start();
+	}
+
+	/**
+	 * Run.
+	 */
+	@Override
+	public void run() {
+		synchronized (event) {
+			try {
+				while (event.displayTime > 0 || fullScreenEvent) {
+					event.displayTime -= 10;
+					repaint();
+					event.wait(10);
+				}
+			} catch (InterruptedException ignored) {
+			}
+			repaint();
+			event.notifyAll();
+		}
 	}
 
 	/**
@@ -64,7 +84,7 @@ public class EventPanel extends JPanel {
 		fullScreenEvent = true;
 		event.setText(text);
 
-		thread = new Thread(this::run);
+		thread = new Thread(this);
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -79,15 +99,11 @@ public class EventPanel extends JPanel {
 		thread.start();
 	}
 
-	/**
-	 * Draw x centered string within [x; x + width].
-	 *
-	 * @param string      the string
-	 * @param upperCenter the upper center of the drawn string
-	 * @param width       the width in which to fit the string
-	 */
-	private void drawXCenteredString(String string, Point upperCenter, int width) {
-		graphics2D.drawString(string, upperCenter.x + (width - getFontMetrics(graphics2D.getFont()).stringWidth(string)) / 2, upperCenter.y);
+	@Override
+	public void paint(Graphics g) {
+		super.paint(g);
+		graphics2D = (Graphics2D) g;
+		drawAction();
 	}
 
 	/**
@@ -111,7 +127,8 @@ public class EventPanel extends JPanel {
 			tempGraph.setColor(ColorPalette.BLUE_BACKGROUND.color);
 
 			if (fullScreenEvent) tempGraph.fillRect(0, 0, getWidth(), getHeight());
-			else tempGraph.fillRect(getWidth() / 2 - width / 2 - padding, getHeight() / 2 - height / 2, width + 2 * padding, height);
+			else
+				tempGraph.fillRect(getWidth() / 2 - width / 2 - padding, getHeight() / 2 - height / 2, width + 2 * padding, height);
 
 			tempGraph.dispose();
 
@@ -121,28 +138,15 @@ public class EventPanel extends JPanel {
 		}
 	}
 
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		graphics2D = (Graphics2D) g;
-		drawAction();
-	}
-
 	/**
-	 * Run.
+	 * Draw x centered string within [x; x + width].
+	 *
+	 * @param string      the string
+	 * @param upperCenter the upper center of the drawn string
+	 * @param width       the width in which to fit the string
 	 */
-	public void run() {
-		synchronized (event) {
-			try {
-				while (event.displayTime > 0 || fullScreenEvent) {
-					event.displayTime -= 10;
-					repaint();
-					event.wait(10);
-				}
-			} catch (InterruptedException ignored) {}
-			repaint();
-			event.notifyAll();
-		}
+	private void drawXCenteredString(String string, Point upperCenter, int width) {
+		graphics2D.drawString(string, upperCenter.x + (width - getFontMetrics(graphics2D.getFont()).stringWidth(string)) / 2, upperCenter.y);
 	}
 
 	/**
