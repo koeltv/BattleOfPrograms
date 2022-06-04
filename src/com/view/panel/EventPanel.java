@@ -14,6 +14,9 @@ import java.util.LinkedList;
  */
 public class EventPanel extends JPanel implements Runnable {
 
+	/**
+	 * The delay between each repainting of the current event.
+	 */
 	private static final int MILLIS_BETWEEN_STEPS = 10;
 	/**
 	 * A stack of events to be displayed.
