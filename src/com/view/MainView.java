@@ -45,10 +45,6 @@ public class MainView {
 	 */
 	private static PlayerIndicator playerIndicator;
 	/**
-	 * The constant dialog.
-	 */
-	private static Dialog dialog;
-	/**
 	 * The Frame.
 	 */
 	private JFrame frame;
@@ -173,6 +169,59 @@ public class MainView {
 	}
 
 	/**
+	 * Display dialog.
+	 * Prepare a dialog and display it when possible.
+	 *
+	 * @param text           the text
+	 * @param buttonsEnabled whether buttons should be enabled or not
+	 */
+	public static void displayDialog(String text, boolean buttonsEnabled) {
+		Point locationOnScreen = instance.frame.getLocationOnScreen();
+		Dialog.initialize(new Point(locationOnScreen.x + instance.frame.getWidth() / 2, locationOnScreen.y + instance.frame.getHeight() / 2));
+
+		Dialog.enableButtons(buttonsEnabled);
+		Dialog.setText(text);
+
+		new Thread(MainView::showDialog).start();
+	}
+
+	/**
+	 * Show dialog.
+	 * Display the dialog when there is no event displayed.
+	 */
+	@SuppressWarnings("BusyWait")
+	public static void showDialog() {
+		try {
+			while (!mainPanel.noEvent()) Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		Dialog.display(true);
+	}
+
+	/**
+	 * Reset.
+	 */
+	public static void reset() {
+		mainPanel.stopEvent();
+		mainPanel.removeAll();
+		pointLabel.setVisible(false);
+		playerIndicator.setVisible(false);
+		confirmButton.setVisible(false);
+		removeConfirmationListeners();
+		GameController.reset();
+		MainView.addPanel(new StartingPanel(), PanelIdentifier.STARTING_PANEL);
+		MainView.switchToPanel(PanelIdentifier.STARTING_PANEL);
+	}
+
+	/**
+	 * Remove confirmation listeners.
+	 */
+	public static void removeConfirmationListeners() {
+		for (ActionListener listener : confirmButton.getActionListeners()) confirmButton.removeActionListener(listener);
+	}
+
+	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
@@ -253,55 +302,5 @@ public class MainView {
 		mainPanel.setLayout(new CardLayout(0, 0));
 
 		btnMenu.addActionListener(e -> reset());
-	}
-
-	/**
-	 * Display dialog.
-	 * Prepare a dialog and display it when possible.
-	 *
-	 * @param text           the text
-	 * @param buttonsEnabled whether buttons should be enabled or not
-	 */
-	public static void displayDialog(String text, boolean buttonsEnabled) {
-		dialog = new Dialog(new Point(instance.frame.getLocationOnScreen().x + instance.frame.getWidth() / 2, instance.frame.getLocationOnScreen().y + instance.frame.getHeight() / 2), text);
-		if (!buttonsEnabled) dialog.disableButtons();
-
-		new Thread(MainView::showDialog).start();
-	}
-
-	/**
-	 * Reset.
-	 */
-	public static void reset() {
-		mainPanel.stopEvent();
-		mainPanel.removeAll();
-		pointLabel.setVisible(false);
-		playerIndicator.setVisible(false);
-		confirmButton.setVisible(false);
-		removeConfirmationListeners();
-		GameController.reset();
-		MainView.addPanel(new StartingPanel(), PanelIdentifier.STARTING_PANEL);
-		MainView.switchToPanel(PanelIdentifier.STARTING_PANEL);
-	}
-
-	/**
-	 * Show dialog.
-	 * Display the dialog when there is no event displayed.
-	 */
-	@SuppressWarnings("BusyWait")
-	public static void showDialog() {
-		try {
-			while (!mainPanel.noEvent()) Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		dialog.setVisible(true);
-	}
-
-	/**
-	 * Remove confirmation listeners.
-	 */
-	public static void removeConfirmationListeners() {
-		for (ActionListener listener : confirmButton.getActionListeners()) confirmButton.removeActionListener(listener);
 	}
 }

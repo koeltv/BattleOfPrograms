@@ -103,6 +103,18 @@ public class DragAndDrop {
 	}
 
 	/**
+	 * Allow drag and drop.
+	 *
+	 * @param component the component
+	 * @param allow     whether to allow it or not
+	 */
+	public void allowDragAndDrop(Component component, boolean allow) {
+		removeListeners(component);
+		if (allow) addListeners(component);
+		component.addMouseListener(dragAndDropController);
+	}
+
+	/**
 	 * The Drag and drop controller.
 	 */
 	private final MouseAdapter dragAndDropController = new MouseAdapter() {
@@ -115,18 +127,5 @@ public class DragAndDrop {
 			component.getParent().revalidate();
 		}
 	};
-
-
-	/**
-	 * Allow drag and drop.
-	 *
-	 * @param component the component
-	 * @param allow     whether to allow it or not
-	 */
-	public void allowDragAndDrop(Component component, boolean allow) {
-		removeListeners(component);
-		if (allow) addListeners(component);
-		component.addMouseListener(dragAndDropController);
-	}
 
 }

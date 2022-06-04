@@ -96,39 +96,6 @@ public class EventPanel extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Sets a full window event.
-	 *
-	 * @param text the text to display
-	 */
-	public void setFullWindowEvent(String text) {
-		eventStack.push(new Event(text, true));
-
-		thread = new Thread(this);
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				removeMouseListener(this);
-				thread.interrupt();
-				stopEvent();
-				repaint();
-			}
-		});
-
-		thread.start();
-	}
-
-	/**
-	 * Draw x centered string within [x; x + width].
-	 *
-	 * @param string      the string
-	 * @param upperCenter the upper center of the drawn string
-	 * @param width       the width in which to fit the string
-	 */
-	private void drawXCenteredString(String string, Point upperCenter, int width) {
-		graphics2D.drawString(string, upperCenter.x + (width - getFontMetrics(graphics2D.getFont()).stringWidth(string)) / 2, upperCenter.y);
-	}
-
-	/**
 	 * Display the current action if there is one.
 	 *
 	 * @see Event
@@ -159,6 +126,39 @@ public class EventPanel extends JPanel implements Runnable {
 			graphics2D.setColor(Color.WHITE);
 			drawXCenteredString(event.getText(), new Point(getWidth() / 2 - width / 2, getHeight() / 2 - height / 2 + (int) (height * 0.875)), width);
 		}
+	}
+
+	/**
+	 * Draw x centered string within [x; x + width].
+	 *
+	 * @param string      the string
+	 * @param upperCenter the upper center of the drawn string
+	 * @param width       the width in which to fit the string
+	 */
+	private void drawXCenteredString(String string, Point upperCenter, int width) {
+		graphics2D.drawString(string, upperCenter.x + (width - getFontMetrics(graphics2D.getFont()).stringWidth(string)) / 2, upperCenter.y);
+	}
+
+	/**
+	 * Sets a full window event.
+	 *
+	 * @param text the text to display
+	 */
+	public void setFullWindowEvent(String text) {
+		eventStack.push(new Event(text, true));
+
+		thread = new Thread(this);
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				removeMouseListener(this);
+				thread.interrupt();
+				stopEvent();
+				repaint();
+			}
+		});
+
+		thread.start();
 	}
 
 	/**

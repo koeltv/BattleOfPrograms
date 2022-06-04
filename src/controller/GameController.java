@@ -109,6 +109,18 @@ public class GameController implements Runnable {
 	}
 
 	/**
+	 * Reset the {@link GameController}.
+	 */
+	public static void reset() {
+		Arrays.fill(getPlayers(), null);
+		FieldProperties[] values = FieldProperties.values();
+		for (int i = 0; i < values.length; i++) {
+			instance.fields[i] = new Field(values[i]);
+		}
+		instance.step = 1;
+	}
+
+	/**
 	 * Start the game in debug mode.
 	 * Start on the attribution screen with players and soldiers pre-made and attributed.
 	 */
@@ -141,18 +153,6 @@ public class GameController implements Runnable {
 	}
 
 	/**
-	 * Reset the {@link GameController}.
-	 */
-	public static void reset() {
-		Arrays.fill(getPlayers(), null);
-		FieldProperties[] values = FieldProperties.values();
-		for (int i = 0; i < values.length; i++) {
-			instance.fields[i] = new Field(values[i]);
-		}
-		instance.step = 1;
-	}
-
-	/**
 	 * Disable the tutorial dialogs.
 	 */
 	public static void passTutorial() {
@@ -164,15 +164,6 @@ public class GameController implements Runnable {
 	 */
 	public static void nextStep() {
 		instance.step++;
-	}
-
-	/**
-	 * Get the player array.
-	 *
-	 * @return the players
-	 */
-	public static Player[] getPlayers() {
-		return instance.players;
 	}
 
 	/**
@@ -203,6 +194,15 @@ public class GameController implements Runnable {
 			if (field.fieldProperties == fieldProperties) return field;
 		}
 		throw new RuntimeException("Field not found");
+	}
+
+	/**
+	 * Get the player array.
+	 *
+	 * @return the players
+	 */
+	public static Player[] getPlayers() {
+		return instance.players;
 	}
 
 	@Override
