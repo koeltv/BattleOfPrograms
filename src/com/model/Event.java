@@ -17,21 +17,62 @@ public class Event {
 	/**
 	 * The Text.
 	 */
-	public String text;
-
+	private final String text;
+	/**
+	 * The Full screen.
+	 */
+	private final boolean fullScreen;
 	/**
 	 * The Display time.
 	 * This is the time the text will be displayed. It depends on the length of the String.
 	 */
-	public int displayTime;
+	private int displayTime;
 
 	/**
-	 * Set content of the event
+	 * Create a new event.
 	 *
-	 * @param text text to display
+	 * @param text       text to display
+	 * @param fullScreen whether to display it full screen or not
 	 */
-	public void setText(String text) {
+	public Event(String text, boolean fullScreen) {
 		this.text = text;
-		this.displayTime = (int) (text.length() * AVG_CHAR_PER_SECOND * 1000);
+		this.fullScreen = fullScreen;
+		this.displayTime = (int) (text.length() * AVG_CHAR_PER_SECOND * 300);
+	}
+
+	/**
+	 * Gets text.
+	 *
+	 * @return the text
+	 */
+	public String getText() {
+		return text;
+	}
+
+	/**
+	 * Gets display time.
+	 *
+	 * @return the display time
+	 */
+	public int getDisplayTime() {
+		return displayTime;
+	}
+
+	/**
+	 * Shorten the display time.
+	 *
+	 * @param time the time
+	 */
+	public void shortenDisplayTime(int time) {
+		if (!fullScreen) displayTime -= time;
+	}
+
+	/**
+	 * Whether the event needs to be shown full screen or not.
+	 *
+	 * @return the boolean
+	 */
+	public boolean isFullScreen() {
+		return fullScreen;
 	}
 }

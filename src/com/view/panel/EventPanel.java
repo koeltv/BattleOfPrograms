@@ -7,22 +7,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
 
 /**
  * Panel used as main panel to display actions.
  */
 public class EventPanel extends JPanel implements Runnable {
+
+	private static final int MILLIS_BETWEEN_STEPS = 10;
 	/**
-	 * The next action to display.
+	 * A stack of events to be displayed.
 	 *
 	 * @see Event
 	 */
-	private final Event event = new Event();
-
-	/**
-	 * The Full screen event.
-	 */
-	private boolean fullScreenEvent;
+	private final LinkedList<Event> eventStack = new LinkedList<>();
 
 	/**
 	 * The Thread printing the event.
@@ -44,13 +42,13 @@ public class EventPanel extends JPanel implements Runnable {
 		if (thread != null) {
 			thread.interrupt();
 			try {
-				synchronized (event) {
-					event.wait(500);
+				synchronized (eventStack) {
+					eventStack.wait(500);
 				}
 			} catch (InterruptedException ignored) {
 			}
 		}
-		event.setText(text);
+		eventStack.push(new Event(text, false));
 		thread = new Thread(this);
 		thread.start();
 	}
@@ -60,43 +58,31 @@ public class EventPanel extends JPanel implements Runnable {
 	 */
 	@Override
 	public void run() {
-		synchronized (event) {
+		synchronized (eventStack) {
 			try {
-				while (event.displayTime > 0 || fullScreenEvent) {
-					event.displayTime -= 10;
-					repaint();
-					event.wait(10);
+				while (eventStack.size() > 0 && eventStack.peek().getDisplayTime() > 0) {
+					if (eventStack.size() > 0) {
+						eventStack.peek().shortenDisplayTime(MILLIS_BETWEEN_STEPS);
+						repaint();
+						if (eventStack.size() > 0 && eventStack.peek().getDisplayTime() < 1) {
+							stopEvent();
+						}
+						eventStack.wait(MILLIS_BETWEEN_STEPS);
+					}
 				}
 			} catch (InterruptedException ignored) {
 			}
 			repaint();
-			event.notifyAll();
+			eventStack.notifyAll();
 		}
 	}
 
 	/**
-	 * Sets a full window event.
-	 *
-	 * @param text the text to display
+	 * Stop event displaying.
 	 */
-	public void setFullWindowEvent(String text) {
-		event.displayTime = 0;
-		fullScreenEvent = true;
-		event.setText(text);
-
-		thread = new Thread(this);
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				removeMouseListener(this);
-				thread.interrupt();
-				fullScreenEvent = false;
-				event.displayTime = 0;
-				repaint();
-			}
-		});
-
-		thread.start();
+	public void stopEvent() {
+		if (eventStack.size() > 0)
+			eventStack.pop();
 	}
 
 	@Override
@@ -107,35 +93,25 @@ public class EventPanel extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Display the current action if there is one.
+	 * Sets a full window event.
 	 *
-	 * @see Event
+	 * @param text the text to display
 	 */
-	private void drawAction() {
-		if (event.displayTime > 0 || fullScreenEvent) {
-			int padding = getWidth() / 20;
+	public void setFullWindowEvent(String text) {
+		eventStack.push(new Event(text, true));
 
-			//We adapt the size to the current screen size
-			Font font = getFont().deriveFont((float) padding);
-			graphics2D.setFont(font);
-			int width = graphics2D.getFontMetrics().stringWidth(event.text);
-			int height = graphics2D.getFontMetrics().getAscent();
+		thread = new Thread(this);
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				removeMouseListener(this);
+				thread.interrupt();
+				stopEvent();
+				repaint();
+			}
+		});
 
-			//We do a background on which we put the text
-			Graphics2D tempGraph = (Graphics2D) graphics2D.create();
-			tempGraph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, fullScreenEvent ? 0.99f : 0.75f));
-			tempGraph.setColor(ColorPalette.BLUE_BACKGROUND.color);
-
-			if (fullScreenEvent) tempGraph.fillRect(0, 0, getWidth(), getHeight());
-			else
-				tempGraph.fillRect(getWidth() / 2 - width / 2 - padding, getHeight() / 2 - height / 2, width + 2 * padding, height);
-
-			tempGraph.dispose();
-
-			//We add the text
-			graphics2D.setColor(Color.WHITE);
-			drawXCenteredString(event.text, new Point(getWidth() / 2 - width / 2, getHeight() / 2 - height / 2 + (int) (height * 0.875)), width);
-		}
+		thread.start();
 	}
 
 	/**
@@ -150,11 +126,36 @@ public class EventPanel extends JPanel implements Runnable {
 	}
 
 	/**
-	 * Stop event displaying.
+	 * Display the current action if there is one.
+	 *
+	 * @see Event
 	 */
-	public void stopEvent() {
-		event.displayTime = 0;
-		fullScreenEvent = false;
+	private void drawAction() {
+		Event event = eventStack.peek();
+		if (event != null && event.getDisplayTime() > 0) {
+			int padding = getWidth() / 20;
+
+			//We adapt the size to the current screen size
+			Font font = getFont().deriveFont((float) padding);
+			graphics2D.setFont(font);
+			int width = graphics2D.getFontMetrics().stringWidth(event.getText());
+			int height = graphics2D.getFontMetrics().getAscent();
+
+			//We do a background on which we put the text
+			Graphics2D tempGraph = (Graphics2D) graphics2D.create();
+			tempGraph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, event.isFullScreen() ? 0.99f : 0.75f));
+			tempGraph.setColor(ColorPalette.BLUE_BACKGROUND.color);
+
+			if (event.isFullScreen()) tempGraph.fillRect(0, 0, getWidth(), getHeight());
+			else
+				tempGraph.fillRect(getWidth() / 2 - width / 2 - padding, getHeight() / 2 - height / 2, width + 2 * padding, height);
+
+			tempGraph.dispose();
+
+			//We add the text
+			graphics2D.setColor(Color.WHITE);
+			drawXCenteredString(event.getText(), new Point(getWidth() / 2 - width / 2, getHeight() / 2 - height / 2 + (int) (height * 0.875)), width);
+		}
 	}
 
 	/**
@@ -163,6 +164,6 @@ public class EventPanel extends JPanel implements Runnable {
 	 * @return false if an event is displayed, false otherwise
 	 */
 	public boolean noEvent() {
-		return event.displayTime <= 0 && !fullScreenEvent;
+		return eventStack.size() < 1;
 	}
 }
