@@ -363,13 +363,13 @@ public class AttributePanel extends JPanel {
 
 				if (GameController.displayTutorial()) {
 					MainView.displayDialog("""
-							Sur cette interface, tu peux assigner des points aux statistiques des différents soldats.
+							Sur cette interface, tu peux assigner des points aux statistiques des différents soldats (voir F.R.I.C.D. ci-dessus).
 														
-							Pour choisir un soldat il suffit de cliquer dessus, tu pourras ensuite bouger les sliders pour changer les stats.
+							Pour choisir un soldat il suffit de cliquer dessus, tu pourras ensuite bouger les sliders pour changer ces stats.
 														
-							Tu as un indicateur en haut de la fenêtre pour savoir le nombre de points qu'il te reste.
+							Tu as un indicateur en haut à gauche de la fenêtre pour savoir le nombre de points qu'il te reste.
 														
-							Attention ! Il te faut sélectionner 5 réservistes pour continuer !
+							Attention ! Il te faut sélectionner 5 réservistes qui ne participerons pas à la 1ère bataille pour continuer !
 							""", false);
 				}
 			}
