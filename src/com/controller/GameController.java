@@ -109,6 +109,15 @@ public class GameController implements Runnable {
 	}
 
 	/**
+	 * Get the player array.
+	 *
+	 * @return the players
+	 */
+	public static Player[] getPlayers() {
+		return instance.players;
+	}
+
+	/**
 	 * Reset the {@link GameController}.
 	 */
 	public static void reset() {
@@ -194,15 +203,6 @@ public class GameController implements Runnable {
 			if (field.fieldProperties == fieldProperties) return field;
 		}
 		throw new RuntimeException("Field not found");
-	}
-
-	/**
-	 * Get the player array.
-	 *
-	 * @return the players
-	 */
-	public static Player[] getPlayers() {
-		return instance.players;
 	}
 
 	@Override
