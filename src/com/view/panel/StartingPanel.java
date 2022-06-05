@@ -1,6 +1,7 @@
 package com.view.panel;
 
 import com.view.MainView;
+import com.view.component.RoundedButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,16 +31,16 @@ public class StartingPanel extends BasePanel {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setOpaque(false);
 		add(buttonPanel, BorderLayout.SOUTH);
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 5));
 
-		JButton btnNewGame = new JButton("Nouveau Jeu");
+		RoundedButton btnNewGame = new RoundedButton("Nouveau Jeu");
 		buttonPanel.add(btnNewGame);
 		btnNewGame.addActionListener(e -> {
 			MainView.addPanel(new PlayerInfoPanel(), PanelIdentifier.PLAYER_INFO_PANEL);
 			MainView.switchToPanel(PanelIdentifier.PLAYER_INFO_PANEL);
 		});
 
-		JButton btnCredits = new JButton("Cr\u00E9dits");
+		RoundedButton btnCredits = new RoundedButton("Cr\u00E9dits");
 		buttonPanel.add(btnCredits);
 		btnCredits.addActionListener(e ->
 				MainView.displayDialog("""
@@ -50,7 +51,7 @@ public class StartingPanel extends BasePanel {
 						""", false)
 		);
 
-		JButton btnQuit = new JButton("Quitter le jeu");
+		RoundedButton btnQuit = new RoundedButton("Quitter le jeu");
 		buttonPanel.add(btnQuit);
 		btnQuit.addActionListener(e -> System.exit(0));
 	}

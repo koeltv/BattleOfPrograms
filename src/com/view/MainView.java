@@ -196,7 +196,7 @@ public class MainView {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Dialog.display(true);
+		Dialog.display();
 	}
 
 	/**
@@ -240,11 +240,13 @@ public class MainView {
 
 		JButton btnMenu = new JButton("Menu");
 		btnMenu.setForeground(ColorPalette.MENU_BLUE.color);
+		btnMenu.setContentAreaFilled(false);
 		SpringLayout sl_menuBar = new SpringLayout();
 		sl_menuBar.putConstraint(SpringLayout.NORTH, btnMenu, 1, SpringLayout.NORTH, menuBar);
 		sl_menuBar.putConstraint(SpringLayout.WEST, btnMenu, 1, SpringLayout.WEST, menuBar);
 		menuBar.setLayout(sl_menuBar);
 		menuBar.add(btnMenu);
+		btnMenu.addActionListener(e -> reset());
 
 		pointLabel = new JLabel("Points \u00E0 assigner : 400 pts");
 		sl_menuBar.putConstraint(SpringLayout.NORTH, pointLabel, 1, SpringLayout.NORTH, menuBar);
@@ -300,7 +302,5 @@ public class MainView {
 		mainPanel = new EventPanel();
 		frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 		mainPanel.setLayout(new CardLayout(0, 0));
-
-		btnMenu.addActionListener(e -> reset());
 	}
 }

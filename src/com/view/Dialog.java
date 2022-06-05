@@ -1,5 +1,7 @@
 package com.view;
 
+import com.view.component.RoundedButton;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -71,7 +73,7 @@ public class Dialog extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 			{
-				JButton okButton = new JButton("Menu");
+				RoundedButton okButton = new RoundedButton("Menu");
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -81,7 +83,7 @@ public class Dialog extends JDialog {
 				});
 			}
 			{
-				JButton cancelButton = new JButton("Quitter le jeu");
+				RoundedButton cancelButton = new RoundedButton("Quitter le jeu");
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 				cancelButton.addActionListener(e -> System.exit(0));
@@ -110,13 +112,14 @@ public class Dialog extends JDialog {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				instance.dispose();
+				instance.textPane.removeMouseListener(this);
 			}
 		};
 
 		if (enable) {
-			instance.textPane.addMouseListener(dismiss);
-		} else {
 			instance.textPane.removeMouseListener(dismiss);
+		} else {
+			instance.textPane.addMouseListener(dismiss);
 		}
 	}
 
@@ -136,10 +139,8 @@ public class Dialog extends JDialog {
 
 	/**
 	 * Display the dialog.
-	 *
-	 * @param display whether to display or to hide the dialog
 	 */
-	public static void display(boolean display) {
-		instance.setVisible(display);
+	public static void display() {
+		instance.setVisible(true);
 	}
 }
