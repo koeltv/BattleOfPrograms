@@ -1,11 +1,11 @@
 package com.view.component;
 
+import com.controller.GameController;
 import com.model.Field;
 import com.model.FieldProperties;
 import com.view.ColorPalette;
 import com.view.MainView;
 import com.view.Resource;
-import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;

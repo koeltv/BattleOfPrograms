@@ -1,11 +1,11 @@
 package com.view.panel;
 
+import com.controller.GameController;
 import com.model.Field;
 import com.model.Player;
 import com.view.MainView;
 import com.view.Resource;
 import com.view.component.GraphicField;
-import controller.GameController;
 
 import javax.swing.*;
 import java.awt.event.*;

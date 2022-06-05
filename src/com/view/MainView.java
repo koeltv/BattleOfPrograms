@@ -1,5 +1,6 @@
 package com.view;
 
+import com.controller.GameController;
 import com.model.FieldProperties;
 import com.model.Player;
 import com.view.component.PlayerIndicator;
@@ -7,7 +8,6 @@ import com.view.panel.EventPanel;
 import com.view.panel.FieldAttributionPanel;
 import com.view.panel.PanelIdentifier;
 import com.view.panel.StartingPanel;
-import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;

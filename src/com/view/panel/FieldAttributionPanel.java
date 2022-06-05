@@ -1,5 +1,6 @@
 package com.view.panel;
 
+import com.controller.GameController;
 import com.model.Field;
 import com.model.Soldier;
 import com.view.ColorPalette;
@@ -8,7 +9,6 @@ import com.view.Resource;
 import com.view.component.DragAndDrop;
 import com.view.component.FieldColumn;
 import com.view.component.GraphicSoldier;
-import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;

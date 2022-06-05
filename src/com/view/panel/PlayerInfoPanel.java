@@ -1,8 +1,8 @@
 package com.view.panel;
 
+import com.controller.GameController;
 import com.model.Player;
 import com.view.MainView;
-import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;

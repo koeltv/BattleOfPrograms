@@ -1,11 +1,11 @@
 package com.view.panel;
 
+import com.controller.GameController;
 import com.model.*;
 import com.view.ColorPalette;
 import com.view.MainView;
 import com.view.Resource;
 import com.view.component.GraphicSoldier;
-import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,6 @@
 package com.model;
 
-import controller.GameController;
+import com.controller.GameController;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
